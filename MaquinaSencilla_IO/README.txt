@@ -1,28 +1,37 @@
-M醧uina Sencilla con soporte de:
+# M谩quina Sencilla
+
+## Con soporte de:
 OUT de LEDS (DEVICE DIR 000 | REGISTER SELECTED 00)
 IN de SWITCHES (DEVICE DIR 001 | REGISTER SELECTED 00)
 IN/OUT de BTNS (DEVICE DIR 010 | REGISTER SELECTED 00)
 
-OP:
-IN:  1110 (DEVICE_DIR|REG_SEL) | DESTINY
-OUT: 1111 (DEVICE_DIR|REG_SEL) | SOURCE
-BEQ: 1100 XXXXXXXXXXXXXXXXXXXX | DIR
+## OP
+P = (DEVICE_DIR|REG_SEL)
+D = DEST
+S = SRC
+A = ADDR
 
-Mecanismo de entrada de datos, por software:
-Polling del bot髇 BTNS hasta que tenga valor 1.
+IN:   1110 PPPP PDDD DDDD
+OUT:  1111 PPPP PSSS SSSS
+BEQ:  1100 0AAA AAAA AAAA
+CALL: 1100 10AA AAAA AAAA
+RET:  1100 11AA AAAA AAAA
+
+## Mecanismo de entrada de datos, por software
+Polling del bot贸n BTNS hasta que tenga valor 1.
 Una vez que tiene valor 1, leer switches.
 Poner 0 en registro de control de BTNS.
 
-Detalles de implementaci髇:
+## Detalles de implementaci贸n
 - Lectura de archivos de entrada en RAM.v
-- Controlador de Bot髇:
-	- Dos registros, uno del valor actual del bot髇 y otro 
-	para el c醠culo	del pr髕imo valor.
+- Controlador de Bot贸n:
+	- Dos registros, uno del valor actual del bot贸n y otro 
+	para el c谩lculo	del pr贸ximo valor.
 	- El segundo registro tiene como clock el valor actual 
-	del bot髇 y como reset asincr髇ico el write_enable de la MS.
-	- Es decir, el valor actual se pone en 1 en el posedge del bot髇,
+	del bot贸n y como reset asincr贸nico el write_enable de la MS.
+	- Es decir, el valor actual se pone en 1 en el posedge del bot贸n,
 	y se pone en 0 cuando se activa el write_enable.
  
 
-Ensambladores:
+## Ensambladores
 - TODO Emi y Fran
