@@ -22,6 +22,7 @@
 
 module Placa(
     input clk,
+    input reset,
     input [7:0] sw,
     output [7:0] Led,
     input btnS
@@ -31,8 +32,10 @@ module Placa(
     wire [4:0] dirport;
     wire [15:0] outport;
     wire we;
-    MaquinaSencilla MS(.clk(clk), .inport(inport), .dirport(dirport), .outport(outport), .we(we));
-    LogicaIO L(.dev_sel(dirport[4:2]), .reg_sel(dirport[1:0]), .data_in(outport), .data_out(inport), .we(we),
-               .Led(Led), .sw(sw), .btnS(btnS), .clk(clk));
+    MaquinaSencilla MS(.clk(clk), .reset(reset), .inport(inport), .dirport(dirport), .outport(outport), .we(we));
+    LogicaIO L(.dev_sel(dirport[4:2]), .reg_sel(dirport[1:0]), 
+    			.data_in(outport), .data_out(inport), .we(we),
+               	.Led(Led), .sw(sw), .btnS(btnS), 
+               	.clk(clk), .reset(reset));
     
 endmodule

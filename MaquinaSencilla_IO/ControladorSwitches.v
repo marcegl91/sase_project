@@ -23,7 +23,7 @@
 
 
 module ControladorSwitches(
-    input clk,
+    input clk, reset,
     input [7:0] sw,
     output reg [7:0] sw1
     );
@@ -31,7 +31,10 @@ module ControladorSwitches(
     
     reg [7:0] sw_next = 8'b11110000;
     always@(posedge clk)
-        sw1 <= sw_next;
+    	if (reset)
+    		sw1 <= 8'd0;
+    	else
+        	sw1 <= sw_next;
 
     always@*
         sw_next = sw;

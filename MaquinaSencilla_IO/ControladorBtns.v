@@ -21,25 +21,30 @@
 
 
 module ControladorBotones(
-    input clk,
-    input btnS,
-    input we,
-    output reg btns1
-    );
-        
+	input clk, reset,
+	input btnS,
+	input we,
+	output reg btns1
+	);
+		
 
-    reg btns_next =  1'b0;
-    reg btnS_reg = 1'b0;
-    always@(posedge clk)
-        begin
-        btns1 <= btns_next;
-        end
-            
-    always@(posedge btnS, posedge we)    
-        if(we)
-            btnS_reg <= 1'b0;
-        else
-             btnS_reg <= 1'b1;
-    always@*
-        btns_next = btnS_reg;        
+	reg btns_next =  1'b0;
+	reg btnS_reg = 1'b0;
+	
+	always@(posedge clk)
+		begin
+		if (reset)
+			btns1 <= 1'd0;
+		else
+			btns1 <= btns_next;
+		end
+			
+	always@(posedge btnS, posedge we)    
+		if(we)
+			btnS_reg <= 1'b0;
+		else
+			btnS_reg <= 1'b1;
+			
+	always@*
+		btns_next = btnS_reg;        
 endmodule

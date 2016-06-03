@@ -22,6 +22,7 @@
 
 module UC(
     input clk,
+    input reset,
     input c3, c2, c1, c0, fz,
     output reg [11:0] out
     );
@@ -52,9 +53,12 @@ module UC(
                 default: out = 12'dx;
              endcase   
         end
-    
+        	
     always@(posedge clk)
-        estado_actual <= estado_futuro;                
+    	if (reset)
+    		estado_actual <= 4'd0;
+    	else
+        	estado_actual <= estado_futuro;                
 
     always@*
         begin
@@ -93,7 +97,5 @@ module UC(
              default: estado_futuro = estado_actual;
              endcase
         end
-    
-    
-    
+        
 endmodule

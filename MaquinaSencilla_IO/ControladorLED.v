@@ -22,14 +22,17 @@
 
 module ControladorLED(
     input [15:0] in,
-    input clk,
+    input clk, reset,
     input we,
     output reg [7:0] Led
     );
 
     reg [7:0] led_next = 8'b00000000;
     always@(posedge clk)
-        Led <= led_next;
+    	if (reset)
+    		Led <= 8'd0;
+    	else
+        	Led <= led_next;
 
     always@*
         if(we)
