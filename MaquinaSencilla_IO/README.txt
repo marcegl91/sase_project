@@ -49,6 +49,7 @@ OUT P,S => [P]=S                   - Mueve al puerto P lo que esta en la memoria
 BEQ D   => si Z==1 => PC=[D]       - salta si el flag Z esta activo
 CALL D  => [reg]=PC, PC=D, reg-1   - llama a una funcion
 RET	=> reg+1, PC=[reg]         - retorna de un call
+JMP D   =>PC=[D]                   - salta a la posicion D
 LEA "TAG",D  => [D]="TAG"          - Carga la direccion en que se encuentra la etiqueta,variable o constante "TAG" en la                                    posicion D       
 DW xxxxxx                          -Define un word de 16 bits en esa posicion (el numero ingresado debe ser decimal)
 LABEL:                             -Define una etiqueta
