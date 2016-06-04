@@ -93,7 +93,7 @@ vector<string> parser_codigo(vector<string> codigo_limpio,map <string,int> etiqu
             segundo_op=line.substr(line.find(',')+1); //busca segundo operando
             primer_op=int_a_binario(atoi(primer_op.c_str()),5); //pone los digitos del medio con el puerto designado
         }
-        if(comando=="BEQ"||comando=="CALL"){
+        if(comando=="BEQ"||comando=="JMP"||comando=="CALL"){
             //instruccion sin primer operando
             primer_op=""; 
             segundo_op=line;
@@ -255,7 +255,12 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                 line=trim_espacios(line);
                 comando=caps_UP(comando);       //lo convierto a mayusculas para no tener problemas
                 if(instructions_codes.find(comando)!= instructions_codes.end()){
-                    if((comando==string("BEQ"))||(comando==string("CALL"))||(comando==string("DW"))||(comando==string("RET"))){
+                    if((comando==string("BEQ"))||(comando==string("CALL"))||(comando==string("DW"))||
+                        (comando==string("JMP"))||(comando==string("RET"))){
+                        if(comando==string("JMP")){
+                            program.push_back("CMP 0,0");
+                            linea_leida++;
+                        }
                         comando_limpio=comando+" "+line;
                     }
                     else{
@@ -376,6 +381,7 @@ int main(int argc,char * argv[]){
     instructions_codes.insert ( pair<string,string>("BEQ", "110000000") );
     instructions_codes.insert ( pair<string,string>("CALL","110010000") );
     instructions_codes.insert ( pair<string,string>("RET", "110011000") );
+    instructions_codes.insert ( pair<string,string>("JMP", "110000000") );
     //instruccion de ensamble de 16 bits
     instructions_codes.insert ( pair<string,string>("DW","") );
     //
