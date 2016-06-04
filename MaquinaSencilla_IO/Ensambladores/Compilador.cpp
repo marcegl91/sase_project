@@ -267,6 +267,26 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                         primer_op=line.substr(0,line.find(',')); //busca primer operando
                         segundo_op=line.substr(line.find(',')+1); //busca segundo operando
                         segundo_op=trim_espacios(segundo_op);
+                        if(comando==string("INC")){
+                            comando=string("ADD");
+                            segundo_op=primer_op; 
+                            primer_op=string("@1"); 
+                            cout<<comando+" "+primer_op+","+segundo_op<<endl;
+                            if(constantes.find(primer_op)== constantes.end()) {
+                                    constantes.insert ( pair<string,int>(primer_op,constante_leida) );
+                                    constante_leida++;
+                            }       
+                        }
+                        if(comando==string("DEC")){
+                            comando=string("ADD");
+                            segundo_op=primer_op; 
+                            primer_op=string("@65535");
+                            cout<<comando+" "+primer_op+","+segundo_op<<endl;
+                            if(constantes.find(primer_op)== constantes.end()) {
+                                    constantes.insert ( pair<string,int>(primer_op,constante_leida) );
+                                    constante_leida++;
+                            }       
+                        }
                         if((comando==string("LEA"))&&(lea_address.find(primer_op)== lea_address.end())){
                                 lea_address.insert ( pair<string,int>(primer_op,lea_leida) );
                                 lea_leida++;
@@ -382,6 +402,8 @@ int main(int argc,char * argv[]){
     instructions_codes.insert ( pair<string,string>("CALL","110010000") );
     instructions_codes.insert ( pair<string,string>("RET", "110011000") );
     instructions_codes.insert ( pair<string,string>("JMP", "110000000") );
+    instructions_codes.insert ( pair<string,string>("INC", "00") );
+    instructions_codes.insert ( pair<string,string>("DEC", "00") );
     //instruccion de ensamble de 16 bits
     instructions_codes.insert ( pair<string,string>("DW","") );
     //
