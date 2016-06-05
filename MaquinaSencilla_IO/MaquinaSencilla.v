@@ -29,7 +29,7 @@ module MaquinaSencilla(
     output we
     );
     
-    wire [3:0] cop;
+    wire [5:0] cop;
     wire [11:0] out;
     assign we = out[0];
      

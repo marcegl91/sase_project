@@ -25,11 +25,12 @@ module UP(
     alu_op1, alu_op0, 
     le, pc_w, ir_w, a_w, b_w, fz_w, 
     mx_memio,
+    input [1:0] sp_w,
     input [15:0] inport,
     input clk,
     input reset,
     output reg fz,
-    output [3:0] cop,
+    output [5:0] cop,
     output [15:0] mem_out,
     output [4:0] dirport
     );
@@ -37,15 +38,17 @@ module UP(
     reg [15:0] ir, ir_next;
     reg [15:0] a, a_next, b, b_next;
     reg [6:0] pc, pc_next;
+    reg [6:0] sp, sp_next;
     reg fz_next;
     
     initial
     begin  
         pc = 7'd0;
         fz = 1'b0;
+        sp = 7'd126;
     end
         
-    assign cop = ir[15:12];
+    assign cop = ir[15:10];
     assign dirport = ir[11:7];
     wire [15:0] alu_out; //, mem_out;
     wire [6:0] mux_out;
@@ -53,7 +56,7 @@ module UP(
     reg [15:0] mux_mem_out;
        
     Alu A(.A(a), .B(b), .op({alu_op1, alu_op0}), .z(alu_z), .out(alu_out));
-    Multiplexor mux(.m3(ir[6:0]), .m2(ir[13:7]), .m1(7'd0), .m0(pc), .sel({mx1, mx0}), .out(mux_out));
+    Multiplexor mux(.m3(ir[6:0]), .m2(ir[13:7]), .m1(sp), .m0(pc), .sel({mx1, mx0}), .out(mux_out));
     RAM Mem(.clk(clk), .le(le), .dir(mux_out), .ent(mux_mem_out), .sal(mem_out));
     
     
@@ -73,6 +76,9 @@ module UP(
        pc <= pc_next;
        a <= a_next;
        b <= b_next;
+       
+       sp <= sp_next;
+
        fz <= fz_next;
        end
     end
@@ -91,6 +97,7 @@ module UP(
         ir_next = ir;
         a_next = a;
         b_next = b;
+        sp_next = sp;
         fz_next = fz;
         
         if (pc_w)
@@ -101,6 +108,8 @@ module UP(
             a_next = mem_out;
         if (b_w)
             b_next = mem_out;
+        if (sp_w[0])
+            sp_next = sp_w[1] ? (sp + 1) : (sp - 1);
         if (fz_w)
             fz_next = alu_z;
     end
