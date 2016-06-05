@@ -22,6 +22,7 @@
 
 module LogicaIO(
     input clk,
+    input reset,
     input [2:0] dev_sel,
     input [1:0] reg_sel,
     input we,
@@ -34,16 +35,16 @@ module LogicaIO(
     
     reg we_led;
     reg [15:0] data_in_led; 
-    ControladorLED CntrlLed(.we(we_led), .in(data_in_led), .Led(Led), .clk(clk));
+    ControladorLED CntrlLed(.we(we_led), .in(data_in_led), .Led(Led), .clk(clk), .reset(reset));
     
     wire [7:0] sw1;
     wire [15:0] data_in_swt; 
-    ControladorSwitches CntrlSwt(.clk(clk), .sw1(sw1), .sw(sw));
+    ControladorSwitches CntrlSwt(.clk(clk), .reset(reset), .sw1(sw1), .sw(sw));
     
     reg we_btns;
     wire btns1;
     wire cntrl;
-    ControladorBotones CntrlBtns(.clk(clk), .btns1(btns1), .btnS(btnS), .we(we_btns));
+    ControladorBotones CntrlBtns(.clk(clk), .reset(reset), .btns1(btns1), .btnS(btnS), .we(we_btns));
         
     
     always@*
