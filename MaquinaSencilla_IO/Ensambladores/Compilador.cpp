@@ -290,6 +290,10 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                             }       
                         }
                         if((comando==string("LEA"))&&(lea_address.find(primer_op)== lea_address.end())){
+                        	if(es_constante(segundo_op)){
+                                    cout<<"Error al compilar, no se puede hacer LEA con destino constante, linea: "<<linea_codigo+1<<endl;
+                                    exit(-1);
+                                }
                                 lea_address.insert ( pair<string,int>(primer_op,lea_leida) );
                                 lea_leida++;
                         }
