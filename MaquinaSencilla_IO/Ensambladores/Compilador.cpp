@@ -12,6 +12,8 @@
 using namespace std;
 map<string,string> instructions_codes;
 
+//SOPORTE EXPERIMENTAL PARA WINDOWS, para usarlo descomentar la siguiente linea
+//#define Windows_MODE
 //funciones auxiliares para conversion de datos(debe haber mejores pero estas andan :) )
 bool es_variable(string a){
     return isalpha(a[0]);
@@ -364,16 +366,22 @@ int main(int argc,char * argv[]){
     map <string,int> constantes;
     map <string,int> lea_address;
     cout<<"Bienvenido al compilador de prueba"<<endl;
+    
+#ifdef Windows_MODE
+    //tratando de fabricar el soporte para windows
+    cout<<"MODO WINDOWS"<<endl;
+    cout<<"Ingresar el nombre del archivo asm"<<endl;
+    string archivo_in;
+    getline(cin,archivo_in);
+#else
+    cout<<"MODO LINUX"<<endl;
+    string archivo_in=string(argv[1]);
 	if((argc < 2)) {
 		cout << "El programa debe recibir al menos 1 parametro (archivo a ensamblar)" << std::endl;
-		cout << "El formato correcto de ejecucion es: " << argv[0] << " archivo_assembler [archivo_salida --opcional]" << std::endl;
+		cout << "El formato correcto de ejecucion es: ./main archivo_assembler [archivo_salida --opcional]" << std::endl;
         return -1;
 	}
-    /*tratando de fabricar el soporte para windows
-    //string archivo_in;
-    //getline(cin,archivo_in);
-    */
-    string archivo_in=string(argv[1]);
+#endif
     string archivo_out;
     if(argc<3){
     	archivo_out=archivo_in.substr(0,archivo_in.find_last_of('.'))+".hex";   
