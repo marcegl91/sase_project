@@ -35,6 +35,8 @@ module Alu(
             out=A^B;
         2: // B
             out=B;
+        3: // NEG
+            out=A^16'b1111111111111111;
         default:
           out=16'dx;
     endcase
