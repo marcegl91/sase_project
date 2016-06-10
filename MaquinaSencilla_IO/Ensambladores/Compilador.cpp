@@ -19,7 +19,7 @@ bool es_variable(string a){
 }
 
 bool es_direccion(string a){
-    return isalnum(a[0]);
+    return isdigit(a[0]);
 }
 
 bool es_constante(string a){
@@ -122,12 +122,13 @@ vector<string> parser_codigo(vector<string> codigo_limpio,map <string,int> etiqu
         }
         if(comando=="BEQ"||comando=="CALL"){
             //instruccion sin primer operando
-            primer_op=""; 
-            segundo_op=address_solver(line,posicion_variables,etiquetas,variables,constantes,lea_address);
-            if(etiquetas.find(segundo_op)==etiquetas.end()&&!es_direccion(segundo_op)){
-                cout<<"error: "<<comando<<" apunta a una etiqueta invalida: \""<<segundo_op <<"\", linea:"<< i<<endl;
+            primer_op="";
+            segundo_op=address_solver(line,posicion_variables,etiquetas,variables,constantes,lea_address); 
+            if(etiquetas.find(line)==etiquetas.end()&&!es_direccion(line)){
+                cout<<"error: "<<comando<<" apunta a una etiqueta invalida: \""<<line <<"\", linea:"<< i<<endl;
                 exit(-1);
             }
+            
             
         }
         if(comando=="DW"){
@@ -156,7 +157,6 @@ vector<string> parser_codigo(vector<string> codigo_limpio,map <string,int> etiqu
             //instruccion con primer operando de 7 bits
             primer_op=line.substr(0,line.find(',')); //busca primer operando
             segundo_op=line.substr(line.find(',')+1); //busca segundo operando 
-            map<string,int>::iterator it_label=etiquetas.find(primer_op);
             primer_op=address_solver(primer_op,posicion_variables,etiquetas,variables,constantes,lea_address);
             segundo_op=address_solver(segundo_op,posicion_variables,etiquetas,variables,constantes,lea_address);
         }
