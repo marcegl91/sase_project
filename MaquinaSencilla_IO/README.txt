@@ -42,7 +42,6 @@ D = DEST
 S = SRC
 A = ADDR
 
-NEG D => [D]=![D]                   -Niega Bit a Bit el contenido de D
 ADD S,D => [D]=[S]+[D],Z=([S]+[D])==0  - Suma S+D y lo almacena en D, Si S+D=0 entonces flag Z es 1 si no flag Z=0
 CMP S,D => Z=([S]+[D])==0          - Si S+D=0 , entonces el flag Z=1 si no flag Z = 0
 MOV S,D => [D]=[S]                 - Mueve lo que esta en la posicion de memoria S a la posicion D
