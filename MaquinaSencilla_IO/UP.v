@@ -24,7 +24,7 @@ module UP(
     input mx1, mx0, 
     alu_op1, alu_op0, 
     le, pc_w, ir_w, a_w, b_w, fz_w, 
-    mx_memio,
+    mx_memio, mx_mempc,
     input [1:0] sp_w,
     input [15:0] inport,
     input clk,
@@ -45,7 +45,7 @@ module UP(
     begin  
         pc = 7'd0;
         fz = 1'b0;
-        sp = 7'd126;
+        sp = 7'd0;  // ?
     end
         
     assign cop = ir[15:10];
@@ -87,6 +87,8 @@ module UP(
     begin
         if (mx_memio)
             mux_mem_out = inport;
+        else if (mx_mempc)
+            mux_mem_out = pc;
         else
             mux_mem_out = alu_out;
     end
@@ -108,8 +110,8 @@ module UP(
             a_next = mem_out;
         if (b_w)
             b_next = mem_out;
-        if (sp_w[0])
-            sp_next = sp_w[1] ? (sp + 1) : (sp - 1);
+        if (sp_w[1])
+            sp_next = sp_w[0] ? (sp + 7'b1) : (sp - 7'b1);
         if (fz_w)
             fz_next = alu_z;
     end
