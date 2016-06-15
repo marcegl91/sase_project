@@ -6,17 +6,17 @@ S = SRC
 A = ADDR
 
 ADD S,D => [D]=[S]+[D],Z=([S]+[D])==0  - Suma S+D y lo almacena en D, Si S+D=0 entonces flag Z es 1 si no flag Z=0
-CMP S,D => Z=([S]+[D])==0          - Si S-D=0 , entonces el flag Z=1 si no flag Z = 0
+CMP S,D => Z=([S]-[D])==0          - Si S-D=0 , entonces el flag Z=1 si no flag Z = 0
 MOV S,D => [D]=[S]                 - Mueve lo que esta en la posicion de memoria S a la posicion D
 IN P,D  => D=[P]		   - Mueve a la posicion de memoria D lo que esta en el puerto P
 OUT P,S => [P]=S                   - Mueve al puerto P lo que esta en la memoria en la posicion S 
-BEQ D   => si Z==1 => PC=[D]       - salta si el flag Z esta activo
-CALL D  => [reg]=PC, PC=D, reg-1   - llama a una funcion
+BEQ "TAG"   => si Z==1 => PC=[D]       - salta si el flag Z esta activo a la posicion de la etiqueta, variable o constante "TAG" en la posicion D       
+CALL "TAG"  => [reg]=PC, PC=D, reg-1   - llama a una funcion
 RET	=> reg+1, PC=[reg]          - retorna de un call
 JMP D   =>PC=[D]                   - salta a la posicion D
 DEC D   => [D]=[D]-1 		   - Decrementa la variable D en 1 
 INC D	=> [D]=[D]-1 		   - Incrementa la variable D en 1
-LEA "TAG",D  => [D]="TAG"          - Carga la direccion en que se encuentra la etiqueta,variable o constante "TAG" en la                                    posicion D       
+LEA "TAG",D  => [D]="TAG"          - Carga la direccion en que se encuentra la etiqueta,variable o constante "TAG" en la posicion D       
 DW xxxxxx                          -Define un word de 16 bits en esa posicion (el numero ingresado debe ser decimal)
 LABEL:                             -Define una etiqueta
 SUB S,D => [D]=[S]-[D]            - Resta D a S y lo guarda en D
