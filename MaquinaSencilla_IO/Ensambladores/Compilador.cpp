@@ -12,7 +12,7 @@
 using namespace std;
 map<string,string> instructions_codes;
 //SOPORTE EXPERIMENTAL PARA WINDOWS, para usarlo descomentar la siguiente linea
-//#define Windows_MODE
+#define Windows_MODE
 //funciones auxiliares para conversion de datos(debe haber mejores pero estas andan :) )
 bool es_variable(string a){
     return isalpha(a[0]);
@@ -70,10 +70,10 @@ string trim_espacios(string a){
 string address_solver(string var, int prog_size,map <string,int> etiquetas,map <string,int> variables,map <string,int> constantes,map <string,int> &lea_address){
     int posicion_variables=prog_size;
     int posicion_constantes=posicion_variables+variables.size();
-    int posicion_lea_address=posicion_constantes+constantes.size();
+    //int posicion_lea_address=posicion_constantes+constantes.size();
     int address;
     map<string,int>::iterator it_label=etiquetas.find(var);
-    if(it_label!= etiquetas.end()){  
+    if(it_label!= etiquetas.end()){
         address=it_label->second;
     }
     else{
@@ -111,9 +111,9 @@ vector<string> parser_codigo(vector<string> codigo_limpio,map <string,int> etiqu
         line=trim_espacios(line);
         string primer_op;
         string segundo_op;
-        bool usa_segundo_comando=true;
+        //bool usa_segundo_comando=true;
         segundo_op=trim_espacios(segundo_op);
-        if((comando=="IN")||(comando=="OUT")){ 
+        if((comando=="IN")||(comando=="OUT")){
             //instruccion con primer operando de 5 bits
             primer_op=line.substr(0,line.find(',')); //busca primer operando
             segundo_op=line.substr(line.find(',')+1); //busca segundo operando
@@ -123,17 +123,17 @@ vector<string> parser_codigo(vector<string> codigo_limpio,map <string,int> etiqu
         if(comando=="BEQ"||comando=="CALL"){
             //instruccion sin primer operando
             primer_op="";
-            segundo_op=address_solver(line,posicion_variables,etiquetas,variables,constantes,lea_address); 
+            segundo_op=address_solver(line,posicion_variables,etiquetas,variables,constantes,lea_address);
             if(etiquetas.find(line)==etiquetas.end()&&!es_direccion(line)){
                 cout<<"error: "<<comando<<" apunta a una etiqueta invalida: \""<<line <<"\", linea:"<< i<<endl;
                 exit(-1);
             }
-            
-            
+
+
         }
         if(comando=="DW"){
             //instruccion asignacion
-            primer_op=int_a_binario(atoi(line.c_str()),16); 
+            primer_op=int_a_binario(atoi(line.c_str()),16);
             segundo_op="";
         }
         if(comando=="RET"){
@@ -142,7 +142,7 @@ vector<string> parser_codigo(vector<string> codigo_limpio,map <string,int> etiqu
         }
         if(comando=="LEA"){
             primer_op=line.substr(0,line.find(',')); //busca primer operando
-            segundo_op=line.substr(line.find(',')+1); //busca segundo operando 
+            segundo_op=line.substr(line.find(',')+1); //busca segundo operando
             map<string,int>::iterator it_address=lea_address.find(primer_op);
             if(it_address!=lea_address.end()){
                 primer_op=int_a_binario((posicion_lea_address+it_address->second),7);
@@ -156,7 +156,7 @@ vector<string> parser_codigo(vector<string> codigo_limpio,map <string,int> etiqu
         if(comando=="MOV"||comando=="ADD"||comando=="CMP"){
             //instruccion con primer operando de 7 bits
             primer_op=line.substr(0,line.find(',')); //busca primer operando
-            segundo_op=line.substr(line.find(',')+1); //busca segundo operando 
+            segundo_op=line.substr(line.find(',')+1); //busca segundo operando
             primer_op=address_solver(primer_op,posicion_variables,etiquetas,variables,constantes,lea_address);
             segundo_op=address_solver(segundo_op,posicion_variables,etiquetas,variables,constantes,lea_address);
         }
@@ -177,7 +177,7 @@ vector<string> parser_codigo(vector<string> codigo_limpio,map <string,int> etiqu
     for (map<string,int>::iterator it_address=lea_address.begin(); it_address!=lea_address.end();it_address++){
         map<string,int>::iterator it_etiqueta=etiquetas.find(it_address->first);
         int lea_pos_memoria=posicion_lea_address+it_address->second;
-        if(it_etiqueta!= etiquetas.end()){ 
+        if(it_etiqueta!= etiquetas.end()){
             program[lea_pos_memoria]=int_a_binario(it_etiqueta->second,16);
         }
         else{
@@ -239,7 +239,6 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
     int linea_leida=0;
     int linea_codigo=0;
     int lea_leida=0;
-    int labels_automaticos=0;
 
     while(getline(input_file, line)){
         line=trim_espacios(line);               //elimino los espacios hasta el primer caracter valido
@@ -254,7 +253,7 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                 }
                 line=line.substr(label_pos+1); //linea sin comentario y sin etiqueta
             }
-            line=trim_espacios(line);   
+            line=trim_espacios(line);
             string comando=line.substr(0,line.find(' '));//busca instruccion
             string primer_op;
             string segundo_op;
@@ -278,46 +277,43 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                         segundo_op=trim_espacios(segundo_op);
                         if(comando==string("INC")){
                             comando=string("ADD");
-                            segundo_op=primer_op; 
-                            primer_op=string("@1"); 
-                            agregar_var(primer_op,variables,constantes);          
+                            segundo_op=primer_op;
+                            primer_op=string("@1");
+                            agregar_var(primer_op,variables,constantes);
                         }
                         if(comando==string("DEC")){
                             comando=string("ADD");
-                            segundo_op=primer_op; 
+                            segundo_op=primer_op;
                             primer_op=string("@65535");
-                            agregar_var(primer_op,variables,constantes);         
+                            agregar_var(primer_op,variables,constantes);
                         }
                         if(comando==string("SUB")){
                             if(es_constante(segundo_op)){
                                 cout<<"Error al compilar, no se puede hacer "<<comando<<" con destino constante, linea: "<<linea_codigo+1<<endl;
                                 exit(-1);
                             }
-                            agregar_var(primer_op,variables,constantes); 
-                            agregar_var("@65535",variables,constantes); 
-                            agregar_var("@0",variables,constantes); 
+                            agregar_var(primer_op,variables,constantes);
+                            agregar_var("@65535",variables,constantes);
+                            agregar_var("@0",variables,constantes);
                             string variable_auxiliar="Resta_Var_###_Asquerosa_Imposible_de_Repetir";
                             agregar_var(variable_auxiliar,variables,constantes);
 
                             program.push_back("CMP @0,"+segundo_op);                     //cmp @0,B //linea 0
                             linea_leida++;
-                            string label_fin="#Resta_Label_Fin_Asqueroso_Imposible_de_Repetir"+int_a_string(labels_automaticos);
-                            agregar_etiqueta(label_fin,linea_leida+6,etiquetas);
-                            program.push_back("BEQ "+ label_fin);                       //BEQ fin linea 1
-                            linea_leida++;  
+                            int label_fin=linea_leida+6;
+                            program.push_back("BEQ "+ int_a_string(label_fin));         //BEQ fin linea 1
+                            linea_leida++;
                             program.push_back("MOV "+primer_op+","+variable_auxiliar);  //MOV A,Var_resta linea 2
                             linea_leida++;
-                            string label_iteracion="#Resta_Label_Iteracion_Asqueroso_Imposible_de_Repetir"+int_a_string(labels_automaticos);
-                            labels_automaticos++;
-                            agregar_etiqueta(label_iteracion,linea_leida,etiquetas);
+                            int label_iteracion=linea_leida;
                             program.push_back("ADD @65535,"+variable_auxiliar);        //DEC Var_Resta linea 3
                             linea_leida++;
                             program.push_back("ADD @65535,"+segundo_op);               //loop: DEC B  linea 4
                             linea_leida++;
-                            program.push_back("BEQ "+label_iteracion);                //BEQ loop     linea 5
-                            linea_leida++;  
+                            program.push_back("BEQ "+int_a_string(label_iteracion));  //BEQ loop     linea 5
+                            linea_leida++;
                             comando="MOV";                                            //fin: MOV Var_Resta,B linea 6
-                            primer_op=variable_auxiliar;                              
+                            primer_op=variable_auxiliar;
                         }
 
                         if((comando==string("LEA"))&&(lea_address.find(primer_op)== lea_address.end())){
@@ -328,15 +324,63 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                             lea_address.insert ( pair<string,int>(primer_op,lea_leida) );
                             lea_leida++;
                         }
+                        if(comando==string("MOV*")){
+                            if(lea_address.find(primer_op)== lea_address.end()){
+                                lea_address.insert ( pair<string,int>(primer_op,lea_leida) );
+                                lea_leida++;
+                            }
+                            if(es_constante(segundo_op)){
+                                    cout<<"Error al compilar, no se puede hacer MOV* con destino constante, linea: "<<linea_codigo+1<<endl;
+                                    exit(-1);
+                            }
+                            if(lea_address.find(segundo_op)== lea_address.end()){
+                                lea_address.insert ( pair<string,int>(segundo_op,lea_leida) );
+                                lea_leida++;
+                            }
+                            agregar_var("@32768",variables,constantes);
+                            agregar_var("@1",variables,constantes);
+                            agregar_var("@0",variables,constantes);
+                            agregar_var("@7",variables,constantes);
+                            string contador_shift="MOV*_Contador_Shift_###_Asquerosa_Imposible_de_Repetir";
+                            agregar_var(contador_shift,variables,constantes);
+                            int pos_var_x=linea_leida+11;
+                            program.push_back("LEA "+primer_op+","+int_a_string(pos_var_x));                   //LEA A,X
+                            linea_leida++;
+                            program.push_back("MOV @0,"+contador_shift);                                        //MOV @0,Contador Loop
+                            linea_leida++;
+                            int pos_loop=linea_leida;
+                            program.push_back("ADD "+int_a_string(pos_var_x)+","+int_a_string(pos_var_x));   //loop:ADD X,X
+                            linea_leida++;
+                            program.push_back("CMP "+contador_shift+",@7");                                    //CMP CONTADOR_LOOP,7
+                            linea_leida++;
+                            program.push_back("BEQ "+int_a_string(linea_leida+4));                            //BEQ FIN LOOP
+                            linea_leida++;
+                            program.push_back("ADD @1,"+contador_shift);                                       //INC contador_loop
+                            linea_leida++;
+                            program.push_back("CMP 0,0");                                                      //CMP 0,0
+                            linea_leida++;
+                            program.push_back("BEQ "+int_a_string(pos_loop));                                 //BEQ loop
+                            linea_leida++;
+                            program.push_back("ADD @32768,"+int_a_string(pos_var_x));                           //ADD 10..0,X
+                            linea_leida++;
+                            //program.push_back("LEA "+segundo_op+",@"+contador_shift);                   //LEA B,X
+                            // linea_leida++;
+                            //program.push_back("ADD "+contador_shift+",@"+int_a_string(pos_var_x));     //ADD B,X
+                            program.push_back("ADD "+int_a_string(pos_var_x)+segundo_op);               //ADD X,B
+                            linea_leida++;
+                            comando="ADD ";
+                            primer_op="@0";
+                            segundo_op="@0";
+                        }
                         if((comando==string("ADD"))||(comando==string("MOV"))){
                             if(es_constante(segundo_op)){
                                 cout<<"Error al compilar, no se puede hacer "<<comando<<" con destino constante, linea: "<<linea_codigo+1<<endl;
                                 exit(-1);
                             }
-                            agregar_var(primer_op,variables,constantes);   
-                        }                        
+                            agregar_var(primer_op,variables,constantes);
+                        }
                         if(comando==string("CMP")) {
-                            agregar_var(primer_op,variables,constantes); 
+                            agregar_var(primer_op,variables,constantes);
                         }
                         if((comando==string("IN"))||(comando==string("OUT"))){
                             if(atoi (primer_op.c_str())>32){
@@ -344,19 +388,19 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                                 exit(-1);
                             }
                         }
-                        agregar_var(segundo_op,variables,constantes); 
+                        agregar_var(segundo_op,variables,constantes);
                         comando_limpio=comando+" "+primer_op+","+segundo_op;
-                    }                
+                    }
                 }
                 else{
                         cout<<"Error al compilar: instruccion invalida en linea "<<linea_codigo+1<<endl;
                         cout<<"instruccion: "<<comando+" "+line<<endl;
                         exit(-3);
-                }  
+                }
                 program.push_back(comando_limpio);
                 linea_leida++;
             }
-        
+
         }
         linea_codigo++;
     }
@@ -375,7 +419,7 @@ void optimizar_memoria(map <string,int> &etiquetas,map <string,int> &variables){
         it->second=i;
         i++;
    }
-   
+
 }
 
 /************************** MAIN ************************************/
@@ -387,7 +431,7 @@ int main(int argc,char * argv[]){
     map <string,int> constantes;
     map <string,int> lea_address;
     cout<<"Bienvenido al compilador de prueba"<<endl;
-    
+
 #ifdef Windows_MODE
     cout<<"MODO WINDOWS"<<endl;
     cout<<"Ingresar el nombre del archivo asm"<<endl;
@@ -404,14 +448,14 @@ int main(int argc,char * argv[]){
 #endif
     string archivo_out;
     if(argc<3){
-        archivo_out=archivo_in.substr(0,archivo_in.find_last_of('.'))+".hex";   
+        archivo_out=archivo_in.substr(0,archivo_in.find_last_of('.'))+".hex";
     }
     else{
         archivo_out=string(argv[2]);
     }
     cout<<"abriendo archivo de entrada: "<< archivo_in<<endl;
     ifstream input_file_fstream(archivo_in.c_str());
-        
+
     if(input_file_fstream.fail()){
         cerr << "No se pudo abrir archivo de entrada" << std::endl;
         return -2;
@@ -423,6 +467,7 @@ int main(int argc,char * argv[]){
     instructions_codes.insert ( pair<string,string>("MOV","10") );
     instructions_codes.insert ( pair<string,string>("LEA","10") );
     instructions_codes.insert ( pair<string,string>("SUB","10") );
+    instructions_codes.insert ( pair<string,string>("MOV*","10") );
     //instruccion con 1 parametro de 5 bits y uno de 7
     instructions_codes.insert ( pair<string,string>("IN",  "1110") );
     instructions_codes.insert ( pair<string,string>("OUT", "1111") );
@@ -444,7 +489,7 @@ int main(int argc,char * argv[]){
     cout<<"parseando codigo en lenguaje maquina"<<endl;
     vector<string> codigo_ensamblado=parser_codigo(codigo_limpio,etiquetas,variables,constantes,lea_address);
     //  vector<string> codigo_ensamblado=codigo_limpio;
-    cout<<"generando archivo de salida: "<<endl;  
+    cout<<"generando archivo de salida: "<<endl;
     ofstream output_file_fstream(archivo_out.c_str());
     if(output_file_fstream.fail()){
         cerr << "No se pudo crear archivo de salida" << std::endl;
