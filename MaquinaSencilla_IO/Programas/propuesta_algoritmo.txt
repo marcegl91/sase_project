@@ -17,16 +17,16 @@
 
   clear all;
   % Inicializo el vector de temperaturas
-  M=100;
-  u(1)=100;
-  u(2:M)=0;
+  M = 100;
+  u(1) = 100;
+  u(2:M) = 0;
 
   % Iteración principal
-  N=3000;
-  for(k=1:N)
+  N = 3000;
+  for( k = 1 : N )
 	  % Sub Iteración
-	  for(i=2:M-1)
-		  u(i)=( u(i+1) + u(i-1) )/2;
+	  for( i = 2 : M - 1 )
+		  u(i)=( u(i+1) + u(i-1) ) / 2;
 	  end
   end
   plot(u);
@@ -37,40 +37,82 @@
 Para implementar este extracto de código necesito Load (LD) para traerme valores de la memoria
 y shift right (SHR) para dividir por dos.
 
-
-// Inicialización...
+; Inicialización...
+MOV @100,N
+MOV @15,M
 MOV @0,k
+
+; Comienza iteración principal
 MainIt: CMP k,N
-    // Si terminé de iterar voy al final del programa
-        BEQ EndMainIt
-    // Inicializo i = 0
-        MOV @0,i
-    SubIt: CMP i,M
-        BEQ EndSubit
-        MOV @0,tmp
-        // Actualizo punteros u(i-1), u(i) y u(i+1)
-            MOV u_curr_ptr,u_prev_ptr
-            MOV u_next_ptr,u_curr_ptr
-            ADD u_nbr_size,u_next_ptr
-        // Obtengo valores apuntados, u_prev = u(i-1) y u_next = u(i+1)
-            LD u_prev_ptr,u_prev
-            LD u_next_ptr,u_next
-        // Promedio, u(i) = ( u(i+1) + u(i-1) ) / 2
-            ADD u_prev,tmp
-            ADD u_next,tmp
-            SHR tmp
-            MOV tmp,u_curr
-        // Incremento subiteración 
-            ADD @1,i
-        // Salto al principio del ciclo: SubIt
-            CMP @0,@0
-            BEQ SubIt 
-    EndSubit:
-    // Incremento iteración principal
-        ADD @1,k
-    // Salto al principio del ciclo: SubIt
-        CMP @0,@0
-        BEQ MainIt
+
+	; Si terminé de iterar voy al final del programa
+		BEQ EndMainIt
+
+	; Inicializo los punteros al comienzo del arreglo
+		MOV Data,u_prev_ptr
+		MOV Data,tmp
+		ADD @1,tmp
+		MOV tmp,u_curr_ptr
+		MOV Data,tmp
+		ADD @1,tmp
+		MOV tmp,u_next_ptr
+
+	; Inicializo i = 2
+		MOV @0,i
+
+	; Comienza la subiteración
+		SubIt: CMP i,M
+		BEQ EndSubit
+
+		; Obtengo valores apuntados, u_prev = u(i-1) y u_next = u(i+1)
+			LEA u_prev_ptr,u_prev
+			LEA u_next_ptr,u_next
+
+		; Promedio, u(i) = ( u(i+1) + u(i-1) ) / 2
+			MOV u_prev,res
+			ADD u_next,res
+			SHR res
+			MOV res,[u_curr_ptr]
+
+		; Incremento subiteración
+			ADD @1,i
+
+		; Actualizo punteros u(i-1), u(i) y u(i+1)
+			ADD @1,u_prev_ptr
+			ADD @1,u_curr_ptr
+			ADD @1,u_next_ptr
+
+		; Salto al principio del ciclo: SubIt
+			CMP @0,@0
+			BEQ SubIt 
+
+	EndSubit:
+
+	; Incremento iteración principal
+		ADD @1,k
+
+	; Salto al principio del ciclo: SubIt
+		CMP @0,@0
+		BEQ MainIt
+
 EndMainIt:
-    CMP @0,@0
-    BEQ EndMainIt
+	CMP @0,@0
+	BEQ EndMainIt
+
+Data:		0110010000000000
+		0000000000000000
+		0000000000000000
+		0000000000000000
+		0000000000000000
+		0000000000000000
+		0000000000000000
+		0000000000000000
+		0000000000000000
+		0000000000000000
+		0000000000000000
+		0000000000000000
+		0000000000000000
+		0000000000000000
+		0000000000000000
+		0000000000000000
+
