@@ -8,6 +8,8 @@ A = ADDR
 ADD S,D => [D]=[S]+[D],Z=([S]+[D])==0  - Suma S+D y lo almacena en D, Si S+D=0 entonces flag Z es 1 si no flag Z=0
 CMP S,D => Z=([S]-[D])==0          - Si S-D=0 , entonces el flag Z=1 si no flag Z = 0
 MOV S,D => [D]=[S]                 - Mueve lo que esta en la posicion de memoria S a la posicion D
+MOV [S],D => [D]=[[S]]             - Mueve lo que esta en la posicion de memoria apuntada por S a la posicion de memoria D
+MOV S,[D] => [[D]]=[S]             - Mueve lo que esta en la posicion de memoria S a la posicion apuntada por D
 IN P,D  => D=[P]		   - Mueve a la posicion de memoria D lo que esta en el puerto P
 OUT P,S => [P]=S                   - Mueve al puerto P lo que esta en la memoria en la posicion S 
 BEQ "TAG"   => si Z==1 => PC=[D]       - salta si el flag Z esta activo a la posicion de la etiqueta, variable o constante "TAG" en la posicion D       
