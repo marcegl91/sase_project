@@ -21,53 +21,89 @@
 
 
 module LogicaIO(
-    input clk,
-    input reset,
     input [2:0] dev_sel,
     input [1:0] reg_sel,
     input we,
-    input [15:0] data_in,
-    output reg [15:0] data_out,
-    output [7:0] Led,
-    input [7:0] sw,
-    input btnS
-    );
+    input [15:0] data_out,
+    output reg [15:0] data_in,
     
-    reg we_led;
-    reg [15:0] data_in_led; 
-    ControladorLED CntrlLed(.we(we_led), .in(data_in_led), .Led(Led), .clk(clk), .reset(reset));
+    input [15:0] device0in,    
+    output [18:0] device0out,
+    output reg device0cs,
     
-    wire [7:0] sw1;
-    wire [15:0] data_in_swt; 
-    ControladorSwitches CntrlSwt(.clk(clk), .reset(reset), .sw1(sw1), .sw(sw));
+    input [15:0] device1in,    
+    output [18:0] device1out,
+    output reg device1cs,
     
-    reg we_btns;
-    wire btns1;
-    wire cntrl;
-    ControladorBotones CntrlBtns(.clk(clk), .reset(reset), .btns1(btns1), .btnS(btnS), .we(we_btns));
-        
+    input [15:0] device2in,    
+    output [18:0] device2out,
+    output reg device2cs,
+    
+    input [15:0] device3in,    
+    output [18:0] device3out,
+    output reg device3cs,
+    
+    input [15:0] device4in,    
+    output [18:0] device4out,
+    output reg device4cs,
+    
+    input [15:0] device5in,    
+    output [18:0] device5out,
+    output reg device5cs,
+    
+    input [15:0] device6in,    
+    output [18:0] device6out,
+    output reg device6cs,
+    
+    input [15:0] device7in,    
+    output [18:0] device7out,
+    output reg device7cs
+    
+    );        
+    
+    assign device0out = {we, reg_sel, data_out};
+    assign device1out = {we, reg_sel, data_out};
+    assign device2out = {we, reg_sel, data_out};
+    assign device3out = {we, reg_sel, data_out};
+    assign device4out = {we, reg_sel, data_out};
+    assign device5out = {we, reg_sel, data_out};
+    assign device6out = {we, reg_sel, data_out};
+    assign device7out = {we, reg_sel, data_out};
     
     always@*
         begin
-        we_led = 1'b0;
-        data_in_led = 16'd0;
-        we_btns = 1'b0;
-        data_out = 16'd0;
-          
+        device0cs = 1'b0;
+        device1cs = 1'b0;
+        device2cs = 1'b0;
+        device3cs = 1'b0;
+        device4cs = 1'b0;
+        device5cs = 1'b0;
+        device6cs = 1'b0;
+        device7cs = 1'b0;
+        data_in = 15'b0;
+ 
         case(dev_sel)
-            0:  
-			begin
-                data_in_led = data_in;
-                we_led = we;
-                end               
-            1:
-                data_out = {8'd0, sw1};            
-            2:  
+            0:
                 begin
-                data_out = {15'b0, btns1};
-                we_btns = we;
+                device0cs = 1'b1;
+                data_in = device0in;
                 end
-            3: ;          
+            1:
+                begin
+                device1cs = 1'b1;
+                data_in = device1in;
+                end
+            2:
+                begin
+                device2cs = 1'b1;
+                data_in = device2in;
+                end
+            3:
+                begin
+                device3cs = 1'b1;
+                data_in = device3in;
+                end
+           
             default: ;
         endcase
         end
