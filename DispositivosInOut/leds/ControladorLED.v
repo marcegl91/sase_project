@@ -39,7 +39,7 @@ module ControladorLED(
         	Led <= led_next;
 
     always@*
-        if(we)
+        if(we & cs)
             led_next = in[7:0];
         else
             led_next = Led;
