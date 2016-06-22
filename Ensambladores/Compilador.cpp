@@ -278,23 +278,24 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                             linea_leida++;
                             comando=string("BEQ");
                         }
-                        comando_limpio=comando+" "+line;
+                        program.push_back(comando+" "+line);
+                        linea_leida++;
                     }
                     else{
                         primer_op=line.substr(0,line.find(',')); //busca primer operando
                         segundo_op=line.substr(line.find(',')+1); //busca segundo operando
                         segundo_op=trim_espacios(segundo_op);
                         if(comando==string("INC")){
-                            comando=string("ADD");
-                            segundo_op=primer_op;
-                            primer_op=string("@1");
+                            agregar_var("@1",variables,constantes);
                             agregar_var(primer_op,variables,constantes);
+                            program.push_back("ADD @1,"+primer_op);
+                            linea_leida++;
                         }
                         if(comando==string("DEC")){
-                            comando=string("ADD");
-                            segundo_op=primer_op;
-                            primer_op=string("@65535");
                             agregar_var(primer_op,variables,constantes);
+                            agregar_var("@65535",variables,constantes);
+                            program.push_back("ADD @65535,"+primer_op);
+                            linea_leida++;
                         }
                         if(comando==string("SUB")){
                             if(es_constante(segundo_op)){
@@ -316,9 +317,10 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                             program.push_back("ADD @65535,"+variable_auxiliar);        //DEC Var_Resta linea 3
                             program.push_back("ADD @65535,"+segundo_op);               //loop: DEC B  linea 4
                             program.push_back("BEQ "+int_a_string(label_iteracion));  //BEQ loop     linea 5
-                            linea_leida+=2;
-                            comando="MOV";                                            //fin: MOV Var_Resta,B linea 6
-                            primer_op=variable_auxiliar;
+                            linea_leida+=2;                                           //fin: MOV Var_Resta,B linea 6
+                            agregar_var(segundo_op,variables,constantes);
+                            program.push_back("MOV "+variable_auxiliar+","+segundo_op);
+                            linea_leida++;
                         }
                         if(comando==string("LEA")){
                             if(es_constante(segundo_op)){
@@ -330,6 +332,9 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                                 cout<<"ADVERTENCIA, LEA CARGA LITERAL EN POSICION DE MEMORIA"<<endl;
                                 cout<<"LEA "<<primer_op<<","<<segundo_op<<" linea:"<<linea_codigo<<endl;
                             }
+                            agregar_var(segundo_op,variables,constantes);
+                            program.push_back(comando+" "+primer_op+","+segundo_op);
+                            linea_leida++;
                         }
 
                         if(comando==string("ADD")){
@@ -338,6 +343,9 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                                 exit(-1);
                             }
                             agregar_var(primer_op,variables,constantes);
+                            agregar_var(segundo_op,variables,constantes);
+                            program.push_back(comando+" "+primer_op+","+segundo_op);
+                            linea_leida++;
                         }
                         if(comando==string("MOV")){
                             if(es_constante(segundo_op)){
@@ -346,8 +354,12 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                             }
                             if(es_x_referencia(primer_op)||es_x_referencia(segundo_op))
                                 comando="MOV*";
-                            else
+                            else{
                                 agregar_var(primer_op,variables,constantes);
+                                agregar_var(segundo_op,variables,constantes);
+                                program.push_back(comando+" "+primer_op+","+segundo_op);
+                                linea_leida++;
+                            }
                         }
                         //MOV [a],[b]
                         if(comando==string("MOV*")){
@@ -393,40 +405,63 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                                     program.push_back("ADD "+contador_shift+","+int_a_string(pos_var_x));     //ADD var,X
                                     linea_leida+=2;
                                 }
-                                comando="MOV";  
-                                primer_op="0";
-                                segundo_op="0";  
+                                program.push_back("MOV "+primer_op+",0");  
+                                linea_leida++;  
                             }
                             else{
                                 //MOV A,[B]
                                 segundo_op=segundo_op.substr(1,segundo_op.find(']')-1) ;
-                                program.push_back("ADD "+segundo_op+","+int_a_string(linea_leida+1));               
+                                program.push_back("ADD "+segundo_op+","+int_a_string(linea_leida+1)); 
+                                program.push_back("MOV "+primer_op+",0");            
                                 linea_leida++;
-                                comando="MOV";  
-                                primer_op=primer_op;
-                                segundo_op="0";  
                             }
+                            agregar_var(primer_op,variables,constantes);
+                            agregar_var(segundo_op,variables,constantes);
+                        }
+                        if(comando==string("SHIFTR")){
+                            if(es_constante(primer_op)){
+                                    cout<<"Error al compilar, no se puede hacer SHIFT a una constante, linea: "<<linea_codigo+1<<endl;
+                                exit(-1);
+                            } /* 
+                            agregar_var("@1",variables,constantes);
+                            agregar_var("@0",variables,constantes);
+                            string contador_shift="VARIABLE_AUXILIAR_ASM_###_Asquerosa_Imposible_de_Repetir";
+                            agregar_var(contador_shift,variables,constantes); 
+                            primer_op=primer_op.substr(1,primer_op.find(']')-1);
+                            program.push_back("MOV @0,"+contador_shift);                                    //MOV @0,Contador Loop
+                            linea_leida++;
+                            int pos_loop=linea_leida;
+                            int pos_fin_loop=pos_loop+6;
+                            program.push_back("CMP "segundo_op+","+contador_shift);                         //CMP CONTADOR_LOOP,7     
+                            program.push_back("BEQ "+int_a_string(pos_fin_loop));                          //BEQ FIN LOOP
+                            program.push_back("ADD "+primer_op+","+primer_op; //loop:ADD X,X
+                            program.push_back("ADD @1,"+contador_shift);                                   //INC contador_loop
+                            program.push_back("CMP 0,0");                                                  //CMP 0,0
+                            program.push_back("BEQ "+int_a_string(pos_loop));                              //BEQ loop
+                            linea_leida+=7;*/
                         }
                         if(comando==string("CMP")) {
                             agregar_var(primer_op,variables,constantes);
+                            agregar_var(segundo_op,variables,constantes);
+                            program.push_back(comando+" "+primer_op+","+segundo_op);
+                            linea_leida++;
                         }
                         if((comando==string("IN"))||(comando==string("OUT"))){
                             if(atoi (primer_op.c_str())>=32){
                                 cout<<"Error al compilar: IN/OUT designa un puerto invalido, linea "<<linea_codigo+1<<endl;
                                 exit(-1);
                             }
+                            agregar_var(segundo_op,variables,constantes);
+                            program.push_back(comando+" "+primer_op+","+segundo_op);
+                            linea_leida++;
                         }
-                        agregar_var(segundo_op,variables,constantes);
-                        comando_limpio=comando+" "+primer_op+","+segundo_op;
                     }
                 }
                 else{
                         cout<<"Error al compilar: instruccion invalida en linea "<<linea_codigo+1<<endl;
                         cout<<"instruccion: "<<comando+" "+line<<endl;
                         exit(-3);
-                }
-                program.push_back(comando_limpio);
-                linea_leida++;
+                }   
             }
 
         }
