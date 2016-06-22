@@ -44,10 +44,10 @@ module ControladorBotones(
 		end
 			
 	always@(posedge btnS, posedge we)
-		if(we)
-			btnS_reg <= 1'b0;
-		else
-			btnS_reg <= 1'b1;
+        if(we)
+            btnS_reg <= ~cs;
+        else
+            btnS_reg <= 1'b1;
 			
 	always@*
 		btns_next = btnS_reg;        
