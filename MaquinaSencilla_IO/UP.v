@@ -68,6 +68,7 @@ module UP(
         pc <= 7'd0;
         a <= 16'd0;
         b <= 16'd0;
+        sp <= 16'd0;
         fz <= 1'd0;
         end
     else
