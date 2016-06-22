@@ -18,7 +18,7 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module ControladorSHIFT(
+module ControladorShift(
 	input clk, reset,
 	input [1:0] reg_sel,
 	input [15:0] data_in,
