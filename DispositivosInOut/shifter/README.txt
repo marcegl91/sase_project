@@ -14,3 +14,11 @@ IN shifter11
 ciclo:comparar shifter11 con 0
 es 0? saltar a ciclo
 in shifter10
+
+
+OUT shifter00 xxxxxxxxxxxxxxxx
+OUT shifter01 xxxxxxxxxxxxxxxx
+in shifter11
+ciclo:cMP shifter11 0
+JZ ciclo
+in shifter10
