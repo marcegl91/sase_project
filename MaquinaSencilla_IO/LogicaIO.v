@@ -103,7 +103,25 @@ module LogicaIO(
                 device3cs = 1'b1;
                 data_in = device3in;
                 end
-           
+                
+            4:
+                begin
+                device3cs = 1'b1;
+                data_in = device3in;
+                end
+            
+            5:
+                begin
+                device3cs = 1'b1;
+                data_in = device3in;
+                end
+            
+            6:
+                begin
+                device3cs = 1'b1;
+                data_in = device3in;
+                end
+                           
             default: ;
         endcase
         end
