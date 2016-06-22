@@ -36,7 +36,7 @@ module testShift;
 	wire [15:0] data_out;
 
 	// Instantiate the Unit Under Test (UUT)
-	shift uut (
+	ControladorShift uut (
 		.clk(clk), 
 		.reset(reset), 
 		.reg_sel(reg_sel), 
@@ -70,7 +70,7 @@ module testShift;
 		// Wait 100 ns for global reset to finish
 		#100;
       reg_sel = 2'b00;
-		data_in = 16'b1000000000000001; //direccion y cantidad, esto es 2 shift right
+		data_in = 16'b0000000000000001; //direccion y cantidad, esto es 1 shift left
 		we = 1;
 		#20;
       reg_sel = 2'b01;

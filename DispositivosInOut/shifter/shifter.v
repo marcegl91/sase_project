@@ -54,7 +54,7 @@ always @(posedge clk)
 			begin
 				if(times == 0)
 					begin
-						result <= shiftedValue;
+						result <= value;
 						ready <= 1;
 					end
 				else
