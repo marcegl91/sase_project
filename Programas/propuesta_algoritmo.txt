@@ -37,6 +37,9 @@
 Para implementar este extracto de código necesito Load (LD) para traerme valores de la memoria
 y shift right (SHR) para dividir por dos.
 
+; Reinicio la UART
+OUT 5,0
+
 ; Inicialización...
 MOV @100,N
 MOV @15,M
@@ -44,18 +47,17 @@ MOV @0,k
 
 ; Comienza iteración principal
 MainIt: CMP k,N
-
+	
 	; Si terminé de iterar voy al final del programa
 		BEQ EndMainIt
 
 	; Inicializo los punteros al comienzo del arreglo
 		MOV Data,u_prev_ptr
-		MOV Data,tmp
-		ADD @1,tmp
-		MOV tmp,u_curr_ptr
-		MOV Data,tmp
-		ADD @1,tmp
-		MOV tmp,u_next_ptr
+		MOV Data,u_curr_ptr
+		MOV Data,u_next_ptr
+		ADD @1,u_curr_ptr
+		ADD @1,u_next_ptr
+		ADD @1,u_next_ptr
 
 	; Inicializo i = 2
 		MOV @0,i
@@ -67,11 +69,19 @@ MainIt: CMP k,N
 		; Obtengo valores apuntados, u_prev = u(i-1) y u_next = u(i+1)
 			LEA u_prev_ptr,u_prev
 			LEA u_next_ptr,u_next
+			
+		; Imprimo puntero para debug
+		WaitUntilNotFullUart:
+			IN 6,z
+			CMP @1,z
+			BEQ WaitUntilNotFullUart
+		OUT 4,u_prev_ptr
+		OUT 4,@32
 
 		; Promedio, u(i) = ( u(i+1) + u(i-1) ) / 2
-			MOV u_prev,res
+		 MOV u_prev,res
 			ADD u_next,res
-			SHR res
+			SHR res,1
 			MOV res,[u_curr_ptr]
 
 		; Incremento subiteración
@@ -84,7 +94,7 @@ MainIt: CMP k,N
 
 		; Salto al principio del ciclo: SubIt
 			CMP @0,@0
-			BEQ SubIt 
+			BEQ SubIt
 
 	EndSubit:
 
@@ -96,23 +106,22 @@ MainIt: CMP k,N
 		BEQ MainIt
 
 EndMainIt:
-	CMP @0,@0
-	BEQ EndMainIt
+	JMP EndMainIt
 
-Data:		0110010000000000
-		0000000000000000
-		0000000000000000
-		0000000000000000
-		0000000000000000
-		0000000000000000
-		0000000000000000
-		0000000000000000
-		0000000000000000
-		0000000000000000
-		0000000000000000
-		0000000000000000
-		0000000000000000
-		0000000000000000
-		0000000000000000
-		0000000000000000
+Data:	DW 25600
+	DW 0
+	DW 0
+	DW 0
+	DW 0
+	DW 0
+	DW 0
+	DW 0
+	DW 0
+	DW 0
+	DW 0
+	DW 0
+	DW 0
+	DW 0
+	DW 0
+	DW 0
 
