@@ -38,7 +38,7 @@ Para implementar este extracto de código necesito Load (LD) para traerme valore
 y shift right (SHR) para dividir por dos.
 
 ; Reinicio la UART
-OUT 5,0
+OUT 5,@0
 
 ; Inicialización...
 MOV @100,N
@@ -56,8 +56,7 @@ MainIt: CMP k,N
 		MOV Data,u_curr_ptr
 		MOV Data,u_next_ptr
 		ADD @1,u_curr_ptr
-		ADD @1,u_next_ptr
-		ADD @1,u_next_ptr
+		ADD @2,u_next_ptr
 
 	; Inicializo i = 2
 		MOV @0,i
@@ -79,9 +78,9 @@ MainIt: CMP k,N
 		OUT 4,@32
 
 		; Promedio, u(i) = ( u(i+1) + u(i-1) ) / 2
-		 MOV u_prev,res
+			MOV u_prev,res
 			ADD u_next,res
-			SHR res,1
+			SHIFTR res,1
 			MOV res,[u_curr_ptr]
 
 		; Incremento subiteración
@@ -93,8 +92,7 @@ MainIt: CMP k,N
 			ADD @1,u_next_ptr
 
 		; Salto al principio del ciclo: SubIt
-			CMP @0,@0
-			BEQ SubIt
+			JMP SubIt
 
 	EndSubit:
 
@@ -102,8 +100,7 @@ MainIt: CMP k,N
 		ADD @1,k
 
 	; Salto al principio del ciclo: SubIt
-		CMP @0,@0
-		BEQ MainIt
+		JMP MainIt
 
 EndMainIt:
 	JMP EndMainIt
@@ -124,4 +121,3 @@ Data:	DW 25600
 	DW 0
 	DW 0
 	DW 0
-
