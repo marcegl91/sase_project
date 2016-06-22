@@ -10,6 +10,12 @@
 #include <stdlib.h>
 #define MAX_SIZE_CODE 128
 using namespace std;
+
+#define puerto_0_shifter "0"
+#define puerto_1_shifter "1"
+#define puerto_2_shifter "2"
+#define puerto_3_shifter "3"
+
 map<string,string> instructions_codes;
 //SOPORTE EXPERIMENTAL PARA WINDOWS, para usarlo descomentar la siguiente linea
 //#define Windows_MODE
@@ -418,27 +424,43 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                             agregar_var(primer_op,variables,constantes);
                             agregar_var(segundo_op,variables,constantes);
                         }
-                        if(comando==string("SHIFTR")){
+                        //shiftl x,desplazamiento
+                        if(comando==string("SHIFTR")||comando==string("SHIFTL")){
                             if(es_constante(primer_op)){
                                     cout<<"Error al compilar, no se puede hacer SHIFT a una constante, linea: "<<linea_codigo+1<<endl;
                                 exit(-1);
-                            } /* 
-                            agregar_var("@1",variables,constantes);
-                            agregar_var("@0",variables,constantes);
+                            }
+                            agregar_var(primer_op,variables,constantes);
                             string contador_shift="VARIABLE_AUXILIAR_ASM_###_Asquerosa_Imposible_de_Repetir";
                             agregar_var(contador_shift,variables,constantes); 
-                            primer_op=primer_op.substr(1,primer_op.find(']')-1);
-                            program.push_back("MOV @0,"+contador_shift);                                    //MOV @0,Contador Loop
-                            linea_leida++;
-                            int pos_loop=linea_leida;
-                            int pos_fin_loop=pos_loop+6;
-                            program.push_back("CMP "segundo_op+","+contador_shift);                         //CMP CONTADOR_LOOP,7     
-                            program.push_back("BEQ "+int_a_string(pos_fin_loop));                          //BEQ FIN LOOP
-                            program.push_back("ADD "+primer_op+","+primer_op; //loop:ADD X,X
-                            program.push_back("ADD @1,"+contador_shift);                                   //INC contador_loop
-                            program.push_back("CMP 0,0");                                                  //CMP 0,0
-                            program.push_back("BEQ "+int_a_string(pos_loop));                              //BEQ loop
-                            linea_leida+=7;*/
+                            agregar_var("@0",variables,constantes);
+                            if(es_constante(segundo_op)){
+                                int primer_parametro;
+                                if(comando==string("SHIFTR"))
+                                    primer_parametro=32768;
+                                primer_parametro+=string_a_int(segundo_op.substr(1));
+                                string aux="@"+int_a_string(primer_parametro);
+                                agregar_var(aux,variables,constantes);
+                                program.push_back("OUT 0,"+aux); 
+                            }
+                            else{
+                                agregar_var(segundo_op,variables,constantes);
+                                agregar_var("@100000000000",variables,constantes);
+                                if(comando==string("SHIFTR"))
+                                    program.push_back("MOV @100000000000,"+contador_shift);
+                                else
+                                    program.push_back("MOV @0,"+contador_shift);
+                                program.push_back("ADD "+segundo_op+","+contador_shift);
+                                program.push_back("OUT 0,"+contador_shift); 
+                                linea_leida+=2;
+                            }
+                            program.push_back("OUT 1,"+primer_op);
+                            linea_leida=linea_leida+2;
+                            program.push_back("IN 3,"+contador_shift);
+                            program.push_back("CMP @0,"+contador_shift);  
+                            program.push_back("BEQ "+int_a_string(linea_leida)); 
+                            program.push_back("IN 2,"+primer_op);
+                            linea_leida=linea_leida+4;
                         }
                         if(comando==string("CMP")) {
                             agregar_var(primer_op,variables,constantes);
@@ -540,6 +562,9 @@ int main(int argc,char * argv[]){
     instructions_codes.insert ( pair<string,string>("JMP", "110000000") );
     instructions_codes.insert ( pair<string,string>("INC", "00") );
     instructions_codes.insert ( pair<string,string>("DEC", "00") );
+    //instruccion con 1 parametro de 4 bits y uno de 7
+    instructions_codes.insert ( pair<string,string>("SHIFTL", "") );
+    instructions_codes.insert ( pair<string,string>("SHIFTR", "") );
     //instruccion de ensamble de 16 bits
     instructions_codes.insert ( pair<string,string>("DW","") );
     //
