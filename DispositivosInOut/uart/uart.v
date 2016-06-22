@@ -31,16 +31,37 @@ module uart
    uart_rx #(.DBIT(DBIT), .SB_TICK(SB_TICK)) uart_rx_unit
       (.clk(clk), .reset(reset), .rx(rx), .s_tick(tick),
        .rx_done_tick(rx_done_tick), .dout(rx_data_out));
-
-   fifo #(.B(DBIT), .W(FIFO_W)) fifo_rx_unit
-      (.clk(clk), .reset(reset), .rd(rd_uart),
-       .wr(rx_done_tick), .w_data(rx_data_out),
-       .empty(rx_empty), .full(), .r_data(r_data));
-
-   fifo #(.B(DBIT), .W(FIFO_W)) fifo_tx_unit
-      (.clk(clk), .reset(reset), .rd(tx_done_tick),
-       .wr(wr_uart), .w_data(w_data), .empty(tx_empty),
-       .full(tx_full), .r_data(tx_fifo_out));
+       
+   FIFO frx(
+         .clk(clk),
+         .srst(reset),
+         .din(rx_data_out),
+         .wr_en(rx_done_tick),
+         .rd_en(rd_uart),
+         .dout(r_data),
+         .full(),
+         .empty(rx_empty)
+       );
+       //   fifo #(.B(DBIT), .W(FIFO_W)) fifo_rx_unit
+         //      (.clk(clk), .reset(reset), .rd(rd_uart),
+         //       .wr(rx_done_tick), .w_data(rx_data_out),
+         //       .empty(rx_empty), .full(), .r_data(r_data));
+       
+      FIFO ftx(
+            .clk(clk),
+            .srst(reset),
+            .din(w_data),
+            .wr_en(wr_uart),
+            .rd_en(tx_done_tick),
+            .dout(tx_fifo_out),
+            .full(tx_full),
+            .empty(tx_empty)
+          );
+//
+//   fifo #(.B(DBIT), .W(FIFO_W)) fifo_tx_unit
+//      (.clk(clk), .reset(reset), .rd(tx_done_tick),
+//       .wr(wr_uart), .w_data(w_data), .empty(tx_empty),
+//       .full(tx_full), .r_data(tx_fifo_out));
 
    uart_tx #(.DBIT(DBIT), .SB_TICK(SB_TICK)) uart_tx_unit
       (.clk(clk), .reset(reset), .tx_start(tx_fifo_not_empty),

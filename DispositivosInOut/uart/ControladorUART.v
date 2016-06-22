@@ -13,9 +13,10 @@ module ControladorUART
     // signal declaration
     reg tx_full, rx_empty;
     wire tx_full_next, rx_empty_next;
-    reg wr_uart, rd_uart, reset_uart;
+    reg wr_uart, rd_uart, force_reset;
     wire [7:0] w_data, r_data;
     
+    assign reset_uart = reset | force_reset;
         
     always@(posedge clk)
         if (reset)
@@ -35,8 +36,12 @@ module ControladorUART
         begin
         wr_uart = 1'b0;
         rd_uart = 1'b0;
-        reset_uart = 1'b0;
+        force_reset = 1'b0;
         out = 16'b0;
+        // RX_EMPTY = 11
+        // TX_FULL = 10
+        // TX = 00
+        // RX = 01
         if(cs)
             begin
             if(we)
@@ -44,7 +49,7 @@ module ControladorUART
                 if (reg_sel == 2'b0)
                     wr_uart = 1'b1;
                 else if(reg_sel == 2'b01)
-                    reset_uart = 1'b1;
+                    force_reset = 1'b1;
                 end
             else
                 begin
