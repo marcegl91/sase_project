@@ -106,20 +106,20 @@ module LogicaIO(
                 
             4:
                 begin
-                device3cs = 1'b1;
-                data_in = device3in;
+                device4cs = 1'b1;
+                data_in = device4in;
                 end
             
             5:
                 begin
-                device3cs = 1'b1;
-                data_in = device3in;
+                device5cs = 1'b1;
+                data_in = device5in;
                 end
             
             6:
                 begin
-                device3cs = 1'b1;
-                data_in = device3in;
+                device6cs = 1'b1;
+                data_in = device6in;
                 end
                            
             default: ;
