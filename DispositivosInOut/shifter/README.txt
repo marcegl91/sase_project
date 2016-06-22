@@ -10,8 +10,8 @@ resultante en shifter10
 
 
 
-OUT shifter00 sxxxxxxxxxxxssss
-OUT shifter01 xxxxxxxxxxxxxxxx
+OUT shifter00 dxxxxxxxxxxxssss // d = 0 (shift left), d = 1 (shift right), ssss = (cantidad de shifts)
+OUT shifter01 vvvvvvvvvvvvvvvv // vvvvvvvvvvvvvvvv (valor a shiftear)
 in shifter11
 ciclo:CMP shifter11 0
 JZ ciclo
