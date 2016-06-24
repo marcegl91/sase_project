@@ -1,0 +1,730 @@
+
+*** Running xst
+    with args -ifn "Placa.xst" -ofn "Placa.srp" -intstyle ise
+
+Reading design: Placa.prj
+
+=========================================================================
+*                          HDL Parsing                                  *
+=========================================================================
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/RAM.v" into library work
+Parsing module <RAM>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Multiplexor.v" into library work
+Parsing module <Multiplexor>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Alu.v" into library work
+Parsing module <Alu>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/uart_tx.v" into library work
+Parsing module <uart_tx>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/uart_rx.v" into library work
+Parsing module <uart_rx>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/mod_m_counter.v" into library work
+Parsing module <mod_m_counter>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/fifo.v" into library work
+Parsing module <FIFO>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/UP.v" into library work
+Parsing module <UP>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/UC.v" into library work
+Parsing module <UC>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/uart.v" into library work
+Parsing module <uart>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/sseg/hex_to_sseg.v" into library work
+Parsing module <hex_to_sseg>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/sseg/disp_mux.v" into library work
+Parsing module <disp_mux>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/MaquinaSencilla.v" into library work
+Parsing module <MaquinaSencilla>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/LogicaIO.v" into library work
+Parsing module <LogicaIO>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/ControladorUART.v" into library work
+Parsing module <ControladorUART>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/sseg/ControladorSSEG.v" into library work
+Parsing module <ControladorSSEG>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/leds/ControladorLED.v" into library work
+Parsing module <ControladorLED>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/ControladorSwitches.v" into library work
+Parsing module <ControladorSwitches>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/ControladorBtns.v" into library work
+Parsing module <ControladorBotones>.
+Analyzing Verilog file "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v" into library work
+Parsing module <Placa>.
+
+=========================================================================
+*                            HDL Elaboration                            *
+=========================================================================
+WARNING:HDLCompiler:1016 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v" Line 62: Port sseg is not connected to this instance
+
+Elaborating module <Placa>.
+
+Elaborating module <MaquinaSencilla>.
+
+Elaborating module <UC>.
+
+Elaborating module <UP>.
+
+Elaborating module <Alu>.
+
+Elaborating module <Multiplexor>.
+
+Elaborating module <RAM>.
+
+Elaborating module <LogicaIO>.
+WARNING:HDLCompiler:1127 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v" Line 43: Assignment to device0in ignored, since the identifier is never used
+WARNING:HDLCompiler:1127 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v" Line 44: Assignment to device1in ignored, since the identifier is never used
+WARNING:HDLCompiler:1127 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v" Line 45: Assignment to device2in ignored, since the identifier is never used
+
+Elaborating module <ControladorLED>.
+
+Elaborating module <ControladorSwitches>.
+
+Elaborating module <ControladorBotones>.
+
+Elaborating module <ControladorSSEG>.
+
+Elaborating module <hex_to_sseg>.
+WARNING:HDLCompiler:189 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/sseg/ControladorSSEG.v" Line 49: Size mismatch in connection of port <dp>. Formal port size is 1-bit while actual signal size is 32-bit.
+WARNING:HDLCompiler:189 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/sseg/ControladorSSEG.v" Line 50: Size mismatch in connection of port <dp>. Formal port size is 1-bit while actual signal size is 32-bit.
+WARNING:HDLCompiler:189 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/sseg/ControladorSSEG.v" Line 51: Size mismatch in connection of port <dp>. Formal port size is 1-bit while actual signal size is 32-bit.
+WARNING:HDLCompiler:189 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/sseg/ControladorSSEG.v" Line 52: Size mismatch in connection of port <dp>. Formal port size is 1-bit while actual signal size is 32-bit.
+
+Elaborating module <disp_mux>.
+WARNING:HDLCompiler:413 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/sseg/disp_mux.v" Line 27: Result of 19-bit expression is truncated to fit in 18-bit target.
+WARNING:HDLCompiler:189 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/sseg/ControladorSSEG.v" Line 54: Size mismatch in connection of port <reset>. Formal port size is 1-bit while actual signal size is 32-bit.
+
+Elaborating module <ControladorUART>.
+
+Elaborating module <uart>.
+
+Elaborating module <mod_m_counter(M=326,N=9)>.
+WARNING:HDLCompiler:413 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/mod_m_counter.v" Line 26: Result of 32-bit expression is truncated to fit in 9-bit target.
+
+Elaborating module <uart_rx(DBIT=8,SB_TICK=16)>.
+WARNING:HDLCompiler:413 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/uart_rx.v" Line 69: Result of 5-bit expression is truncated to fit in 4-bit target.
+WARNING:HDLCompiler:413 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/uart_rx.v" Line 79: Result of 4-bit expression is truncated to fit in 3-bit target.
+WARNING:HDLCompiler:413 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/uart_rx.v" Line 82: Result of 5-bit expression is truncated to fit in 4-bit target.
+WARNING:HDLCompiler:413 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/uart_rx.v" Line 91: Result of 5-bit expression is truncated to fit in 4-bit target.
+
+Elaborating module <FIFO>.
+WARNING:HDLCompiler:1499 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/fifo.v" Line 39: Empty module <FIFO> remains a black box.
+
+Elaborating module <uart_tx(DBIT=8,SB_TICK=16)>.
+WARNING:HDLCompiler:413 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/uart_tx.v" Line 80: Result of 5-bit expression is truncated to fit in 4-bit target.
+WARNING:HDLCompiler:413 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/uart_tx.v" Line 93: Result of 4-bit expression is truncated to fit in 3-bit target.
+WARNING:HDLCompiler:413 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/uart_tx.v" Line 96: Result of 5-bit expression is truncated to fit in 4-bit target.
+WARNING:HDLCompiler:413 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/uart_tx.v" Line 108: Result of 5-bit expression is truncated to fit in 4-bit target.
+WARNING:HDLCompiler:634 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v" Line 41: Net <device0out[15]> does not have a driver.
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Synthesizing Unit <Placa>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v".
+INFO:Xst:3210 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v" line 42: Output port <device0out> of the instance <L> is unconnected or connected to loadless signal.
+INFO:Xst:3210 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v" line 42: Output port <device1out> of the instance <L> is unconnected or connected to loadless signal.
+INFO:Xst:3210 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v" line 42: Output port <device2out> of the instance <L> is unconnected or connected to loadless signal.
+INFO:Xst:3210 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v" line 42: Output port <device0cs> of the instance <L> is unconnected or connected to loadless signal.
+INFO:Xst:3210 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v" line 42: Output port <device1cs> of the instance <L> is unconnected or connected to loadless signal.
+INFO:Xst:3210 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v" line 42: Output port <device2cs> of the instance <L> is unconnected or connected to loadless signal.
+INFO:Xst:3210 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v" line 62: Output port <sseg> of the instance <CntrlSSEG> is unconnected or connected to loadless signal.
+INFO:Xst:3210 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v" line 62: Output port <an> of the instance <CntrlSSEG> is unconnected or connected to loadless signal.
+WARNING:Xst:653 - Signal <device0out> is used but never assigned. This sourceless signal will be automatically connected to value GND.
+WARNING:Xst:653 - Signal <device1out> is used but never assigned. This sourceless signal will be automatically connected to value GND.
+WARNING:Xst:653 - Signal <device2out> is used but never assigned. This sourceless signal will be automatically connected to value GND.
+    Summary:
+	no macro.
+Unit <Placa> synthesized.
+
+Synthesizing Unit <MaquinaSencilla>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/MaquinaSencilla.v".
+    Summary:
+	no macro.
+Unit <MaquinaSencilla> synthesized.
+
+Synthesizing Unit <UC>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/UC.v".
+    Found 5-bit register for signal <estado_actual>.
+    Found finite state machine <FSM_0> for signal <estado_actual>.
+    -----------------------------------------------------------------------
+    | States             | 13                                             |
+    | Transitions        | 81                                             |
+    | Inputs             | 12                                             |
+    | Outputs            | 18                                             |
+    | Clock              | clk (rising_edge)                              |
+    | Reset              | reset (positive)                               |
+    | Reset type         | synchronous                                    |
+    | Reset State        | 00000                                          |
+    | Power Up State     | 00000                                          |
+    | Encoding           | auto                                           |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Summary:
+	inferred   1 Finite State Machine(s).
+Unit <UC> synthesized.
+
+Synthesizing Unit <UP>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/UP.v".
+    Found 7-bit register for signal <pc>.
+    Found 16-bit register for signal <a>.
+    Found 16-bit register for signal <b>.
+    Found 7-bit register for signal <sp>.
+    Found 1-bit register for signal <fz>.
+    Found 16-bit register for signal <ir>.
+    Found 7-bit subtractor for signal <sp[6]_GND_4_o_sub_22_OUT> created at line 115.
+    Found 7-bit adder for signal <mux_out[6]_GND_4_o_add_15_OUT> created at line 107.
+    Found 7-bit adder for signal <sp[6]_GND_4_o_add_20_OUT> created at line 115.
+    Summary:
+	inferred   2 Adder/Subtractor(s).
+	inferred  63 D-type flip-flop(s).
+	inferred   2 Multiplexer(s).
+Unit <UP> synthesized.
+
+Synthesizing Unit <Alu>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Alu.v".
+    Found 16-bit adder for signal <A[15]_B[15]_add_0_OUT> created at line 33.
+    Found 16-bit 4-to-1 multiplexer for signal <out> created at line 31.
+    Summary:
+	inferred   1 Adder/Subtractor(s).
+	inferred   1 Multiplexer(s).
+Unit <Alu> synthesized.
+
+Synthesizing Unit <Multiplexor>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/Multiplexor.v".
+    Found 7-bit 4-to-1 multiplexer for signal <out> created at line 31.
+    Summary:
+	inferred   1 Multiplexer(s).
+Unit <Multiplexor> synthesized.
+
+Synthesizing Unit <RAM>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/RAM.v".
+        RAM_WIDTH = 16
+        RAM_ADDR_BITS = 7
+    Found 128x16-bit single-port RAM <Mram_M> for signal <M>.
+    Summary:
+	inferred   1 RAM(s).
+Unit <RAM> synthesized.
+
+Synthesizing Unit <LogicaIO>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/LogicaIO.v".
+WARNING:Xst:647 - Input <device7in> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+    Found 8x7-bit Read Only RAM for signal <_n0032>
+    Found 16-bit 7-to-1 multiplexer for signal <data_in> created at line 85.
+    Summary:
+	inferred   1 RAM(s).
+	inferred   1 Multiplexer(s).
+Unit <LogicaIO> synthesized.
+
+Synthesizing Unit <ControladorLED>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/leds/ControladorLED.v".
+WARNING:Xst:647 - Input <reg_sel> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <in<15:8>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+    Found 8-bit register for signal <Led>.
+    Summary:
+	inferred   8 D-type flip-flop(s).
+Unit <ControladorLED> synthesized.
+
+Synthesizing Unit <ControladorSwitches>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/ControladorSwitches.v".
+WARNING:Xst:647 - Input <reg_sel> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <in<15:8>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <we> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <cs> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+    Found 8-bit register for signal <swt_val>.
+    Summary:
+	inferred   8 D-type flip-flop(s).
+Unit <ControladorSwitches> synthesized.
+
+Synthesizing Unit <ControladorBotones>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/ControladorBtns.v".
+WARNING:Xst:647 - Input <reg_sel> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <in<15:1>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+    Found 1-bit register for signal <btns1>.
+    Found 1-bit register for signal <btnS_reg>.
+    Summary:
+	inferred   2 D-type flip-flop(s).
+Unit <ControladorBotones> synthesized.
+
+Synthesizing Unit <ControladorSSEG>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/sseg/ControladorSSEG.v".
+WARNING:Xst:647 - Input <reg_sel> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <reset> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+    Found 4-bit register for signal <sseg_1>.
+    Found 4-bit register for signal <sseg_2>.
+    Found 4-bit register for signal <sseg_3>.
+    Found 4-bit register for signal <sseg_0>.
+    Summary:
+	inferred  16 D-type flip-flop(s).
+Unit <ControladorSSEG> synthesized.
+
+Synthesizing Unit <hex_to_sseg>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/sseg/hex_to_sseg.v".
+    Found 16x7-bit Read Only RAM for signal <_n0026[0:6]>
+    Summary:
+	inferred   1 RAM(s).
+Unit <hex_to_sseg> synthesized.
+
+Synthesizing Unit <disp_mux>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/sseg/disp_mux.v".
+    Found 18-bit register for signal <q_reg>.
+    Found 18-bit adder for signal <q_next> created at line 27.
+    Found 4x4-bit Read Only RAM for signal <an>
+    Found 8-bit 4-to-1 multiplexer for signal <sseg> created at line 32.
+    Summary:
+	inferred   1 RAM(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred  18 D-type flip-flop(s).
+	inferred   1 Multiplexer(s).
+Unit <disp_mux> synthesized.
+
+Synthesizing Unit <ControladorUART>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/ControladorUART.v".
+WARNING:Xst:647 - Input <in<15:8>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+    Found 1-bit register for signal <rx_empty>.
+    Found 1-bit register for signal <tx_full>.
+    Found 16-bit 4-to-1 multiplexer for signal <GND_15_o_GND_15_o_mux_9_OUT> created at line 61.
+    Summary:
+	inferred   2 D-type flip-flop(s).
+	inferred  10 Multiplexer(s).
+Unit <ControladorUART> synthesized.
+
+Synthesizing Unit <uart>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/uart.v".
+        DBIT = 8
+        SB_TICK = 16
+        DVSR = 326
+        DVSR_BIT = 9
+        FIFO_W = 2
+INFO:Xst:3210 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/uart.v" line 28: Output port <q> of the instance <baud_gen_unit> is unconnected or connected to loadless signal.
+INFO:Xst:3210 - "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/uart.v" line 35: Output port <full> of the instance <frx> is unconnected or connected to loadless signal.
+    Summary:
+	no macro.
+Unit <uart> synthesized.
+
+Synthesizing Unit <mod_m_counter>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/mod_m_counter.v".
+        N = 9
+        M = 326
+    Found 9-bit register for signal <r_reg>.
+    Found 10-bit adder for signal <n0013[9:0]> created at line 26.
+    Summary:
+	inferred   1 Adder/Subtractor(s).
+	inferred   9 D-type flip-flop(s).
+	inferred   1 Multiplexer(s).
+Unit <mod_m_counter> synthesized.
+
+Synthesizing Unit <uart_rx>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/uart_rx.v".
+        DBIT = 8
+        SB_TICK = 16
+    Found 4-bit register for signal <s_reg>.
+    Found 3-bit register for signal <n_reg>.
+    Found 8-bit register for signal <b_reg>.
+    Found 2-bit register for signal <state_reg>.
+    Found finite state machine <FSM_1> for signal <state_reg>.
+    -----------------------------------------------------------------------
+    | States             | 4                                              |
+    | Transitions        | 12                                             |
+    | Inputs             | 5                                              |
+    | Outputs            | 2                                              |
+    | Clock              | clk (rising_edge)                              |
+    | Reset              | reset (positive)                               |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | 00                                             |
+    | Encoding           | auto                                           |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 3-bit adder for signal <n_reg[2]_GND_18_o_add_16_OUT> created at line 79.
+    Found 4-bit adder for signal <s_reg[3]_GND_18_o_add_29_OUT> created at line 91.
+    Found 4-bit 4-to-1 multiplexer for signal <s_next> created at line 53.
+    Summary:
+	inferred   2 Adder/Subtractor(s).
+	inferred  15 D-type flip-flop(s).
+	inferred  11 Multiplexer(s).
+	inferred   1 Finite State Machine(s).
+Unit <uart_rx> synthesized.
+
+Synthesizing Unit <uart_tx>.
+    Related source file is "C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/uart/uart_tx.v".
+        DBIT = 8
+        SB_TICK = 16
+    Found 1-bit register for signal <tx_reg>.
+    Found 4-bit register for signal <s_reg>.
+    Found 3-bit register for signal <n_reg>.
+    Found 8-bit register for signal <b_reg>.
+    Found 2-bit register for signal <state_reg>.
+    Found finite state machine <FSM_2> for signal <state_reg>.
+    -----------------------------------------------------------------------
+    | States             | 4                                              |
+    | Transitions        | 12                                             |
+    | Inputs             | 4                                              |
+    | Outputs            | 2                                              |
+    | Clock              | clk (rising_edge)                              |
+    | Reset              | reset (positive)                               |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | 00                                             |
+    | Encoding           | auto                                           |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 3-bit adder for signal <n_reg[2]_GND_20_o_add_17_OUT> created at line 93.
+    Found 4-bit adder for signal <s_reg[3]_GND_20_o_add_30_OUT> created at line 108.
+    Found 4-bit 4-to-1 multiplexer for signal <s_next> created at line 58.
+    Summary:
+	inferred   2 Adder/Subtractor(s).
+	inferred  16 D-type flip-flop(s).
+	inferred  10 Multiplexer(s).
+	inferred   1 Finite State Machine(s).
+Unit <uart_tx> synthesized.
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# RAMs                                                 : 7
+ 128x16-bit single-port RAM                            : 1
+ 16x7-bit single-port Read Only RAM                    : 4
+ 4x4-bit single-port Read Only RAM                     : 1
+ 8x7-bit single-port Read Only RAM                     : 1
+# Adders/Subtractors                                   : 9
+ 10-bit adder                                          : 1
+ 16-bit adder                                          : 1
+ 18-bit adder                                          : 1
+ 3-bit adder                                           : 2
+ 4-bit adder                                           : 2
+ 7-bit adder                                           : 1
+ 7-bit addsub                                          : 1
+# Registers                                            : 25
+ 1-bit register                                        : 6
+ 16-bit register                                       : 3
+ 18-bit register                                       : 1
+ 3-bit register                                        : 2
+ 4-bit register                                        : 6
+ 7-bit register                                        : 2
+ 8-bit register                                        : 4
+ 9-bit register                                        : 1
+# Multiplexers                                         : 38
+ 1-bit 2-to-1 multiplexer                              : 11
+ 16-bit 2-to-1 multiplexer                             : 4
+ 16-bit 4-to-1 multiplexer                             : 2
+ 16-bit 7-to-1 multiplexer                             : 1
+ 3-bit 2-to-1 multiplexer                              : 2
+ 32-bit 2-to-1 multiplexer                             : 1
+ 4-bit 2-to-1 multiplexer                              : 12
+ 4-bit 4-to-1 multiplexer                              : 2
+ 7-bit 4-to-1 multiplexer                              : 1
+ 8-bit 2-to-1 multiplexer                              : 1
+ 8-bit 4-to-1 multiplexer                              : 1
+# FSMs                                                 : 3
+# Xors                                                 : 2
+ 16-bit xor2                                           : 2
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+Reading core <..\..\MS_final.srcs\sources_1\imports\facu\DispositivosInOut\uart/FIFO.ngc>.
+Loading core <FIFO> for timing and area information for instance <ftx>.
+Loading core <FIFO> for timing and area information for instance <frx>.
+
+Synthesizing (advanced) Unit <LogicaIO>.
+INFO:Xst:3231 - The small RAM <Mram__n0032> will be implemented on LUTs in order to maximize performance and save block RAM resources. If you want to force its implementation on block, use option/constraint ram_style.
+    -----------------------------------------------------------------------
+    | ram_type           | Distributed                         |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 8-word x 7-bit                      |          |
+    |     weA            | connected to signal <GND>           | high     |
+    |     addrA          | connected to signal <dev_sel>       |          |
+    |     diA            | connected to signal <GND>           |          |
+    |     doA            | connected to internal node          |          |
+    -----------------------------------------------------------------------
+Unit <LogicaIO> synthesized (advanced).
+
+Synthesizing (advanced) Unit <RAM>.
+INFO:Xst:3218 - HDL ADVISOR - The RAM <Mram_M> will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
+    -----------------------------------------------------------------------
+    | ram_type           | Distributed                         |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 128-word x 16-bit                   |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <le>            | high     |
+    |     addrA          | connected to signal <dir>           |          |
+    |     diA            | connected to signal <ent>           |          |
+    |     doA            | connected to internal node          |          |
+    -----------------------------------------------------------------------
+Unit <RAM> synthesized (advanced).
+
+Synthesizing (advanced) Unit <UP>.
+The following registers are absorbed into counter <sp>: 1 register on signal <sp>.
+Unit <UP> synthesized (advanced).
+
+Synthesizing (advanced) Unit <disp_mux>.
+The following registers are absorbed into counter <q_reg>: 1 register on signal <q_reg>.
+INFO:Xst:3218 - HDL ADVISOR - The RAM <Mram_an> will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
+    -----------------------------------------------------------------------
+    | ram_type           | Distributed                         |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 4-word x 4-bit                      |          |
+    |     weA            | connected to signal <GND>           | high     |
+    |     addrA          | connected to signal <q_reg>         |          |
+    |     diA            | connected to signal <GND>           |          |
+    |     doA            | connected to signal <an>            |          |
+    -----------------------------------------------------------------------
+Unit <disp_mux> synthesized (advanced).
+
+Synthesizing (advanced) Unit <hex_to_sseg>.
+INFO:Xst:3231 - The small RAM <Mram__n0026[0:6]> will be implemented on LUTs in order to maximize performance and save block RAM resources. If you want to force its implementation on block, use option/constraint ram_style.
+    -----------------------------------------------------------------------
+    | ram_type           | Distributed                         |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 16-word x 7-bit                     |          |
+    |     weA            | connected to signal <GND>           | high     |
+    |     addrA          | connected to signal <hex>           |          |
+    |     diA            | connected to signal <GND>           |          |
+    |     doA            | connected to internal node          |          |
+    -----------------------------------------------------------------------
+Unit <hex_to_sseg> synthesized (advanced).
+
+Synthesizing (advanced) Unit <uart_rx>.
+The following registers are absorbed into counter <n_reg>: 1 register on signal <n_reg>.
+Unit <uart_rx> synthesized (advanced).
+
+Synthesizing (advanced) Unit <uart_tx>.
+The following registers are absorbed into counter <n_reg>: 1 register on signal <n_reg>.
+Unit <uart_tx> synthesized (advanced).
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# RAMs                                                 : 7
+ 128x16-bit single-port distributed RAM                : 1
+ 16x7-bit single-port distributed Read Only RAM        : 4
+ 4x4-bit single-port distributed Read Only RAM         : 1
+ 8x7-bit single-port distributed Read Only RAM         : 1
+# Adders/Subtractors                                   : 5
+ 10-bit adder                                          : 1
+ 16-bit adder                                          : 1
+ 4-bit adder                                           : 2
+ 7-bit adder                                           : 1
+# Counters                                             : 4
+ 18-bit up counter                                     : 1
+ 3-bit up counter                                      : 2
+ 7-bit updown counter                                  : 1
+# Registers                                            : 126
+ Flip-Flops                                            : 126
+# Multiplexers                                         : 42
+ 1-bit 2-to-1 multiplexer                              : 11
+ 1-bit 4-to-1 multiplexer                              : 7
+ 16-bit 2-to-1 multiplexer                             : 4
+ 16-bit 4-to-1 multiplexer                             : 2
+ 16-bit 7-to-1 multiplexer                             : 1
+ 32-bit 2-to-1 multiplexer                             : 1
+ 4-bit 2-to-1 multiplexer                              : 12
+ 4-bit 4-to-1 multiplexer                              : 2
+ 8-bit 2-to-1 multiplexer                              : 1
+ 8-bit 4-to-1 multiplexer                              : 1
+# FSMs                                                 : 3
+# Xors                                                 : 2
+ 16-bit xor2                                           : 2
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+WARNING:Xst:1710 - FF/Latch <Led_0> (without init value) has a constant value of 0 in block <ControladorLED>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Led_1> (without init value) has a constant value of 0 in block <ControladorLED>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Led_2> (without init value) has a constant value of 0 in block <ControladorLED>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Led_3> (without init value) has a constant value of 0 in block <ControladorLED>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Led_4> (without init value) has a constant value of 0 in block <ControladorLED>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Led_5> (without init value) has a constant value of 0 in block <ControladorLED>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Led_6> (without init value) has a constant value of 0 in block <ControladorLED>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Led_7> (without init value) has a constant value of 0 in block <ControladorLED>. This FF/Latch will be trimmed during the optimization process.
+Analyzing FSM <MFsm> for best encoding.
+Optimizing FSM <MS/C/FSM_0> on signal <estado_actual[1:13]> with one-hot encoding.
+------------------------
+ State | Encoding
+------------------------
+ 00000 | 0000000000001
+ 00001 | 0000000000010
+ 00010 | 0000000000100
+ 01011 | 0000000001000
+ 01110 | 0000000010000
+ 01111 | 0000000100000
+ 00110 | 0000001000000
+ 01010 | 0000010000000
+ 10000 | 0000100000000
+ 10010 | 0001000000000
+ 00111 | 0010000000000
+ 01001 | 0100000000000
+ 10001 | 1000000000000
+------------------------
+Analyzing FSM <MFsm> for best encoding.
+Optimizing FSM <CntrlUART/uart_unit/uart_rx_unit/FSM_1> on signal <state_reg[1:2]> with gray encoding.
+-------------------
+ State | Encoding
+-------------------
+ 00    | 00
+ 01    | 01
+ 10    | 11
+ 11    | 10
+-------------------
+Analyzing FSM <MFsm> for best encoding.
+Optimizing FSM <CntrlUART/uart_unit/uart_tx_unit/FSM_2> on signal <state_reg[1:2]> with gray encoding.
+-------------------
+ State | Encoding
+-------------------
+ 00    | 00
+ 01    | 01
+ 10    | 11
+ 11    | 10
+-------------------
+WARNING:Xst:3002 - This design contains one or more registers/latches that are directly
+   incompatible with the Spartan6 architecture. The two primary causes of this is
+   either a register or latch described with both an asynchronous set and
+   asynchronous reset, or a register or latch described with an asynchronous
+   set or reset which however has an initialization value of the opposite 
+   polarity (i.e. asynchronous reset with an initialization value of 1).
+    While this circuit can be built, it creates a sub-optimal implementation
+   in terms of area, power and performance. For a more optimal implementation
+   Xilinx highly recommends one of the following:
+
+          1) Remove either the set or reset from all registers and latches
+             if not needed for required functionality
+          2) Modify the code in order to produce a synchronous set
+             and/or reset (both is preferred)
+          3) Ensure all registers have the same initialization value as the
+             described asynchronous set or reset polarity
+          4) Use the -async_to_sync option to transform the asynchronous
+             set/reset to synchronous operation
+             (timing simulation highly recommended when using this option)
+
+  Please refer to http://www.xilinx.com search string "Spartan6 asynchronous set/reset" for more details.
+
+  List of register instances with asynchronous set and reset:
+    CntrlBtn/btnS_reg in unit <Placa>
+
+
+Optimizing unit <ControladorSwitches> ...
+
+Optimizing unit <Placa> ...
+
+Optimizing unit <UP> ...
+
+Optimizing unit <UC> ...
+
+Optimizing unit <ControladorSSEG> ...
+
+Optimizing unit <ControladorUART> ...
+
+Optimizing unit <mod_m_counter> ...
+
+Optimizing unit <uart_rx> ...
+
+Optimizing unit <uart_tx> ...
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_17> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_16> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_15> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_14> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_13> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_12> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_11> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_10> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_9> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_8> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_7> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_6> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_5> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_4> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_3> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_2> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_1> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/dm/q_reg_0> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/sseg_0_3> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/sseg_0_2> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/sseg_0_1> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/sseg_0_0> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/sseg_3_3> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/sseg_3_2> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/sseg_3_1> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/sseg_3_0> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/sseg_1_3> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/sseg_1_2> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/sseg_1_1> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/sseg_1_0> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/sseg_2_3> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/sseg_2_2> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/sseg_2_1> of sequential type is unconnected in block <Placa>.
+WARNING:Xst:2677 - Node <CntrlSSEG/sseg_2_0> of sequential type is unconnected in block <Placa>.
+
+Mapping all equations...
+Building and optimizing final netlist ...
+Found area constraint ratio of 100 (+ 0) on block Placa, actual ratio is 4.
+INFO:Xst:2260 - The FF/Latch <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwss.wsts/ram_full_i> in Unit <CntrlUART/uart_unit/ftx> is equivalent to the following FF/Latch : <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwss.wsts/ram_full_fb_i> 
+INFO:Xst:2260 - The FF/Latch <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.rfwft/empty_fwft_fb> in Unit <CntrlUART/uart_unit/ftx> is equivalent to the following FF/Latch : <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.rfwft/empty_fwft_i> 
+INFO:Xst:2260 - The FF/Latch <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwss.wsts/ram_full_i> in Unit <CntrlUART/uart_unit/frx> is equivalent to the following FF/Latch : <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwss.wsts/ram_full_fb_i> 
+INFO:Xst:2260 - The FF/Latch <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.rfwft/empty_fwft_fb> in Unit <CntrlUART/uart_unit/frx> is equivalent to the following FF/Latch : <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.rfwft/empty_fwft_i> 
+INFO:Xst:2260 - The FF/Latch <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwss.wsts/ram_full_i> in Unit <CntrlUART/uart_unit/ftx> is equivalent to the following FF/Latch : <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwss.wsts/ram_full_fb_i> 
+INFO:Xst:2260 - The FF/Latch <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.rfwft/empty_fwft_fb> in Unit <CntrlUART/uart_unit/ftx> is equivalent to the following FF/Latch : <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.rfwft/empty_fwft_i> 
+INFO:Xst:2260 - The FF/Latch <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwss.wsts/ram_full_i> in Unit <CntrlUART/uart_unit/frx> is equivalent to the following FF/Latch : <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwss.wsts/ram_full_fb_i> 
+INFO:Xst:2260 - The FF/Latch <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.rfwft/empty_fwft_fb> in Unit <CntrlUART/uart_unit/frx> is equivalent to the following FF/Latch : <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.rfwft/empty_fwft_i> 
+FlipFlop MS/C/estado_actual_FSM_FFd9 has been replicated 1 time(s)
+
+Final Macro Processing ...
+
+=========================================================================
+Final Register Report
+
+Macro Statistics
+# Registers                                            : 133
+ Flip-Flops                                            : 133
+
+=========================================================================
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Design Summary                             *
+=========================================================================
+
+Clock Information:
+------------------
+---------------------------------------------------+-------------------------------+-------+
+Clock Signal                                       | Clock buffer(FF name)         | Load  |
+---------------------------------------------------+-------------------------------+-------+
+clk                                                | BUFGP                         | 228   |
+CntrlBtn/we_cs_AND_62_o(CntrlBtn/we_cs_AND_62_o1:O)| NONE(*)(CntrlBtn/btnS_reg_LDC)| 1     |
+btnS                                               | BUFGP                         | 1     |
+---------------------------------------------------+-------------------------------+-------+
+(*) This 1 clock signal(s) are generated by combinatorial logic,
+and XST is not able to identify which are the primary clock signals.
+Please use the CLOCK_SIGNAL constraint to specify the clock signal(s) generated by combinatorial logic.
+INFO:Xst:2169 - HDL ADVISOR - Some clock signals were not automatically buffered by XST with BUFG/BUFR resources. Please use the buffer_type constraint in order to insert these buffers to the clock signals to help prevent skew problems.
+
+Asynchronous Control Signals Information:
+----------------------------------------
+No asynchronous control signals found in this design
+
+Timing Summary:
+---------------
+Speed Grade: -2
+
+   Minimum period: 7.621ns (Maximum Frequency: 131.216MHz)
+   Minimum input arrival time before clock: 7.116ns
+   Maximum output required time after clock: 4.118ns
+   Maximum combinational path delay: No path found
+
+=========================================================================

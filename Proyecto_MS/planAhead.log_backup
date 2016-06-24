@@ -1,0 +1,24 @@
+#-----------------------------------------------------------
+# PlanAhead v14.1 (64-bit)
+# Build 179419 by xbuild on Thu Apr 26 11:43:29 MDT 2012
+# Start of session at: Fri Jun 24 11:10:00 2016
+# Process ID: 3588
+# Log file: C:\Users\azure\Desktop\MS_final\planAhead.log
+# Journal file: C:\Users\azure\Desktop\MS_final\planAhead.jou
+#-----------------------------------------------------------
+INFO: [Device-36] Loading parts and site information from C:/Xilinx/14.1/ISE_DS/PlanAhead/data/parts/arch.xml
+Parsing RTL primitives file [C:/Xilinx/14.1/ISE_DS/PlanAhead/data/parts/xilinx/rtl/prims/rtl_prims.xml]
+Finished parsing RTL primitives file [C:/Xilinx/14.1/ISE_DS/PlanAhead/data/parts/xilinx/rtl/prims/rtl_prims.xml]
+start_gui
+open_project {C:\Users\azure\Desktop\MS_final\MS_final.ppr}
+Scanning sources...
+Finished scanning sources
+Parsing template File [C:/Xilinx/14.1/ISE_DS/ISE\data\projnav\templates\verilog.xml].
+Finished parsing template File [C:/Xilinx/14.1/ISE_DS/ISE\data\projnav\templates\verilog.xml].
+Parsing template File [C:/Xilinx/14.1/ISE_DS/ISE\data\projnav\templates\vhdl.xml].
+Finished parsing template File [C:/Xilinx/14.1/ISE_DS/ISE\data\projnav\templates\vhdl.xml].
+Parsing template File [C:/Xilinx/14.1/ISE_DS/ISE\data\projnav\templates\ucf.xml].
+Finished parsing template File [C:/Xilinx/14.1/ISE_DS/ISE\data\projnav\templates\ucf.xml].
+set_property source_mgmt_mode All [current_project]
+add_files -norecurse C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/shifter/ControladorShifter.v
+remove_files C:/Users/azure/Desktop/MS_final/MS_final.srcs/sources_1/imports/facu/DispositivosInOut/shifter/ControladorShifter.v
