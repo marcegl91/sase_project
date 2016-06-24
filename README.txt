@@ -1,16 +1,7 @@
 # Máquina Sencilla
 
 ## Puertos
-
-led  = 0
-swt  = 1
-btns = 2
-sseg = 3
-uart = 4       (va todo shifteado 2 por el register select)
-
-OUT de LEDS (DEVICE DIR 000 | REGISTER SELECTED 00)
-IN de SWITCHES (DEVICE DIR 001 | REGISTER SELECTED 00)
-IN/OUT de BTNS (DEVICE DIR 010 | REGISTER SELECTED 00)
+Ver DispositivosInOut/mapaES.md
 
 ## OP
 P = (DEVICE_DIR|REG_SEL)
