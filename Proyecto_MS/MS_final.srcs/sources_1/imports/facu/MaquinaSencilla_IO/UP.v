@@ -23,8 +23,8 @@
 module UP(
     input clk,
     input reset,
-    input [1:0] mux_dir, mux_in, 
-    input alu_op1, alu_op0, le, pc_w, ir_w, a_w, b_w, fz_w, sp_w, sp_d,
+    input [1:0] mux_dir, mux_in, alu_op,
+    input le, pc_w, ir_w, a_w, b_w, fz_w, sp_w, sp_d,
     input [15:0] inport,
     output reg fz,
     output [5:0] cop,
@@ -53,7 +53,7 @@ module UP(
     reg [6:0] mux_dir_out;
     reg [15:0] mux_mem_out;
        
-    Alu A(.A(a), .B(b), .op({alu_op1, alu_op0}), .z(alu_z), .out(alu_out));
+    Alu A(.A(a), .B(b), .op(alu_op), .z(alu_z), .out(alu_out));
     RAM Mem(.clk(clk), .le(le), .dir(mux_dir_out), .ent(mux_mem_out), .sal(mem_out));
     
     always@*

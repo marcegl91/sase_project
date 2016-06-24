@@ -37,7 +37,7 @@ module MaquinaSencilla(
      	.fz(fz), .control(control));
      
      UP P(.mux_dir(control[11:10]), 
-     	.alu_op1(control[9]), .alu_op0(control[8]), 
+     	.alu_op(control[9:8]), 
      	.le(control[7]), 
      	.pc_w(control[6]), .ir_w(control[5]), .a_w(control[4]), .b_w(control[3]), .fz_w(control[2]), 
      	.mux_in({control[1], control[14]}),
