@@ -36,7 +36,7 @@ module testShift;
 	wire [15:0] data_out;
 
 	// Instantiate the Unit Under Test (UUT)
-	ControladorShift uut (
+	ControladorShifter uut (
 		.clk(clk), 
 		.reset(reset), 
 		.reg_sel(reg_sel), 
