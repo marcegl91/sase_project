@@ -36,12 +36,7 @@ wire [15:0] ready_out;
 always @*
 begin
 if(cs)
-begin
-	if (infoValue[14:0] >= 16)
-		times = 4'b1111;
-	else
 		times = infoValue[3:0];
-end
 end
 
 always @*
