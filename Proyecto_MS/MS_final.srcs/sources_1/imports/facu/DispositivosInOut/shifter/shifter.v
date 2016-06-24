@@ -31,19 +31,27 @@ reg [15:0] value;
 reg [15:0] shiftedValue;
 reg [3:0] times;
 reg FirstTime;
-
-//
-//always@(posedge reset)
-//	begin
-//		ready <= 16'd0;
-//		result <= 16'd0;
-//		FirstTime <= 1;
-//		value <= valueEntry;
-//		times <= timesEntry;
-//	end
+reg stop;
 
 always @(posedge clk) 
 	begin
+		
+		if (reset)
+			begin
+				if(!stop)
+					begin
+						ready <= 16'b0;
+						result <= 1'b0;
+						FirstTime <= 1'b1;
+					end
+				stop <= 1'b1;
+			end
+		else
+			begin
+				stop <= 1'b0;
+			end
+			
+			
 		if (FirstTime)
 			begin
 				value <= valueEntry;
@@ -52,7 +60,7 @@ always @(posedge clk)
 			end
 		else
 			begin
-				if(times == 4'b0)
+				if(times == 0)
 					begin
 						result <= value;
 						ready <= 1'b1;
@@ -60,7 +68,7 @@ always @(posedge clk)
 				else
 					begin			
 						value <= shiftedValue;
-						times <= times - 1'b1;
+						times <= times - 1;
 					end
 			end
 	end
