@@ -23,90 +23,114 @@
 module UC(
     input clk,
     input reset,
-    input c3, c2, c1, c0, c5, c4, fz,
-    output reg [14:0] out
+    input [5:0] cop,
+    input fz,
+    output reg [14:0] control
     );
     
-    reg [4:0] estado_actual; 
-    reg [4:0] estado_futuro;
+    reg [4:0] estado; 
+    reg [4:0] estado_next;
     
     initial
-        begin
-        estado_actual = 5'd0;
-        out = 15'b000_00xx01100000;
-        end
+    begin
+        estado = 5'd0;
+    end
     
-    always@*
-        begin
-            case(estado_actual)
-                0: out =  15'b000_00xx01100000; 
-                1: out =  15'b000_xxxx00000000;
-                2: out =  15'b000_10xx00001000; 
-                6: out =  15'b000_11xx00010000; 
-                7: out =  15'b000_110010000100; 
-                9: out =  15'b000_xx0100000100; 
-                10: out = 15'b000_111010000100; 
-                11: out = 15'b000_11xx01100000; 
-                14: out = 15'b000_111010000010; // IN
-                15: out = 15'b000_111000000101; // OUT
-                16: out = 15'b010_xxxx00000000;
-                17: out = 15'b100_01xx10000000;
-                18: out = 15'b011_01xx00100000;
-                
-                default: out = 15'dx;
-             endcase   
-        end
-        	
+    localparam [4:0]
+        fetch   = 5'd0,
+        decode  = 5'd1,
+        load_f  = 5'd2,
+        load_d  = 5'd6,
+        add     = 5'd7,
+        cmp     = 5'd9,
+        mov     = 5'd10,
+        jump    = 5'd11,
+        in      = 5'd14,
+        out     = 5'd15,
+        dec_sp  = 5'd16,
+        push_pc = 5'd17,
+        pop_pc  = 5'd18;
+    
     always@(posedge clk)
-    	if (reset)
-    		estado_actual <= 5'd0;
-    	else
-        	estado_actual <= estado_futuro;                
+    begin
+        if (reset)
+            estado <= 5'd0;
+        else
+            estado <= estado_next;
+    end
 
     always@*
-        begin
-            // IN:  1110
-            // OUT: 1111
-            // BEQ: 1100
-            casex({estado_actual, c1, c0, fz, c3, c2, c5, c4})
-             // 0
-             12'b00000_xxx_xx_xx: estado_futuro = 5'd1;
-             // 1
-             12'b00001_0xx_xx_xx: estado_futuro = 5'd2;
-             12'b00001_x0x_xx_xx: estado_futuro = 5'd2;
-             12'b00001_111_00_0x: estado_futuro = 5'd11; // Branch
-             12'b00001_110_00_0x: estado_futuro = 5'd0; // No branch
-             12'b00001_11x_10_xx: estado_futuro = 5'd14;
-             12'b00001_11x_11_xx: estado_futuro = 5'd15; 
-             12'b00001_11x_00_1x: estado_futuro = 5'd2; // call & ret
-             //2
-             12'b00010_0xx_xx_xx: estado_futuro = 5'd6;
-             12'b00010_10x_xx_xx: estado_futuro = 5'd10;
-             12'b00010_11x_00_10: estado_futuro = 5'd16; // call_1
-             12'b00010_11x_00_11: estado_futuro = 5'd18; // ret
-             //6             
-             12'b00110_x0x_xx_xx: estado_futuro = 5'd7;
-             12'b00110_x1x_xx_xx: estado_futuro = 5'd9;
-             //7
-             12'b00111_xxx_xx_xx: estado_futuro = 5'd0;
-             //9
-             12'b01001_xxx_xx_xx: estado_futuro = 5'd0;
-             //10
-             12'b01010_xxx_xx_xx: estado_futuro = 5'd0;
-             //11
-             12'b01011_xxx_xx_xx: estado_futuro = 5'd1;             
-             //14
-             12'b01110_xx_xx_x_xx: estado_futuro = 5'd0; 
-             //15
-             12'b01111_xx_xx_x_xx: estado_futuro = 5'd0; 
-             //16 (call_1)
-             12'b10000_xxx_xx_xx: estado_futuro = 5'd17;
-             //17 (call_2)
-             12'b10001_xxx_xx_xx: estado_futuro = 5'd11;
-             //18 (ret)
-             12'b10010_xxx_xx_xx: estado_futuro = 5'd11;
-             default: estado_futuro = estado_actual;
-             endcase
-        end
+    begin
+        case (estado)
+            0:  control = 15'b000_00xx01100000; 
+            1:  control = 15'b000_xxxx00000000;
+            2:  control = 15'b000_10xx00001000; 
+            6:  control = 15'b000_11xx00010000; 
+            7:  control = 15'b000_110010000100; 
+            9:  control = 15'b000_xx0100000100; 
+            10: control = 15'b000_111010000100; 
+            11: control = 15'b000_11xx01100000; 
+            14: control = 15'b000_111010000010;
+            15: control = 15'b000_111000000101;
+            16: control = 15'b010_xxxx00000000;
+            17: control = 15'b100_01xx10000000;
+            18: control = 15'b011_01xx00100000;
+            
+            default: control = 15'dx;
+         endcase   
+    end
+        	
+    always@*
+    begin
+        case (estado)
+            fetch: estado_next = decode;
+            
+            decode:
+            begin
+                casex ({cop, fz})
+                    7'b0xxxxxx: estado_next = load_f;
+                    7'bx0xxxxx: estado_next = load_f;
+                    7'b11000x1: estado_next = jump;
+                    7'b11000x0: estado_next = fetch;
+                    7'b1110xxx: estado_next = in;
+                    7'b1111xxx: estado_next = out; 
+                    7'b11001xx: estado_next = load_f;
+                    default:      estado_next = fetch;
+                endcase
+            end
+            
+            load_f:
+            begin
+                casex (cop)
+                    7'b0xxxxx: estado_next = load_d;
+                    7'b10xxxx: estado_next = mov;
+                    7'b110010: estado_next = dec_sp;
+                    7'b110011: estado_next = pop_pc;
+                    default:      estado_next = fetch;
+                endcase
+            end
+            
+            load_d:
+            begin
+                casex (cop)
+                    7'bx0xxxx: estado_next = add;
+                    7'bx1xxxx: estado_next = cmp;
+                    default:      estado_next = fetch;
+                endcase
+            end
+            
+            add:     estado_next = fetch;
+            cmp:     estado_next = fetch;
+            mov:     estado_next = fetch;
+            jump:    estado_next = decode;
+            in:      estado_next = fetch;
+            out:     estado_next = fetch;
+            dec_sp:  estado_next = push_pc;
+            push_pc: estado_next = jump;
+            pop_pc:  estado_next = jump;
+            
+            default: estado_next = fetch;
+        endcase
+    end
         
 endmodule
