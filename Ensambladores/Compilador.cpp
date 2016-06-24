@@ -14,7 +14,7 @@ using namespace std;
 map<string,string> instructions_codes;
 map<string,string> etiquetas_ES;
 //SOPORTE EXPERIMENTAL PARA WINDOWS, para usarlo descomentar la siguiente linea
-//#define Windows_MODE
+#define Windows_MODE
 //funciones auxiliares para conversion de datos(debe haber mejores pero estas andan :) )
 bool es_variable(string a){
     return isalpha(a[0]);
@@ -552,6 +552,11 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                                 cout<<comando<<" "<<line<<endl;
                                 exit(-1);
                             }
+                            if((comando==string("IN"))&&(es_constante(segundo_op))){
+                                cout<<"Error al compilar, IN a constante, linea: "<<linea_codigo+1<<endl;
+                                cout<<comando<<" "<<line<<endl;
+                                exit(-1);
+                            }
                             if(!es_direccion(primer_op)){
                                 map<string,string>::iterator it=etiquetas_ES.find(caps_UP(primer_op));
                                 if(it==etiquetas_ES.end()){
@@ -586,16 +591,18 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
 }
 
 void inicializar_etiquetas_ES(){
-    etiquetas_ES.insert ( pair<string,string>("puerto_0_shifter","10") );
-    etiquetas_ES.insert ( pair<string,string>("puerto_1_shifter","11") );
-    etiquetas_ES.insert ( pair<string,string>("puerto_2_shifter","12") );
-    etiquetas_ES.insert ( pair<string,string>("puerto_3_shifter","13") );
-    etiquetas_ES.insert ( pair<string,string>("LED","0") );
-    etiquetas_ES.insert ( pair<string,string>("SWT","1") );
-    etiquetas_ES.insert ( pair<string,string>("BTNS","2") );
-    etiquetas_ES.insert ( pair<string,string>("SSEG","3") );
-    etiquetas_ES.insert ( pair<string,string>("UART","4") );
-
+    etiquetas_ES.insert ( pair<string,string>("puerto_0_shifter","8") );
+    etiquetas_ES.insert ( pair<string,string>("puerto_1_shifter","9") );
+    etiquetas_ES.insert ( pair<string,string>("puerto_2_shifter","10") );
+    etiquetas_ES.insert ( pair<string,string>("puerto_3_shifter","11") );
+    etiquetas_ES.insert ( pair<string,string>("UART_TX","12") );
+    etiquetas_ES.insert ( pair<string,string>("UART_RX","13") );
+    etiquetas_ES.insert ( pair<string,string>("UART_FULL","14") );
+    etiquetas_ES.insert ( pair<string,string>("UART_EMPTY","15") );
+    etiquetas_ES.insert ( pair<string,string>("SSEG","16") );
+    etiquetas_ES.insert ( pair<string,string>("BTNS","20") );
+    etiquetas_ES.insert ( pair<string,string>("SWT","24") );
+    etiquetas_ES.insert ( pair<string,string>("LED","28") );
 }
 
 void inicializar_instrucciones(){
