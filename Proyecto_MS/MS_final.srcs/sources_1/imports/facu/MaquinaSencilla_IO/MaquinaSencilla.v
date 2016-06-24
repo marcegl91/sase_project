@@ -30,19 +30,18 @@ module MaquinaSencilla(
     );
     
     wire [5:0] cop;
-    wire [14:0] out;
-    assign we = out[0];
+    wire [14:0] control;
+    assign we = control[0];
      
-     UC C(.clk(clk), .reset(reset), 
-     	.c1(cop[5]), .c0(cop[4]), .c3(cop[3]), .c2(cop[2]), .c5(cop[1]), .c4(cop[0]),
-     	.fz(fz), .out(out));
+     UC C(.clk(clk), .reset(reset), .cop(cop),
+     	.fz(fz), .control(control));
      
-     UP P(.mx1(out[11]), .mx0(out[10]), 
-     	.alu_op1(out[9]), .alu_op0(out[8]), 
-     	.le(out[7]), 
-     	.pc_w(out[6]), .ir_w(out[5]), .a_w(out[4]), .b_w(out[3]), .fz_w(out[2]), 
-     	.mx_memio(out[1]), .mx_mempc(out[14]),
-     	.sp_w(out[13:12]),
+     UP P(.mux_dir(control[11:10]), 
+     	.alu_op1(control[9]), .alu_op0(control[8]), 
+     	.le(control[7]), 
+     	.pc_w(control[6]), .ir_w(control[5]), .a_w(control[4]), .b_w(control[3]), .fz_w(control[2]), 
+     	.mux_in({control[1], control[14]}),
+     	.sp_w(control[13]), .sp_d(control[12]),
        	.clk(clk), .reset(reset), 
        	.cop(cop), .fz(fz), 
        	.inport(inport), .mem_out(outport), .dirport(dirport));
