@@ -486,7 +486,7 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                                 segundo_op=segundo_op.substr(1,segundo_op.find(']')-1) ;
                                 program.push_back("ADD "+segundo_op+","+int_a_string(linea_leida+1));
                                 program.push_back("MOV "+primer_op+",0");
-                                linea_leida++;
+                                linea_leida+=2;
                             }
                             agregar_var(primer_op,variables);
                             agregar_var(segundo_op,variables);
