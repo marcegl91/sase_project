@@ -514,7 +514,7 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                                 primer_parametro+=string_a_int(segundo_op.substr(1));
                                 string aux="@"+int_a_string(primer_parametro);
                                 agregar_var(aux,variables);
-                                program.push_back("OUT 0,"+aux);
+                                program.push_back("OUT "+etiquetas_ES.find("PUERTO_0_SHIFTER")->second+","+aux);
                             }
                             else{
                                 agregar_var(segundo_op,variables);
@@ -524,15 +524,15 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
                                 else
                                     program.push_back("MOV @0,"+contador_shift);
                                 program.push_back("ADD "+segundo_op+","+contador_shift);
-                                program.push_back("OUT 0,"+contador_shift);
+                                program.push_back("OUT "+etiquetas_ES.find("PUERTO_0_SHIFTER")->second+","+contador_shift);
                                 linea_leida+=2;
                             }
-                            program.push_back("OUT "+etiquetas_ES.find("puerto_1_shifter")->second+","+primer_op);
+                            program.push_back("OUT "+etiquetas_ES.find("PUERTO_1_SHIFTER")->second+","+primer_op);
                             linea_leida=linea_leida+2;
-                            program.push_back("IN "+etiquetas_ES.find("puerto_3_shifter")->second+","+contador_shift);
+                            program.push_back("IN "+etiquetas_ES.find("PUERTO_3_SHIFTER")->second+","+contador_shift);
                             program.push_back("CMP @0,"+contador_shift);
                             program.push_back("BEQ "+int_a_string(linea_leida));
-                            program.push_back("IN "+etiquetas_ES.find("puerto_2_shifter")->second+","+primer_op);
+                            program.push_back("IN "+etiquetas_ES.find("PUERTO_2_SHIFTER")->second+","+primer_op);
                             linea_leida=linea_leida+4;
                         }
                         if(comando==string("CMP")) {
@@ -591,10 +591,10 @@ vector<string> limpiar_codigo(ifstream &input_file,map <string,int> &etiquetas,m
 }
 
 void inicializar_etiquetas_ES(){
-    etiquetas_ES.insert ( pair<string,string>("puerto_0_shifter","8") );
-    etiquetas_ES.insert ( pair<string,string>("puerto_1_shifter","9") );
-    etiquetas_ES.insert ( pair<string,string>("puerto_2_shifter","10") );
-    etiquetas_ES.insert ( pair<string,string>("puerto_3_shifter","11") );
+    etiquetas_ES.insert ( pair<string,string>("PUERTO_0_SHIFTER","8") );
+    etiquetas_ES.insert ( pair<string,string>("PUERTO_1_SHIFTER","9") );
+    etiquetas_ES.insert ( pair<string,string>("PUERTO_2_SHIFTER","10") );
+    etiquetas_ES.insert ( pair<string,string>("PUERTO_3_SHIFTER","11") );
     etiquetas_ES.insert ( pair<string,string>("UART_TX","12") );
     etiquetas_ES.insert ( pair<string,string>("UART_RX","13") );
     etiquetas_ES.insert ( pair<string,string>("UART_FULL","14") );
