@@ -24,7 +24,8 @@ module Placa(
     input clk,
     input reset,
     input [7:0] swt,
-    output [7:0] Led,
+    output [7:0] Led, sseg,
+    output [3:0] an,     
     input btnS,
     input rx,
     output tx
@@ -42,7 +43,7 @@ module Placa(
             .device0in(device0out), .device0out(device0in), .device0cs(device0cs),
             .device1in(device1out), .device1out(device1in), .device1cs(device1cs),
             .device2in(device2out), .device2out(device2in), .device2cs(device2cs),
-            .device3in(), .device3out(), .device3cs(),
+            .device3in(device3out), .device3out(device3in), .device3cs(device3cs),
             .device4in(), .device4out(), .device4cs(),
             .device5in(), .device5out(), .device5cs(),
             .device6in(), .device6out(), .device6cs(),
@@ -53,11 +54,14 @@ module Placa(
     ControladorLED CntrlLed(.clk(clk), .reset(reset), .we(device0in[18]), .reg_sel(device0in[17:16]), .cs(device0cs), .in(device0in[15:0]), .out(device0out));
     
     // DEVICE 1: UART
-    // ControladorUART CntrlUART(.clk(clk), .reset(reset), .we(device1in[18]), .reg_sel({device1in[17:16]}), .cs(device1cs), .in(device1in[15:0]), .out(device1out), .rx(rx), .tx(tx));
+    // ControladorUART CntrlUART(.clk(clk), .reset(reset), .we(device1in[18]), .reg_sel({device1in[17:16]}), .cs(device1cs), .in({7'b0, rx, device1in[7:0]}), .out(device1out), .tx .rx);
     
     ControladorSwitches CntrlSwt(.clk(clk), .reset(reset), .we(device1in[18]), .reg_sel(device1in[17:16]), .cs(device1cs), .in({8'b0, swt}), .out(device1out));
     
     ControladorBotones  CntrlBtn(.clk(clk), .reset(reset), .we(device2in[18]), .reg_sel(device2in[17:16]), .cs(device2cs), .in({15'b0, btnS}), .out(device2out));
-
+    
+    assign sseg = device3out[7:0];
+    assign an = device3out[11:8];
+    ControladorSSEG CntrlSSEG(.clk(clk), .reset(reset), .we(device3in[18]), .reg_sel(device3in[17:16]), .cs(device3cs), .in(device3in[15:0]), .out(device3out));
 
 endmodule
