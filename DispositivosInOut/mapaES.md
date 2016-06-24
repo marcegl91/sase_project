@@ -5,9 +5,9 @@ Las direcciones de entrada/salida son de 5 bits de ancho y tienen la forma `[d3,
 | ----------	|---------------|---------|----------|----------|----------|---------------|
 | 0	| ... | | | | | | |
 | 1	| ... | | | | | | |
-| 2	| Shifter | | | | | | |
-| 3	| UART		| `Tx_Data`(w)	| `Rx_data`(r)/`Reset`(w) | `Tx_full`(r)| `Rx_empty`(w)| Opera con los 8 bits *menos* significativos|
-| 4	| 7 Segmentos | | | | | | |
+| 2	| Shifter |`op`(w) [¬l/r, x10, #shifts] | `value`(w) | `data_out`(r)  | `ready`(r) | | 
+| 3	| UART		| `tx_data`(w)	| `tx_data`(r)/`reset`(w) | `tx_full`(r) | `rx_empty`(r) | Opera con los 8 bits *menos* significativos|
+| 4	| 7 Segmentos | | `7seg_data`(w)| | | | |
 | 5	| Botones | | | | | | |
-| 6	| Switches	| `SWT_data`(r)| | |
-| 7	| LEDs 		| `LED_data`(w)| | | |
+| 6	| Switches	| `swt_data`(r)| | |
+| 7	| LEDs 		| `led_data`(w)| | | |
