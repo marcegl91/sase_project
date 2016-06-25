@@ -573,9 +573,9 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             }
                             else{
                                 agregar_var(segundo_op,variables);
-                                agregar_var("@100000000000",variables);
+                                agregar_var("@32768",variables);
                                 if(comando==string("SHIFTR"))
-                                    program.push_back("MOV @100000000000,"+contador_shift);
+                                    program.push_back("MOV @32768,"+contador_shift);
                                 else
                                     program.push_back("MOV @0,"+contador_shift);
                                 program.push_back("ADD "+segundo_op+","+contador_shift);
