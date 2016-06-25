@@ -586,7 +586,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             program.push_back("IN "+etiquetas_ES.find("PUERTO_3_SHIFTER")->second+","+contador_shift);
                             program.push_back("CMP @0,"+contador_shift);
                             program.push_back("BEQ "+int_a_string(linea_leida+7));
-                            program.push_back("CMP 0,0";
+                            program.push_back("CMP 0,0");
                             program.push_back("BEQ "+int_a_string(linea_leida+2));
                             program.push_back("IN "+etiquetas_ES.find("PUERTO_2_SHIFTER")->second+","+primer_op);
                             linea_leida+=6;
