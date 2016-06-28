@@ -528,13 +528,13 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                                 if(es_x_referencia(segundo_op)){//Mov [A],[B]  
                                     segundo_op=segundo_op.substr(1,segundo_op.find(']')-1) ;
                                     program.push_back("ADD "+segundo_op+","+int_a_string(pos_var_x));          //      ADD B,X
-                                    linea_leida+=9;
+                                    linea_leida+=11;
                                 }
                                 else{ //Mov [A],B
                                     agregar_lea(segundo_op,lea_address);
                                     program.push_back("LEA "+segundo_op+","+contador_shift);                   //      LEA B,var
                                     program.push_back("ADD "+contador_shift+","+int_a_string(pos_var_x));      //      ADD var,X
-                                    linea_leida+=10;
+                                    linea_leida+=12;
                                 }
                                 program.push_back("MOV "+primer_op+",0");                                      //x:    MOV A,0
                             }
