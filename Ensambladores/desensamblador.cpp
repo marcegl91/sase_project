@@ -20,13 +20,18 @@ string int_a_string(int numero){
     return resultado;
 }
 
-string bin_to_dec(string a){
+int bin_to_int(string a){
     int numero=0;
     for(int i=0;i<a.length();i++){
         if(a[i]=='1'){
             numero+=pow(2,a.length()-1-i);
         }
     }
+    return numero;
+
+}
+string bin_to_dec(string a){
+    int numero=bin_to_int(a);
     return int_a_string(numero);
 }
 
@@ -105,7 +110,7 @@ vector<string> reensamblar_codigo(ifstream &input_file){
                             if(comando=="110010000")
                                 linea_leida="CALL "+bin_to_dec(line.substr(9));
                             else
-                                if(comando=="110011000")
+                                if(line=="1100110000000000")
                                     linea_leida="RET";
                                 else
                                     linea_leida=line;
