@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DARoots Version="1"
+		Minor="22">
+	<FileSet Name="sources"
+			Type="DesignSrcs"
+			RelSrcDir="$PSRCDIR/sources_1">
+		<Filter Type="Srcs"/>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/bitwise-module/BWM.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/DispositivosInOut/bitwise-module/BWM.v"/>
+				<Attr Name="ImportTime"
+						Val="1466772988"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/shifter/shifter.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/DispositivosInOut/shifter/shifter.v"/>
+				<Attr Name="ImportTime"
+						Val="1466612586"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/shifter/Register.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/DispositivosInOut/shifter/Register.v"/>
+				<Attr Name="ImportTime"
+						Val="1466606430"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/shifter/ControladorShifter.v">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/MaquinaSencilla_IO/Multiplexor.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/MaquinaSencilla_IO/Multiplexor.v"/>
+				<Attr Name="ImportTime"
+						Val="1466606430"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/MaquinaSencilla_IO/RAM.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/MaquinaSencilla_IO/RAM.v"/>
+				<Attr Name="ImportTime"
+						Val="1466606430"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/MaquinaSencilla_IO/Alu.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/MaquinaSencilla_IO/Alu.v"/>
+				<Attr Name="ImportTime"
+						Val="1466606430"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/uart/uart_tx.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/DispositivosInOut/uart/uart_tx.v"/>
+				<Attr Name="ImportTime"
+						Val="1207312770"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/uart/uart_rx.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/DispositivosInOut/uart/uart_rx.v"/>
+				<Attr Name="ImportTime"
+						Val="1207312526"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/uart/mod_m_counter.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/DispositivosInOut/uart/mod_m_counter.v"/>
+				<Attr Name="ImportTime"
+						Val="1207231440"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/uart/fifo.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/DispositivosInOut/uart/fifo.v"/>
+				<Attr Name="ImportTime"
+						Val="1466608800"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/uart/FIFO.ngc">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/DispositivosInOut/uart/FIFO.ngc"/>
+				<Attr Name="ImportTime"
+						Val="1466608798"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/MaquinaSencilla_IO/UP.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/MaquinaSencilla_IO/UP.v"/>
+				<Attr Name="ImportTime"
+						Val="1466612586"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/MaquinaSencilla_IO/UC.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/MaquinaSencilla_IO/UC.v"/>
+				<Attr Name="ImportTime"
+						Val="1466606430"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/uart/uart.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/DispositivosInOut/uart/uart.v"/>
+				<Attr Name="ImportTime"
+						Val="1466601744"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/sseg/hex_to_sseg.v">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/sseg/disp_mux.v">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/ControladorBoton.v">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/MaquinaSencilla_IO/MaquinaSencilla.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/MaquinaSencilla_IO/MaquinaSencilla.v"/>
+				<Attr Name="ImportTime"
+						Val="1466606430"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/MaquinaSencilla_IO/LogicaIO.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/MaquinaSencilla_IO/LogicaIO.v"/>
+				<Attr Name="ImportTime"
+						Val="1466612586"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/uart/ControladorUART.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/DispositivosInOut/uart/ControladorUART.v"/>
+				<Attr Name="ImportTime"
+						Val="1466611340"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/sseg/ControladorSSEG.v">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/leds/ControladorLED.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/DispositivosInOut/leds/ControladorLED.v"/>
+				<Attr Name="ImportTime"
+						Val="1466612586"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/ControladorSwitches.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/DispositivosInOut/ControladorSwitches.v"/>
+				<Attr Name="ImportTime"
+						Val="1466608130"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/ControladorBtns.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/DispositivosInOut/ControladorBtns.v"/>
+				<Attr Name="ImportTime"
+						Val="1466612586"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/MaquinaSencilla_IO/Placa.v"/>
+				<Attr Name="ImportTime"
+						Val="1466775338"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<Config>
+			<Option Name="DesignMode"
+					Val="RTL"/>
+			<Option Name="TopModule"
+					Val="Placa"/>
+			<Option Name="TopLib"
+					Val="work"/>
+			<Option Name="TopRTLFile"
+					Val="$PSRCDIR/sources_1/imports/facu/MaquinaSencilla_IO/Placa.v"/>
+			<Option Name="TopAutoSet"
+					Val="TRUE"/>
+		</Config>
+	</FileSet>
+</DARoots>
