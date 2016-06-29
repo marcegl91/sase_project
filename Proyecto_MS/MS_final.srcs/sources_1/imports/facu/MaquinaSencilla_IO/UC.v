@@ -178,7 +178,8 @@ module UC(
                     7'b11000x0: estado_next = fetch;
                     7'b1110xxx: estado_next = in;
                     7'b1111xxx: estado_next = out; 
-                    7'b11001xx: estado_next = load_f;
+                    7'b110010x: estado_next = dec_sp;
+                    7'b110011x: estado_next = pop_pc;
                     default:    estado_next = fetch;
                 endcase
             end
@@ -188,8 +189,6 @@ module UC(
                 casex (cop)
                     7'b0xxxxx: estado_next = load_d;
                     7'b10xxxx: estado_next = mov;
-                    7'b110010: estado_next = dec_sp;
-                    7'b110011: estado_next = pop_pc;
                     default:   estado_next = fetch;
                 endcase
             end
