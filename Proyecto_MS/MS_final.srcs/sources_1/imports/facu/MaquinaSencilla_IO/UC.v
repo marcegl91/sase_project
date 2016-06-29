@@ -25,7 +25,8 @@ module UC(
     input reset,
     input [5:0] cop,
     input fz,
-    output reg [14:0] control
+    output reg [1:0] mux_dir, mux_in, alu_op,
+    output reg le, pc_w, ir_w, a_w, b_w, fz_w, sp_w, sp_d, we
     );
     
     reg [4:0] estado; 
@@ -61,22 +62,105 @@ module UC(
 
     always@*
     begin
+        sp_w = 1'b0;
+        sp_d = 1'b0;
+        mux_dir = 2'bx;
+        alu_op = 2'bx;
+        le = 1'b0;
+        pc_w = 1'b0;
+        ir_w = 1'b0;
+        a_w = 1'b0;
+        b_w = 1'b0;
+        fz_w = 1'b0;
+        mux_in = 2'b0;
+        we = 1'b0;
+
         case (estado)
-            0:  control = 15'b000_00xx01100000; 
-            1:  control = 15'b000_xxxx00000000;
-            2:  control = 15'b000_10xx00001000; 
-            6:  control = 15'b000_11xx00010000; 
-            7:  control = 15'b000_110010000100; 
-            9:  control = 15'b000_xx0100000100; 
-            10: control = 15'b000_111010000100; 
-            11: control = 15'b000_11xx01100000; 
-            14: control = 15'b000_111010000010;
-            15: control = 15'b000_111000000101;
-            16: control = 15'b010_xxxx00000000;
-            17: control = 15'b100_01xx10000000;
-            18: control = 15'b011_01xx00100000;
+            fetch:
+            begin
+                mux_dir = 2'b00;
+                pc_w = 1'b1;
+                ir_w = 1'b1;
+            end
+
+            load_f:
+            begin
+                mux_dir = 2'b10;
+                b_w = 1'b1;
+            end
+
+            load_d:
+            begin
+                mux_dir = 2'b11;
+                a_w = 1'b1;
+            end
+
+            add:
+            begin
+                mux_dir = 2'b11;
+                alu_op = 2'b00;
+                le = 1'b1;
+                fz_w = 1'b1;
+            end
+
+            cmp:
+            begin
+                alu_op = 2'b01;
+                fz_w = 1'b1;
+            end
+
+            mov:
+            begin
+                mux_dir = 2'b11;
+                alu_op = 2'b10;
+                le = 1'b1;
+                fz_w = 1'b1;
+            end
+
+            jump:
+            begin
+                mux_dir = 2'b11;
+                pc_w = 1'b1;
+                ir_w = 1'b1;
+            end
+
+            in:
+            begin
+                mux_dir = 2'b11;
+                alu_op = 2'b10;
+                le = 1'b1;
+                mux_in = 2'b10;
+            end
+
+            out:
+            begin
+                mux_dir = 2'b11;
+                alu_op = 2'b10;
+                fz_w = 1'b1;
+                we = 1'b1;
+            end
+
+            dec_sp:
+            begin
+                sp_d = 1'b1;
+            end
+
+            push_pc:
+            begin
+                mux_dir = 2'b01;
+                le = 1'b1;
+                mux_in = 2'b01;
+            end
+
+            pop_pc:
+            begin
+                sp_w = 1'b1;
+                sp_d = 1'b1;
+                mux_dir = 2'b01;
+                ir_w = 1'b1;
+            end
             
-            default: control = 15'dx;
+            default: ;
          endcase   
     end
         	
@@ -95,7 +179,7 @@ module UC(
                     7'b1110xxx: estado_next = in;
                     7'b1111xxx: estado_next = out; 
                     7'b11001xx: estado_next = load_f;
-                    default:      estado_next = fetch;
+                    default:    estado_next = fetch;
                 endcase
             end
             
@@ -106,7 +190,7 @@ module UC(
                     7'b10xxxx: estado_next = mov;
                     7'b110010: estado_next = dec_sp;
                     7'b110011: estado_next = pop_pc;
-                    default:      estado_next = fetch;
+                    default:   estado_next = fetch;
                 endcase
             end
             
@@ -115,7 +199,7 @@ module UC(
                 casex (cop)
                     7'bx0xxxx: estado_next = add;
                     7'bx1xxxx: estado_next = cmp;
-                    default:      estado_next = fetch;
+                    default:   estado_next = fetch;
                 endcase
             end
             

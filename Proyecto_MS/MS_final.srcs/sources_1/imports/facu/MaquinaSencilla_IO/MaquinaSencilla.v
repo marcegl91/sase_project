@@ -30,21 +30,19 @@ module MaquinaSencilla(
     );
     
     wire [5:0] cop;
-    wire [14:0] control;
-    assign we = control[0];
      
-     UC C(.clk(clk), .reset(reset), .cop(cop),
-     	.fz(fz), .control(control));
-     
-     UP P(.mux_dir(control[11:10]), 
-     	.alu_op(control[9:8]), 
-     	.le(control[7]), 
-     	.pc_w(control[6]), .ir_w(control[5]), .a_w(control[4]), .b_w(control[3]), .fz_w(control[2]), 
-     	.mux_in({control[1], control[14]}),
-     	.sp_w(control[13]), .sp_d(control[12]),
-       	.clk(clk), .reset(reset), 
-       	.cop(cop), .fz(fz), 
+    wire [1:0] mux_dir, mux_in, alu_op;
+    wire le, pc_w, ir_w, a_w, b_w, fz_w, sp_w, sp_d;
+
+     UC C(.clk(clk), .reset(reset), .cop(cop), .fz(fz), .we(we)
+        .mux_dir(mux_dir), .mux_in(mux_in), .alu_op(alu_op),
+        .le(le), .pc_w(pc_w), .ir_w(ir_w), .a_w(a_w), .b_w(b_w),
+        .fz_w(fz_w), .sp_w(sp_w), .sp_d(sp_d));
+
+     UP P(.clk(clk), .reset(reset), .cop(cop), .fz(fz), 
        	.inport(inport), .mem_out(outport), .dirport(dirport));
-  
-        
+        .mux_dir(mux_dir), .mux_in(mux_in), .alu_op(alu_op),
+        .le(le), .pc_w(pc_w), .ir_w(ir_w), .a_w(a_w), .b_w(b_w),
+        .fz_w(fz_w), .sp_w(sp_w), .sp_d(sp_d));
+
 endmodule
