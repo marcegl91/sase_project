@@ -456,7 +456,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                         if(comando==string("SUB")){
                             chequear_error_operando(primer_op,linea_codigo,comando,line);
                             chequear_error_operando(segundo_op,linea_codigo,comando,line);
-                            chequear_destino_valido(segundo_op,linea_codigo,comando,line);
+                            chequear_destino_valido(primer_op,linea_codigo,comando,line);
                             agregar_var(primer_op,variables);
                             agregar_var("@65535",variables);
                             agregar_var("@0",variables);
