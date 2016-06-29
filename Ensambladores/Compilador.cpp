@@ -589,7 +589,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             program.push_back("CMP 0,0");
                             program.push_back("BEQ "+int_a_string(linea_leida+2));
                             program.push_back("IN "+etiquetas_ES.find("PUERTO_2_SHIFTER")->second+","+primer_op);
-                            linea_leida+=6;
+                            linea_leida+=8;
                         }
                         if(comando==string("CMP")) {
                             chequear_error_operando(primer_op,linea_codigo,comando,line);
