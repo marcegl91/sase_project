@@ -35,7 +35,7 @@ module RAM(
     initial
         begin
 //           // Programa 
-           $readmemb("C:/Users/azure/Desktop/repoMS/sase_project-master/Proyecto_MS/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/testBtn.hex", M);
+//           $readmemb("C:/Users/azure/Desktop/repoMS/sase_project-master/Proyecto_MS/MS_final.srcs/sources_1/imports/facu/MaquinaSencilla_IO/testBtn.hex", M);
 //           // Datos  
 //           $readmemb("C:/Users/azure/Desktop/MaquinaSencillaIO/MaquinaSencillaIO.srcs/sources_1/imports/MaquinaSencilla.srcs/sources_1/new/datos.data", M, 100, 106);
            
