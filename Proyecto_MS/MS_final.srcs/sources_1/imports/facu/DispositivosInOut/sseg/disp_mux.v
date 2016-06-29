@@ -24,7 +24,7 @@ module disp_mux
          q_reg <= q_next;
 
    // next-state logic
-   assign q_next = q_reg + 1;
+   assign q_next = q_reg + 1'b1;
 
    // 2 MSBs of counter to control 4-to-1 multiplexing
    // and to generate active-low enable signal
