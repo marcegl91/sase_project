@@ -106,7 +106,7 @@ void modulo_out_shifter(int registro,int valor){
 
 void modulo_out_led(int registro,int valor){
     switch(registro){
-        case 0:cout<<"Salida LED: "<<int_a_binario(valor)<<endl;
+        case 0:cout<<"Salida LED: "<<int_a_binario(valor,16)<<endl;
         break;
         default:cout<<"error de escritura del registro shifter"<<endl;
         break;
