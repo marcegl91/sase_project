@@ -32,11 +32,6 @@ module UC(
     reg [4:0] estado; 
     reg [4:0] estado_next;
     
-    initial
-    begin
-        estado = 5'd0;
-    end
-    
     localparam [4:0]
         fetch   = 5'd0,
         decode  = 5'd1,

@@ -39,13 +39,6 @@ module UP(
     reg [6:0] sp, sp_next;
     reg fz_next;
     
-    initial
-    begin  
-        pc = 7'd0;
-        fz = 1'b0;
-        sp = 7'd0;
-    end
-
     assign cop = ir[15:10];
     assign dirport = ir[11:7];
     
