@@ -113,6 +113,15 @@ void modulo_out_led(int registro,int valor){
     }
 }
 
+void modulo_out_sseg(int registro,int valor){
+    switch(registro){
+        case 0:cout<<"Salida Siete Segmentos: "<<int_a_binario(valor,16)<<endl;
+        break;
+        default:cout<<"error de escritura del registro shifter"<<endl;
+        break;
+    }
+}
+
 
 bool ejecucion(vector<string> &programa,int ciclos){
     
@@ -180,7 +189,9 @@ bool ejecucion(vector<string> &programa,int ciclos){
                         switch(device){
                             case 2:modulo_out_shifter(registro,valor);
                             break;
-                            case 3:modulo_out_led(registro,valor);
+                            case 4:modulo_out_sseg(registro,valor);
+                            break;
+                            case 7:modulo_out_led(registro,valor);
                             break;
                             default:cout<<"modulo desconectado"<<endl;
                             break;
