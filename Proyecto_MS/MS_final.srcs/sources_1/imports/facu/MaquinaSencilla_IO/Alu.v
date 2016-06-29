@@ -19,8 +19,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module Alu(
-    input [15:0] A,
-    input [15:0] B,
+    input [15:0] a,
+    input [15:0] b,
     input [1:0] op,
     output z,
     output reg [15:0] out
@@ -30,13 +30,13 @@ module Alu(
     begin
     case (op)
         0: // Suma
-            out=(A+B);
+            out=(a+b);
         1: // XOR
-            out=A^B;
-        2: // B
-            out=B;
+            out=a^b;
+        2: // b
+            out=b;
         3: // NEG
-            out=B^16'b1111111111111111;
+            out=b^16'b1111111111111111;
         default:
           out=16'dx;
     endcase
