@@ -465,15 +465,14 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             agregar_var(segundo_op,variables);
                             int label_fin=linea_leida+7;
                             int label_iteracion=linea_leida+1;
-                            program.push_back("MOV "+primer_op+","+variable_auxiliar);  //      MOV A,Var_resta 
-                            program.push_back("CMP @0,"+segundo_op);                    //loop: CMP @0,B 
+                            program.push_back("MOV "+segundo_op+","+variable_auxiliar); //      MOV B,Var_resta 
+                            program.push_back("CMP @0,"+variable_auxiliar);             //loop: CMP @0,Var_resta 
                             program.push_back("BEQ "+ int_a_string(label_fin));         //      BEQ fin 
                             program.push_back("ADD @65535,"+variable_auxiliar);         //      DEC Var_Resta 
-                            program.push_back("ADD @65535,"+segundo_op);                //      DEC B  
+                            program.push_back("ADD @65535,"+primer_op);                 //      DEC A  
                             program.push_back("CMP 0,0");                               //      CMP 0,0
                             program.push_back("BEQ "+int_a_string(label_iteracion));    //      BEQ loop                                             
-                            program.push_back("MOV "+variable_auxiliar+","+segundo_op); //fin:  MOV Var_Resta,B 
-                            linea_leida+=8;
+                            linea_leida+=7;
                         }
                         if(comando==string("LEA")){
                             chequear_error_operando(primer_op,linea_codigo,comando,line);
