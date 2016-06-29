@@ -225,10 +225,8 @@
         <Attr Name="UsedInSimulation" Val="1"/>
       </FileInfo>
     </File>
-    <File Path="$PSRCDIR/sources_1/imports/timer/Timer.v">
+    <File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/Timer.v">
       <FileInfo>
-        <Attr Name="ImportPath" Val="$PPRDIR/../DispositivosInOut/timer/Timer.v"/>
-        <Attr Name="ImportTime" Val="1467205843"/>
         <Attr Name="UsedInSynthesis" Val="1"/>
         <Attr Name="UsedInImplementation" Val="1"/>
         <Attr Name="UsedInSimulation" Val="1"/>

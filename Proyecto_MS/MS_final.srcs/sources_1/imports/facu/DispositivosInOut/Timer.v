@@ -8,7 +8,7 @@ module Timer(
 	output [15:0] out
 	);
 
-	reg [15:0] prescaler_goal, prescaler_goal_next, rounds_goal, rounds_goal_next;
+	reg [15:0] prescaler_goal, rounds_goal;
 	reg [15:0] prescaler, prescaler_next;
 	reg [15:0] rounds, rounds_next;
 	reg running, running_next;
@@ -39,34 +39,36 @@ module Timer(
 			prescaler <= prescaler_next;
 			rounds <= rounds_next;
 			running <= running_next;
+
+			case({cs, we, reg_sel})
+				{1'b1, 1'b1, ROUNDS_reg}:
+				begin
+					running <= 1'b0;
+					rounds_goal <= in;
+				end
+
+				{1'b1, 1'b1, PRESCALER_reg}:
+				begin
+					running <= 1'b0;
+					prescaler_goal <= in;
+				end
+
+				{1'b1, 1'b1, START_reg}:
+					begin
+					prescaler <= 16'b0;
+					rounds <= 16'b0;
+					running <= 1'b1;
+					end
+				default: ;
+			endcase
 		end
 	end
 
 		 always@*
-		 begin   
-		         rounds_next = ((rounds != rounds_goal) && (prescaler == prescaler_goal))? rounds + 16'b1 : rounds;
-		         prescaler_next = (!running || (prescaler == prescaler_goal))? 16'b0 : prescaler + 16'b1;
-		         
-		  		 case({cs, we, reg_sel})
-		 				{1'b1, 1'b1, ROUNDS_reg}:
-		 				begin
-		 					running_next = 1'b0;
-		 					rounds_goal_next = in;
-		 				end
-		 
-		 				{1'b1, 1'b1, PRESCALER_reg}:
-		 				begin
-		 					running_next = 1'b0;
-		 					prescaler_goal_next = in;
-		 				end
-		 
-		 				{1'b1, 1'b1, START_reg}:
-		 					begin
-		 					prescaler_next = 16'b0;
-		 					rounds_next = 16'b0;
-		 					running_next = 1'b1;
-		 					end
-		 				default: running_next = (rounds != rounds_goal);
-		 			endcase
+		 begin
+			rounds_next = ((rounds != rounds_goal) && (prescaler == prescaler_goal))? rounds + 16'b1 : rounds;
+			prescaler_next = (!running || (prescaler == prescaler_goal))? 16'b0 : prescaler + 16'b1;
+			running_next = (rounds_next != rounds_goal);
 		end
+
 endmodule
