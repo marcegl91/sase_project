@@ -5,7 +5,7 @@ module Timer(
 	input cs, we,
 	input [1:0] reg_sel,
 	input [15:0] in,
-	output [15:0] out
+	output reg [15:0] out
 	);
 
 	reg [15:0] prescaler_goal, rounds_goal;
@@ -16,12 +16,8 @@ module Timer(
 
 	localparam ROUNDS_reg = 2'b00;
 	localparam PRESCALER_reg = 2'b01;
-	localparam START_reg = 2'b10;
+	localparam STATUS_reg = 2'b10;
 	localparam DONE_reg = 2'b11;
-
-	assign done = (rounds == rounds_goal);
-	assign output_enabled = (cs & (reg_sel == DONE_reg));
-	assign out = (done & output_enabled);
 
 	always@(posedge clk)
 	begin
@@ -40,24 +36,31 @@ module Timer(
 			rounds <= rounds_next;
 			running <= running_next;
 
+			// Writes:
 			case({cs, we, reg_sel})
 				{1'b1, 1'b1, ROUNDS_reg}:
 				begin
-					running <= 1'b0;
 					rounds_goal <= in;
-				end
-
-				{1'b1, 1'b1, PRESCALER_reg}:
-				begin
 					running <= 1'b0;
-					prescaler_goal <= in;
-				end
-
-				{1'b1, 1'b1, START_reg}:
-					begin
 					prescaler <= 16'b0;
 					rounds <= 16'b0;
-					running <= 1'b1;
+				end
+				{1'b1, 1'b1, PRESCALER_reg}:
+				begin
+					prescaler_goal <= in;
+					running <= 1'b0;
+					prescaler <= 16'b0;
+					rounds <= 16'b0;
+				end
+				{1'b1, 1'b1, STATUS_reg}: // Toggle run/stop
+					begin
+					running <= in[0];
+					end
+				{1'b1, 1'b1, DONE_reg}: // Reset & pause
+					begin
+					running <= 1'b0;
+					prescaler <= 16'b0;
+					rounds <= 16'b0;
 					end
 				default: ;
 			endcase
@@ -66,9 +69,19 @@ module Timer(
 
 		 always@*
 		 begin
+			// Next-state logic:
 			rounds_next = ((rounds != rounds_goal) && (prescaler == prescaler_goal))? rounds + 16'b1 : rounds;
 			prescaler_next = (!running || (prescaler == prescaler_goal))? 16'b0 : prescaler + 16'b1;
 			running_next = (rounds_next != rounds_goal);
+			
+			// Output:
+			case({cs, we, reg_sel})
+				{1'b1, 1'b0, ROUNDS_reg}: out = rounds;
+				{1'b1, 1'b0, PRESCALER_reg}: out = prescaler;
+				{1'b1, 1'b0, STATUS_reg}: out = running;
+				{1'b1, 1'b0, DONE_reg}: out = (rounds == rounds_goal);
+				default: out = 16'b0;
+			endcase
 		end
 
 endmodule
