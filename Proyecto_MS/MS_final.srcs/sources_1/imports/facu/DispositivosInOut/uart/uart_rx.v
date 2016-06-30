@@ -30,9 +30,9 @@ module uart_rx
       if (reset)
          begin
             state_reg <= idle;
-            s_reg <= 0;
-            n_reg <= 0;
-            b_reg <= 0;
+            s_reg <= 4'b0;
+            n_reg <= 3'b0;
+            b_reg <= 8'b0;
          end
       else
          begin
@@ -55,31 +55,31 @@ module uart_rx
             if (~rx)
                begin
                   state_next = start;
-                  s_next = 0;
+                  s_next = 4'b0;
                end
          start:
             if (s_tick)
-               if (s_reg==7)
+               if (s_reg==4'd7)
                   begin
                      state_next = data;
-                     s_next = 0;
-                     n_next = 0;
+                     s_next = 4'b0;
+                     n_next = 3'b0;
                   end
                else
-                  s_next = s_reg + 1;
+                  s_next = s_reg + 4'b1;
          data:
             if (s_tick)
-               if (s_reg==15)
+               if (s_reg==4'd15)
                   begin
                      s_next = 0;
                      b_next = {rx, b_reg[7:1]};
                      if (n_reg==(DBIT-1))
                         state_next = stop ;
                       else
-                        n_next = n_reg + 1;
+                        n_next = n_reg + 3'b1;
                    end
                else
-                  s_next = s_reg + 1;
+                  s_next = s_reg + 4'b1;
          stop:
             if (s_tick)
                if (s_reg==(SB_TICK-1))
@@ -88,7 +88,7 @@ module uart_rx
                      rx_done_tick =1'b1;
                   end
                else
-                  s_next = s_reg + 1;
+                  s_next = s_reg + 4'b1;
       endcase
    end
    // output
