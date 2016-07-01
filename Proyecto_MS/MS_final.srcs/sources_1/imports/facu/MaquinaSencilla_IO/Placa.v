@@ -49,25 +49,28 @@ module Placa(
             .device6in(device6out), .device6out(device6in), .device6cs(device6cs),
             .device7in(device7out), .device7out(device7in), .device7cs(device7cs)
             );
+            
+	// Pines I/O externos:
+	assign Led = device7out[7:0];
+	assign sseg = device4out[7:0];
+	assign an = device4out[11:8];
+	// reset <- btnS (Asignado en el .ucf)
+	            
     // DEVICE 7: LEDS
-    assign Led = device7out[7:0];
     ControladorLED CntrlLed(.clk(clk), .reset(reset), .we(device7in[18]), .reg_sel(device7in[17:16]), .cs(device7cs), .in(device7in[15:0]), .out(device7out));   
     // DEVICE 6: SWITCHES
     ControladorSwitches CntrlSwt(.clk(clk), .reset(reset), .we(device6in[18]), .reg_sel(device6in[17:16]), .cs(device6cs), .in({8'b0, sw}), .out(device6out));
     // DEVICE 5 : BOTONES
     ControladorBotones  CntrlBtn(.clk(clk), .reset(reset), .we(device5in[18]), .reg_sel(device5in[17:16]), .cs(device5cs), .in({12'b0, btn}), .out(device5out));
     // DEVICE 4: SEVEN SEGMENTS
-    assign sseg = device4out[7:0];
-    assign an = device4out[11:8];
     ControladorSSEG CntrlSSEG(.clk(clk), .reset(reset), .we(device4in[18]), .reg_sel(device4in[17:16]), .cs(device4cs), .in(device4in[15:0]), .out(device4out));
     // DEVICE 3: UART
     ControladorUART CntrlUART(.clk(clk), .reset(reset), .we(device3in[18]), .reg_sel({device3in[17:16]}), .cs(device3cs), .in({8'b0, device3in[7:0]}), .out(device3out), .tx(tx), .rx(rx));
     // DEVICE 2: SHIFTER
     //ControladorShifter CntrlShifter(.clk(clk), .reset(reset), .we(device2in[18]), .reg_sel({device2in[17:16]}), .cs(device2cs), .in({device2in[15:0]}), .out(device2out));
-    
+    // Timer (para testear)
+    Timer TimerModule(.clk(clk), .reset(reset), .we(device2in[18]), .reg_sel({device2in[17:16]}), .cs(device2cs), .in({device2in[15:0]}), .out(device2out));
     
     // DEVICE 1: -------
     // DEVICE 0: -------
-    //Timer(.clk(clk), .reset(reset), .we(device2in[18]), .reg_sel({device2in[17:16]}), .cs(device2cs), .in({device2in[15:0]}), .out(device2out));
-           
 endmodule
