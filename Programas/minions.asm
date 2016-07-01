@@ -42,51 +42,50 @@ BEQ cmp
 ;CMP temp_a, CODIGO_OUT ;CMP codigoOp, CODIGO_OUT
 ;BEQ out
 
-mov: MOV a, b 
+mov: MOV a, b
      BEQ fin_exec
-	 MOV UNO,[PCB_PTR_actual+OFFSET_Z]
+     MOV UNO,[PCB_PTR_actual+OFFSET_Z]
      JMP fin_exec
 
 add: ADD a, b 
      BEQ fin_exec
-	 MOV UNO,[PCB_PTR_actual+OFFSET_Z]
+     MOV UNO,[PCB_PTR_actual+OFFSET_Z]
      JMP fin_exec	 
 
 cmp: CMP a, b 
      BEQ fin_exec
-	 MOV UNO,[PCB_PTR_actual+OFFSET_Z]
+     MOV UNO,[PCB_PTR_actual+OFFSET_Z]
      JMP fin_exec	 	 
 
 beq: CMP [PCB_PTR_actual+OFFSET_Z], CERO 
      BEQ schedule
-	 MOV b, [PCB_PTR_actual+OFFSET_IP]
-	 JMP schedule
+     MOV b, [PCB_PTR_actual+OFFSET_IP]
+     JMP schedule
 
 fin_exec: OUT [PCB_PTR_actual], dir, direccion_b; OUT [PCB_PTR_actual+OFFSET_DIR_DISP], dir, direccion_b
-          OUT [PCB_PTR_actual], data, b ;OUT [PCB_PTR_actual+OFFSET_DIR_DISP], data, b
-		  
+	  OUT [PCB_PTR_actual], data, b ;OUT [PCB_PTR_actual+OFFSET_DIR_DISP], data, b
+	
 ; == SCHEDULE ==
 schedule: INC cantidad_instrucciones
-		  CMP cantidad_instrucciones, LIMITE_INSTRUCCIONES
-		  BEQ cambiar_programa
-		  JMP fetch
+	  CMP cantidad_instrucciones, LIMITE_INSTRUCCIONES
+	  BEQ cambiar_programa
+	  JMP fetch
 
 cambiar_programa: MOV CERO, cantidad_instrucciones
-				  MOV [PCB_PTR_actual+OFFSET_NEXT_PCB], PCB_PTR_actual
-		          JMP fetch
+         	  MOV [PCB_PTR_actual+OFFSET_NEXT_PCB], PCB_PTR_actual
+		  JMP fetch
 
 finalizar_programa: CMP [PCB_PTR_actual+OFFSET_NEXT_PCB], PCB_PTR_actual
-                    BEQ terminamos
-					MOV [PCB_PTR_actual+OFFSET_PREV_PCB], temp_a
-					ADD OFFSET_NEXT_PCB, temp_a
-					MOV [PCB_PTR_actual+OFFSET_NEXT_PCB], temp_a
+		    BEQ terminamos
+		    MOV [PCB_PTR_actual+OFFSET_PREV_PCB], temp_a
+		    ADD OFFSET_NEXT_PCB, temp_a
+		    MOV [PCB_PTR_actual+OFFSET_NEXT_PCB], temp_a
 
 terminamos: ;prender LEDS
 
 ;Solo MOV soporta indirecciones
 ;OUT no soporta tres operandos
 
-;CONSTANTES
 ;CONSTANTES
 OFFSET_PREV_PCB: DW 4
 OFFSET_NEXT_PCB: DW 3 
