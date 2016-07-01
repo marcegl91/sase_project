@@ -34,13 +34,13 @@ module MaquinaSencilla(
     wire [1:0] mux_dir, mux_in, alu_op;
     wire le, pc_w, ir_w, a_w, b_w, fz_w, sp_w, sp_d;
 
-     UC C(.clk(clk), .reset(reset), .cop(cop), .fz(fz), .we(we)
+     UC C(.clk(clk), .reset(reset), .cop(cop), .fz(fz), .we(we),
         .mux_dir(mux_dir), .mux_in(mux_in), .alu_op(alu_op),
         .le(le), .pc_w(pc_w), .ir_w(ir_w), .a_w(a_w), .b_w(b_w),
         .fz_w(fz_w), .sp_w(sp_w), .sp_d(sp_d));
 
      UP P(.clk(clk), .reset(reset), .cop(cop), .fz(fz), 
-       	.inport(inport), .mem_out(outport), .dirport(dirport));
+       	.inport(inport), .mem_out(outport), .dirport(dirport),
         .mux_dir(mux_dir), .mux_in(mux_in), .alu_op(alu_op),
         .le(le), .pc_w(pc_w), .ir_w(ir_w), .a_w(a_w), .b_w(b_w),
         .fz_w(fz_w), .sp_w(sp_w), .sp_d(sp_d));
