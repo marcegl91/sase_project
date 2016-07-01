@@ -32,9 +32,9 @@ module uart_tx
       if (reset)
          begin
             state_reg <= idle;
-            s_reg <= 0;
-            n_reg <= 0;
-            b_reg <= 0;
+            s_reg <= 4'b0;
+            n_reg <= 3'b0;
+            b_reg <= 8'b0;
             tx_reg <= 1'b1;
          end
       else
@@ -54,7 +54,7 @@ module uart_tx
       s_next = s_reg;
       n_next = n_reg;
       b_next = b_reg;
-      tx_next = tx_reg ;
+      tx_next = tx_reg;
       case (state_reg)
          idle:
             begin
@@ -62,7 +62,7 @@ module uart_tx
                if (tx_start)
                   begin
                      state_next = start;
-                     s_next = 0;
+                     s_next = 4'b0;
                      b_next = din;
                   end
             end
@@ -70,30 +70,30 @@ module uart_tx
             begin
                tx_next = 1'b0;
                if (s_tick)
-                  if (s_reg==15)
+                  if (s_reg==4'd15)
                      begin
                         state_next = data;
-                        s_next = 0;
-                        n_next = 0;
+                        s_next = 4'b0;
+                        n_next = 3'b0;
                      end
                   else
-                     s_next = s_reg + 1;
+                     s_next = s_reg + 1'b1;
             end
          data:
             begin
                tx_next = b_reg[0];
                if (s_tick)
-                  if (s_reg==15)
+                  if (s_reg==4'd15)
                      begin
                         s_next = 0;
                         b_next = b_reg >> 1;
                         if (n_reg==(DBIT-1))
-                           state_next = stop ;
+                           state_next = stop;
                         else
-                           n_next = n_reg + 1;
+                           n_next = n_reg + 1'b1;
                      end
                   else
-                     s_next = s_reg + 1;
+                     s_next = s_reg + 1'b1;
             end
          stop:
             begin
@@ -105,7 +105,7 @@ module uart_tx
                         tx_done_tick = 1'b1;
                      end
                   else
-                     s_next = s_reg + 1;
+                     s_next = s_reg + 1'b1;
             end
       endcase
    end
