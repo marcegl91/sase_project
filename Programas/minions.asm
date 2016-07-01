@@ -75,9 +75,11 @@ cambiar_programa: MOV CERO, cantidad_instrucciones
 				  MOV [PCB_PTR_actual+OFFSET_NEXT_PCB], PCB_PTR_actual
 		          JMP fetch
 
-finalizar_programa: CMP [PCB_PTR_actual+OFFSET_NEXT_PCB], [PCB_PTR_actual+OFFSET_PREV_PCB]
+finalizar_programa: CMP [PCB_PTR_actual+OFFSET_NEXT_PCB], PCB_PTR_actual
                     BEQ terminamos
-					MOV [PCB_PTR_actual+OFFSET_NEXT_PCB], [PCB_PTR_actual+OFFSET_PREV_PCB]
+					MOV [PCB_PTR_actual+OFFSET_PREV_PCB], temp_a
+					ADD OFFSET_NEXT_PCB, temp_a
+					MOV [PCB_PTR_actual+OFFSET_NEXT_PCB], temp_a
 
 terminamos: ;prender LEDS
 
