@@ -22,7 +22,7 @@ string int_a_string(int numero){
 
 int bin_to_int(string a){
     int numero=0;
-    for(int i=0;i<a.length();i++){
+    for(unsigned int i=0;i<a.length();i++){
         if(a[i]=='1'){
             numero+=pow(2,a.length()-1-i);
         }
@@ -61,8 +61,8 @@ void reinsertar_label_codigo(vector<string> &codigo_reensamblado){
     int labels_usados=0;
     int line_ref;
     map <int, string> labels;
-    int tamanio_codigo=codigo_reensamblado.size();
-    for(int i=0;i<tamanio_codigo;i++){
+    unsigned int tamanio_codigo=codigo_reensamblado.size();
+    for(unsigned int i=0;i<tamanio_codigo;i++){
         linea_leida=codigo_reensamblado[i];
         line=linea_leida.substr(0,linea_leida.find(' '));
         operando=linea_leida.substr(linea_leida.find(' ')+1);

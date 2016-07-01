@@ -81,7 +81,7 @@ bool hay_simbolos_reservados_check(string a){
 
 bool direccion_check(string a){
     bool res=true;
-    for(int i=0;i<a.length();i++){
+    for(unsigned int i=0;i<a.length();i++){
         if(!isdigit(a[i]))
             res=false;
     }

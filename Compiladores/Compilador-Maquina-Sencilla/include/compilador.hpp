@@ -54,4 +54,4 @@ std::vector<std::string> parser(std::ifstream &input_file,
 void inicializar_etiquetas_ES();
 void inicializar_instrucciones();
 
-#endif _ASM_MS_H
+#endif
