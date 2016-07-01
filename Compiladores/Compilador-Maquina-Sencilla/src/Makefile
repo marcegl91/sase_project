@@ -1,11 +1,12 @@
 # Macros
 program_NAME=comp
 program_NAME2=desasm
-CC = g++
-CFLAGS = -g -Wall
-SRC = Compilador.cpp
+INCLUDE=../include/
+CFLAGS = -g -std=c++11 -Wall -I$(INCLUDE)
+CC = g++ $(CFLAGS)
+SRC = compilador.cpp
 OBJ = main.o 
-SRC2= Desensamblador.cpp
+SRC2= desensamblador.cpp
 OBJ2 = desasm.o 
 
 # Reglas expl�citas

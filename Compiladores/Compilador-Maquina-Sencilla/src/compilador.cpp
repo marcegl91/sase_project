@@ -1,3 +1,4 @@
+#include <compilador.hpp>
 #include <cassert>
 #include <cctype>
 #include <iostream>
@@ -106,12 +107,12 @@ bool operando_check(string &a){
     string basura="";
     bool hay_llaves=false;
     if((a.find_first_of("[")!=string::npos) &&
-        ((a.find_first_of("[")!=0)||(a.find_first_of("]")==string::npos)) ) {  
+        ((a.find_first_of("[")!=0)||(a.find_first_of("]")==string::npos)) ) {
         //cout<<"error con las llaves"<<endl;
         return false;
     }
     if(a.find_first_of("[")==0) {
-        hay_llaves=true;    
+        hay_llaves=true;
         if(a.find_first_of("]")!=string::npos){
             auxiliar=a.substr(1,a.find_first_of("]")-1);
             basura=a.substr(a.find_first_of("]")+1);
@@ -137,7 +138,7 @@ bool operando_check(string &a){
         a="["+auxiliar+"]";
     }
     else
-        a=auxiliar; 
+        a=auxiliar;
     if(hay_simbolos_reservados_check(auxiliar)){
         return false;
     }
@@ -259,7 +260,7 @@ vector<string> generador_codigo(vector<string> codigo_limpio,map <string,int> et
         if(comando=="BEQ"||comando=="CALL"){
             //instruccion sin primer operando
             if(comando=="CALL")
-                cantidad_call_hallados++;   
+                cantidad_call_hallados++;
             primer_op="";
             segundo_op=address_solver(line,etiquetas,variables,lea_address);
             if(etiquetas.find(line)==etiquetas.end()&&!es_direccion(line)){
@@ -396,7 +397,7 @@ void buscar_etiquetas(string &line,int linea_leida,map <string,int> &etiquetas,i
             cout<<"Error al compilar: label duplicado:\""<<label<<"\" linea "<<linea_codigo+1<<endl;
             exit(-1);
         }
-        
+
     }
 }
 
@@ -465,13 +466,13 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             agregar_var(segundo_op,variables);
                             int label_fin=linea_leida+7;
                             int label_iteracion=linea_leida+1;
-                            program.push_back("MOV "+segundo_op+","+variable_auxiliar); //      MOV B,Var_resta 
-                            program.push_back("CMP @0,"+variable_auxiliar);             //loop: CMP @0,Var_resta 
-                            program.push_back("BEQ "+ int_a_string(label_fin));         //      BEQ fin 
-                            program.push_back("ADD @65535,"+variable_auxiliar);         //      DEC Var_Resta 
-                            program.push_back("ADD @65535,"+primer_op);                 //      DEC A  
+                            program.push_back("MOV "+segundo_op+","+variable_auxiliar); //      MOV B,Var_resta
+                            program.push_back("CMP @0,"+variable_auxiliar);             //loop: CMP @0,Var_resta
+                            program.push_back("BEQ "+ int_a_string(label_fin));         //      BEQ fin
+                            program.push_back("ADD @65535,"+variable_auxiliar);         //      DEC Var_Resta
+                            program.push_back("ADD @65535,"+primer_op);                 //      DEC A
                             program.push_back("CMP 0,0");                               //      CMP 0,0
-                            program.push_back("BEQ "+int_a_string(label_iteracion));    //      BEQ loop                                             
+                            program.push_back("BEQ "+int_a_string(label_iteracion));    //      BEQ loop
                             linea_leida+=7;
                         }
                         if(comando==string("LEA")){
@@ -524,7 +525,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                                 program.push_back("CMP 0,0");                                                  //      CMP 0,0
                                 program.push_back("BEQ "+int_a_string(pos_loop));                              //      BEQ loop
                                 program.push_back("ADD @32768,"+int_a_string(pos_var_x));                      //FIN   ADD 10..0,x
-                                if(es_x_referencia(segundo_op)){//Mov [A],[B]  
+                                if(es_x_referencia(segundo_op)){//Mov [A],[B]
                                     segundo_op=segundo_op.substr(1,segundo_op.find(']')-1) ;
                                     program.push_back("ADD "+segundo_op+","+int_a_string(pos_var_x));          //      ADD B,X
                                     linea_leida+=11;
