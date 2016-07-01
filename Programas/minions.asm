@@ -1,71 +1,69 @@
-;CODIGO: 28-16-16 lineas de codigo (asumiendo que valen dos)
-;CONSTANTES: OFFSET_Z, OFFSET_IP, OFFSET_DIR_DISP, 0, 1, CODIGO_ADD, CODIGO_CMP, CODIGO_MOV, CODIGO_BEQ, LIMITE_INSTRUCCIONES
-;TOTAL: 28-16-9-16-14-1-3-5 = 93 (de 128)
+;TODO: FALTA IMPLEMENTAR IN y OUT
 
-;NOTA: CODIGO_ADD, CODIGO_CMP, CODIGO_MOV, CODIGO_BEQ (son de 4)
 ; == INIT ==
 ;REQUIERE que los dos programas sean validos y estén cargados en memoria
 
-
 ; == FETCH ==
-fetch: OUT [PCB_PTR_actual-OFFSET_DIR_DISP], dir, [PCB_PTR_actual-OFFSET_IP]
-	   IN [PCB_PTR_actual-OFFSET_DIR_DISP], data, instruccion_actual
+fetch: OUT [PCB_PTR_actual], dir, [PCB_PTR_actual+OFFSET_IP]; OUT [PCB_PTR_actual+OFFSET_DIR_DISP], dir, [PCB_PTR_actual+OFFSET_IP]
+IN [PCB_PTR_actual], data, temp_a ; IN [PCB_PTR_actual+OFFSET_DIR_DISP], data, instruccion_actual
 
 ; == DECODE/PARSER ==
-CMP instruccion_actual, FIRMA_END ;1100111111...
+CMP temp_a, FIRMA_END ;CMP instruccion_actual, FIRMA_END
 BEQ finalizar_programa
-OUT disp_parser, data, instruccion_actual
-IN disp_parser, codigo_operacion, codigoOp
-IN disp_parser, dir_a, direccion_a
-IN disp_parser, dir_b, direccion_b
 
-OUT [PCB_PTR_actual-OFFSET_DIR_DISP], dir, direccion_a 
-OUT [PCB_PTR_actual-OFFSET_DIR_DISP], data, a 
+OUT disp_parser, data, temp_a;OUT disp_parser, data, instruccion_actual
 
-OUT [PCB_PTR_actual-OFFSET_DIR_DISP], dir, direccion_b 
-OUT [PCB_PTR_actual-OFFSET_DIR_DISP], data, b
+IN disp_parser, dir_a, temp_a ;IN disp_parser, dir_a, direccion_a
+OUT [PCB_PTR_actual], dir, temp_a ;OUT [PCB_PTR_actual+OFFSET_DIR_DISP], dir, direccion_a 
+OUT [PCB_PTR_actual], data, a ;OUT [PCB_PTR_actual+OFFSET_DIR_DISP], data, a
+
+;Aca no uso temp_a (y uso direccion_b) porque a direccion_b la voy a necesitar mas adelante igual
+IN disp_parser, dir_b, direccion_b  ;IN disp_parser, dir_b, direccion_b
+OUT [PCB_PTR_actual], dir, direccion_b ;OUT [PCB_PTR_actual+OFFSET_DIR_DISP], dir, direccion_b 
+OUT [PCB_PTR_actual], data, b; OUT [PCB_PTR_actual+OFFSET_DIR_DISP], data, b
+
+IN disp_parser, codigo_operacion, temp_a ;IN disp_parser, codigo_operacion, codigoOp
 
 ; == EXECUTE ==
-INC [PCB_PTR_actual-OFFSET_IP] ;Incremento el IP
+INC [PCB_PTR_actual+OFFSET_IP] ;Incremento el IP
 
-CMP codigoOp, CODIGO_BEQ
+CMP temp_a, CODIGO_BEQ ;CMP codigoOp, CODIGO_BEQ
 BEQ beq
 
-MOV 0,[PCB_PTR_actual-OFFSET_Z] ;Pongo el Z en cero para la siguiente instruccion
-
+MOV CERO, [PCB_PTR_actual+OFFSET_Z] ;Pongo el Z en cero para la siguiente instruccion
 
 ;Case para ver si es ADD/CMP/MOV
-CMP codigoOp, CODIGO_ADD
+CMP temp_a, CERO ;CMP codigoOp, CODIGO_ADD
 BEQ add
-CMP codigoOp, CODIGO_CMP
+CMP temp_a, CODIGO_CMP ;CMP codigoOp, CODIGO_CMP
 BEQ cmp
-CMP codigoOp, CODIGO_IN
-BEQ in
-CMP codigoOp, CODIGO_OUT
-BEQ out
+;CMP temp_a, CODIGO_IN ;CMP codigoOp, CODIGO_IN
+;BEQ in
+;CMP temp_a, CODIGO_OUT ;CMP codigoOp, CODIGO_OUT
+;BEQ out
 
 mov: MOV a, b 
      BEQ fin_exec
-	 MOV 1,[PCB_PTR_actual-OFFSET_Z]
+	 MOV UNO,[PCB_PTR_actual+OFFSET_Z]
      JMP fin_exec
 
 add: ADD a, b 
      BEQ fin_exec
-	 MOV 1,[PCB_PTR_actual-OFFSET_Z]
+	 MOV UNO,[PCB_PTR_actual+OFFSET_Z]
      JMP fin_exec	 
 
 cmp: CMP a, b 
      BEQ fin_exec
-	 MOV 1,[PCB_PTR_actual-OFFSET_Z]
+	 MOV UNO,[PCB_PTR_actual+OFFSET_Z]
      JMP fin_exec	 	 
 
-beq: CMP [PCB_PTR_actual-OFFSET_Z], 0 ;If z = 0. OJO que no quede abajo del cero
+beq: CMP [PCB_PTR_actual+OFFSET_Z], CERO 
      BEQ schedule
-	 MOV b, [PCB_PTR_actual-OFFSET_IP]
+	 MOV b, [PCB_PTR_actual+OFFSET_IP]
 	 JMP schedule
 
-fin_exec: OUT [PCB_PTR_actual-OFFSET_DIR_DISP], dir, dirOpB ;Hay que tener dirOpB guardada
-          OUT [PCB_PTR_actual-OFFSET_DIR_DISP], data, b
+fin_exec: OUT [PCB_PTR_actual], dir, direccion_b; OUT [PCB_PTR_actual+OFFSET_DIR_DISP], dir, direccion_b
+          OUT [PCB_PTR_actual], data, b ;OUT [PCB_PTR_actual+OFFSET_DIR_DISP], data, b
 		  
 ; == SCHEDULE ==
 schedule: INC cantidad_instrucciones
@@ -73,51 +71,57 @@ schedule: INC cantidad_instrucciones
 		  BEQ cambiar_programa
 		  JMP fetch
 
-cambiar_programa: MOV 0, cantidad_instrucciones
-				  MOV [PCB_PTR_actual-OFFSET_NEXT_PCB], PCB_PTR_actual
+cambiar_programa: MOV CERO, cantidad_instrucciones
+				  MOV [PCB_PTR_actual+OFFSET_NEXT_PCB], PCB_PTR_actual
 		          JMP fetch
 
-finalizar_programa: CMP [PCB_PTR_actual-OFFSET_NEXT_PCB], [PCB_PTR_actual-OFFSET_PREV_PCB]
+finalizar_programa: CMP [PCB_PTR_actual+OFFSET_NEXT_PCB], [PCB_PTR_actual+OFFSET_PREV_PCB]
                     BEQ terminamos
-					MOV [PCB_PTR_actual-OFFSET_NEXT_PCB], [PCB_PTR_actual-OFFSET_PREV_PCB]
+					MOV [PCB_PTR_actual+OFFSET_NEXT_PCB], [PCB_PTR_actual+OFFSET_PREV_PCB]
 
 terminamos: ;prender LEDS
 
+;Solo MOV soporta indirecciones
+;OUT no soporta tres operandos
+
 ;CONSTANTES
-OFFSET_PREV_PCB: DW 0 ;TODO: OPTIMIZAR
-OFFSET_NEXT_PCB: DW 1 
+;CONSTANTES
+OFFSET_PREV_PCB: DW 4
+OFFSET_NEXT_PCB: DW 3 
 OFFSET_Z: DW 2
-OFFSET_IP: DW 3
-OFFSET_DIR_DISP: DW 4
+OFFSET_IP: DW 1
+;OFFSET_DIR_DISP: DW 0 ;CONSTANTE DE FANTASIA
 
-CODIGO_ADD: DW 0000000000000000
-CODIGO_CMP: DW 0000000000000100
-CODIGO_MOV: DW 0000000000001000
-CODIGO_BEQ: DW 0000000000001100
-CODIGO_IN: DW 0000000000001110
-CODIGO_OUT: DW 0000000000001111
-LIMITE_INSTRUCCIONES: DW 0000000000000101
-;0
-;1
+LIMITE_INSTRUCCIONES: DW 5
+CERO: DW 0 ;0000000000000000 (tambien es CODIGO_ADD)
+UNO: DW 1
 
-PCB_PTR_actual: DW FFFFFF
-cantidad_instrucciones: DW 0
+FIRMA_END: DW 53247 ;1100111111111111
 
-;a: DW 0
-;b: DW 0
-;direccion_a: DW 0
-;direccion_b: DW 0
+CODIGO_CMP: DW 4 ;0000000000000100
+CODIGO_MOV: DW 8 ;0000000000001000
+CODIGO_BEQ: DW 12 ;0000000000001100
+;CODIGO_IN: DW 14 ;0000000000001110
+;CODIGO_OUT: DW 15 ;0000000000001111
 
-;Estas son las dos PCB de las memorias 100 y 101
-DW 101 ; OFFSET_DIR_DISP
+;VARIABLES TEMPORALES
+temp_a: DW 0
+
+;VARIABLES
+PCB_PTR_actual: DW 123
+cantidad_instrucciones: DW 0 
+a: DW 0
+b: DW 0
+direccion_b: DW 0;Guardada para devolver el operando a la memoria externa despues de la operacion
+
+;== Estas son las dos PCB de las memorias 5 y 6 ==
+DW 5 ; OFFSET_DIR_DISP (dispositivo 5)
 DW 0; OFFSET_IP
 DW 0;OFFSET_Z
-DW progA;OFFSET_NEXT_PCB
-progB: DW progA;OFFSET_PREV_PCB
-
-DW 100 ;OFFSET_DIR_DISP
+DW 123;OFFSET_NEXT_PCB (linea de ProgA)
+DW 123;OFFSET_PREV_PCB (linea de ProgA)
+DW 4 ;OFFSET_DIR_DISP (dispositivo 4)
 DW 0 ;OFFSET_IP
 DW 0 ;OFFSET_Z
-DW progB;OFFSET_NEXT_PCB
-progA: DW progB; OFFSET_PREV_PCB
-
+DW 118;OFFSET_NEXT_PCB (linea de ProgB)
+DW 118; OFFSET_PREV_PCB (linea de ProgB)
