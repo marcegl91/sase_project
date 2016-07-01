@@ -1,0 +1,531 @@
+% $Id: jfesample.tex,v 19:a118fd22993e 2013/05/24 04:57:55 stanton $
+\documentclass[12pt]{article}
+
+% DEFAULT PACKAGE SETUP
+
+\usepackage{setspace,graphicx,epstopdf,amsmath,amsfonts,amssymb,amsthm,versionPO}
+\usepackage{marginnote,datetime,enumitem,subfigure,rotating,fancyvrb}
+\usepackage{hyperref,float}
+\usepackage[longnamesfirst]{natbib}
+\usdate
+
+% These next lines allow including or excluding different versions of text
+
+\excludeversion{notes}		% Include notes?
+\includeversion{links}          % Turn hyperlinks on?
+
+% Turn off hyperlinking if links is excluded
+\iflinks{}{\hypersetup{draft=true}}
+
+% Notes options
+\ifnotes{%
+\usepackage[margin=1in,paperwidth=10in,right=2.5in]{geometry}%
+\usepackage[textwidth=1.4in,shadow,colorinlistoftodos]{todonotes}%
+}{%
+\usepackage[margin=1in]{geometry}%
+\usepackage[disable]{todonotes}%
+}
+
+% Allow todonotes inside footnotes without blowing up LaTeX
+% Next command works but now notes can overlap. Instead, we'll define 
+% a special footnote note command that performs this redefinition.
+%\renewcommand{\marginpar}{\marginnote}%
+
+% Save original definition of \marginpar
+\let\oldmarginpar\marginpar
+
+% Workaround for todonotes problem with natbib (To Do list title comes out wrong)
+\makeatletter\let\chapter\@undefined\makeatother % Undefine \chapter for todonotes
+
+% Define note commands
+\newcommand{\smalltodo}[2][] {\todo[caption={#2}, size=\scriptsize, fancyline, #1] {\begin{spacing}{.5}#2\end{spacing}}}
+\newcommand{\rhs}[2][]{\smalltodo[color=green!30,#1]{{\bf RS:} #2}}
+\newcommand{\rhsnolist}[2][]{\smalltodo[nolist,color=green!30,#1]{{\bf RS:} #2}}
+\newcommand{\rhsfn}[2][]{%  To be used in footnotes (and in floats)
+\renewcommand{\marginpar}{\marginnote}%
+\smalltodo[color=green!30,#1]{{\bf RS:} #2}%
+\renewcommand{\marginpar}{\oldmarginpar}}
+%\newcommand{\textnote}[1]{\ifnotes{{\noindent\color{red}#1}}{}}
+\newcommand{\textnote}[1]{\ifnotes{{\colorbox{yellow}{{\color{red}#1}}}}{}}
+
+% Command to start a new page, starting on odd-numbered page if twoside option 
+% is selected above
+\newcommand{\clearRHS}{\clearpage\thispagestyle{empty}\cleardoublepage\thispagestyle{plain}}
+
+% Number paragraphs and subparagraphs and include them in TOC
+\setcounter{tocdepth}{2}
+
+% JFE-specific includes:
+
+\usepackage{indentfirst} % Indent first sentence of a new section.
+\usepackage{jfe}          % JFE-specific formatting of sections, etc.
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{proposition}{Proposition}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}
+\newtheorem{condition}{Condition}
+
+\begin{document}
+
+\setlist{noitemsep}  % Reduce space between list items (itemize, enumerate, etc.)
+%\onehalfspacing      % Use 1.5 spacing
+% Use endnotes instead of footnotes - redefine \footnote command
+
+\title{Tokuwaga\\Compilador de la M\'aquina Sencilla}
+
+\author{Dise\~no de Sistemas con FPGA\\
+  Departamento de Computaci\'on\\
+  Facultad de Ciencias Exactas y Naturales\\
+  Universidad de Buenos Aires}
+
+\date{Primer Cuatrimestre, 2016}          % No date for final submission
+
+\renewcommand*\contentsname{\'Indice}
+
+% Create title page with no page number
+
+\singlespacing
+
+\maketitle
+
+\vspace{1in}
+\begin{abstract}
+\noindent Implementaci\'on de un compilador para la m\'aquina sencilla, a\~nadir funciones al repertorio de la m\'aquina mediante pseudo instrucciones, optimizaci\'on del uso de memoria.
+\end{abstract}
+
+\medskip
+\noindent \textit{Palabras claves}: compilador, pseudo-instrucciones, lenguaje ensamblador, lenguaje m\'aquina, parser, desensamblador.
+
+\vspace{2in}
+\noindent 
+Ishikame, Emiliano \ \ \ - \ \ xxx/xx \ \ - emilianoishikame@yahoo.com.ar\\
+Torrico, Myrko - \ \ xxx/xx \ \ -mirko.torrico@gmail.com\\
+
+\medskip
+
+\thispagestyle{empty}
+
+\clearpage
+
+\tableofcontents
+
+\clearpage
+
+\setcounter{page}{1}
+
+\section{Introducci\'on}
+
+Nuestro ensamblador, Tokuwaga, se encarga de recibir un archivo.asm y generar su transformación a lenguaje de máquina. El archivo recibido pasa por  el siguiente proceso: 
+
+Limpia el c\'odigo: se deshace de comentarios y reconoce variables, constantes y etiquetas para poder direccionarlas despu\'es, y hace el reemplazo de las pseudo-instrucciones. 
+Optimiza Memoria. 
+Parsea el c\'odigo.
+
+En el inicio, Tokuwaga soportaba s\'olo las instrucciones de nuestra M\'aquina sencilla (“MOV”,”ADD”,”CMP”, etc). Luego para facilitar la programaci\'on en assembler, nos vimos obligados a aceptar pseudo-instrucciones como: “JUMP”, “SUB”, “LEA”, entre otros.
+
+Finalmente Tokuwaga  permite el uso de constantes, usando como prefijo @; variables  y etiquetas de la pinta etiqueta:. Para el testeo tambi\'en se desarroll\'o un desensamblador, el cual transforma el lenguaje m\'aquina en c\'odigo ensamblador.
+
+\section{Operaciones}
+Lenguaje del miniCompilador
+Instrucciones v\'alidas de ensamblador
+
+\subsection{DEFINICI\'ON DE TIPOS}
+
+\begin{tabular}{| c | l |}
+\hline 
+P & $DEVICE\_DIR|REG\_SEL$  \\ \hline
+D & Direccion Destino  \\  \hline
+S & Direccion Fuente \\ \hline
+A & ADDR\\  \hline
+@12 & constante (DECIMAL)\\\hline
+\end{tabular}
+
+\subsection{OPERACIONES ARIM\'ETICO/L\'OGICAS}     
+
+\begin{tabular}{| c | c |p{5.5cm}|}
+\hline 
+OPCODE & Funci\'on & Descripci\'on \\ \hline
+ADD S,D & [D]=[S]+[D],Z=([S]+[D])==0 & Suma S+D y lo almacena en D, Si S+D=0 entonces flag Z es 1 si no flag Z=0.\\ \hline
+CMP S,D &  Z=([S]-[D])==0 & Si S-D=0 , entonces el flag Z=1 si no flag Z = 0.\\  \hline
+DEC D & [D]=[D]-1 & Decrementa la variable D en 1. \\ \hline
+INC D & [D]=[D]-1 & Incrementa la variable D en 1 (PSEUDO).\\  \hline
+SUB D,S & [D]=[D]-[S] & Resta S a D y lo guarda en D.\\ \hline
+SHIFTL A,S & [A]=A$>>$S & Aplica un shift l\'ogico a izquierda sobre A tantos bits como indica S.\\ \hline
+SHIFTR A,S & [A]=A$<<$s & Aplica un shift l\'ogico a derecha sobre A tantos bits como indica S.\\ \hline
+\end{tabular}
+
+\subsection{MOVIMIENTO DE DATOS}
+
+\begin{tabular}{| c | c |p{8.5cm}|}
+\hline 
+OPCODE & Funci\'on & Descripci\'on \\ \hline
+MOV S,D & [D]=[S]  & Mueve lo que esta en la posici\'on de memoria S a la posici\'on D.\\ \hline
+MOV S,[D] &  [D]=[[S]]  & Mueve lo que esta en la posici\'on de memoria apuntada por S a la posici\'on de memoria D.\\  \hline
+MOV S,[D] & [[D]]=[S]  & Mueve lo que esta en la posici\'on de memoria S a la posici\'on apuntada por D. \\ \hline
+MOV [S],[D] & [[D]]=[[S]]  & Mueve lo que esta en la posici\'on apuntada por S a la posici\'on apuntada por D. \\ \hline
+LEA "TAG",D & [D]="TAG" & Carga la direcci\'on en que se encuentra la etiqueta,variable o constante "TAG" en la posici\'on D.\\  \hline
+\end{tabular}
+
+
+\subsection{OPERACI\'ON DE ENTRADA/SALIDA}
+\begin{tabular}{| c | c |p{9.5cm}|}
+\hline 
+OPCODE & Funci\'on & Descripci\'on \\ \hline
+IN P,D & [D]=[S]  & Mueve a la posici\'on de memoria D lo que esta en el puerto P.\\ \hline
+OUT P,S &  [D]=[[S]]  & Mueve al puerto P lo que esta en la memoria en la posici\'on S.\\  \hline
+\end{tabular}
+
+
+\subsection{OPERACIONES DE SALTO}
+
+\begin{tabular}{| c | c |p{5cm}|}
+\hline 
+OPCODE & Funci\'on & Descripci\'on \\ \hline
+BEQ "TAG" & Z==1 $\rightarrow$ PC="TAG" & salta si el flag Z esta activo a la posici\'on de la etiqueta o posici\'on "TAG".\\ \hline
+CALL "TAG" &  [[reg]=PC, PC="TAG", reg=reg-1   & Llama a la funci\'on "TAG".\\  \hline
+RET & reg+1, PC=[reg]   & Retorna de un call. \\ \hline
+JMP "TAG" & PC="TAG" & Salto a la posici\'on de la etiqueta o posici\'on "TAG.\\  \hline
+\end{tabular}
+
+\subsection{DEFINICI\'ON DE DATOS}
+\begin{tabular}{| c | p{11.5cm}|}
+\hline 
+OPCODE & Descripci\'on  \\ \hline
+DW xxx &  Define un word de 16 bits en esa posici\'on de memoria (el n\'umero ingresado debe ser decimal).\\ \hline
+LABEL: &  Define una etiqueta.\\  \hline
+\end{tabular}
+
+
+Soporta uso de variables y constantes
+
+\section{Instrucciones en orden alfab\'etico}
+
+\subsection{Instrucci\'on ADD}
+El Destino de la funci\'on ADD no puede ser una constante.\\
+\begin{tabular}{| c | p{11.5cm}|}
+\hline 
+OPCODE & Descripci\'on  \\ \hline
+ADD a,b & Suma la variable a con b y lo guarda en b.\\ \hline
+ADD a,1 & Suma la posici\'on 1 con a y lo guarda en la posici\'on 1.\\ \hline
+ADD 1,a & Suma la variable a con 1 y lo guarda en la variable a.\\ \hline
+ADD @1,a & Suma la variable a con la constante y lo guarda en la variable a.\\ \hline
+\end{tabular}
+
+\subsection{Instrucci\'on BEQ}
+
+\begin{tabular}{| c | p{11.5cm}|}
+\hline 
+OPCODE & Descripci\'on  \\ \hline
+BEQ 1     & si la comparaci\'on FZ=1 salta a la posici\'on 1.\\ \hline
+BEQ LABEL & si la comparaci\'on FZ=1 salta a la etiqueta LABEL.\\ \hline
+\end{tabular}
+
+\subsection{Instrucci\'on CALL }
+\begin{tabular}{| c | p{11.5cm}|}
+\hline 
+OPCODE & Descripci\'on  \\ \hline
+CALL LABEL & Salta a la etiqueta LABEL.\\ \hline
+CALL 100 & Salta a la posici\'on 100  (valor absoluto).\\ \hline
+\end{tabular}
+
+\subsection{Instrucci\'on CMP }
+
+\begin{tabular}{| c | p{11.5cm}|}
+\hline 
+OPCODE & Descripci\'on  \\ \hline
+CMP a,b & Compara las variables a y b y guarda el resultado en el flag Z.\\ \hline
+CMP a,1 & Compara a y con la posicion de memoria 1 y guarda el resultado en el flag Z.\\ \hline
+CMP 1,2 & Compara la posici\'on de memoria 1 y 2 y guarda el resultado en el flag Z.\\ \hline
+CMP @1,a & Compara una constante con la variable a y guarda el resultado en el flag Z.\\ \hline
+\end{tabular}
+
+\subsection{Instrucci\'on DEC }
+El Destino de la funci\'on DEC no puede ser una constante.\\
+\begin{tabular}{| c | p{11.5cm}|}
+\hline 
+OPCODE & Descripci\'on  \\ \hline
+DEC a & incrementa la variable a en 1.\\ \hline
+DEC 0 & incrementa lo que hay en la posici\'on 0 en 1.\\ \hline
+\end{tabular}
+
+\subsection{Instrucci\'on DW }
+Define una constante.
+
+\subsection{Instrucci\'on INC }
+El Destino de la funci\'on INC no puede ser una constante.\\
+\begin{tabular}{| c | p{11.5cm}|}
+\hline 
+OPCODE & Descripci\'on  \\ \hline
+INC a & incrementa la variable a en 1.\\ \hline
+INC 0 & incrementa lo que hay en la posici\'on 0 en 1.\\ \hline
+\end{tabular}
+
+\subsection{Instrucci\'on IN/OUT }
+El Destino de la funci\'on IN no puede ser una constante.
+
+\begin{tabular}{| c | p{11.5cm}|}
+\hline 
+OPCODE & Descripci\'on  \\ \hline
+IN puerto,10 & mueve el puerto a la posici\'on de memoria 10.\\ \hline
+IN puerto,D  & mueve el puerto a la variable S.\\ \hline
+OUT puerto,10 & mueve la posici\'on de memoria 10 al puerto.\\ \hline
+OUT puerto,S  & mueve la variable S al puerto.\\ \hline
+OUT puerto,@10  & mueve una constante al puerto.\\ \hline
+\end{tabular}
+
+El puerto tiene direcciones validas de 0 a 31. Para los dispositivos predefinidos hay etiquetas para facilitar la identificaci\'on.
+\begin{itemize}
+    \item LED
+    \item PUERTO\_0\_SHIFTER
+    \item PUERTO\_1\_SHIFTER
+    \item PUERTO\_2\_SHIFTER
+    \item PUERTO\_3\_SHIFTER
+    \item UART\_TX
+    \item UART\_RX
+    \item UART\_FULL
+    \item UART\_EMPTY
+    \item SSEG
+    \item BTNS
+    \item SWT
+\end{itemize}
+
+\subsection{Instrucci\'on JMP }
+El Destino de la funci\'on IN no puede ser una constante.\\
+\begin{tabular}{| c | p{11.5cm}|}
+\hline 
+OPCODE & Descripci\'on  \\ \hline
+JMP label & salta a la etiqueta label.\\ \hline
+JMP 10  & mueve el puerto a la variable S.\\ \hline
+\end{tabular}
+
+\subsection{Instrucci\'on LEA}
+Permite obtener la direcci\'on donde el ensamblador almacena una variable.\\
+\begin{tabular}{| c | p{11.5cm}|}
+\hline 
+OPCODE & Descripci\'on  \\ \hline
+LEA LABEL,A & Carga la posici\'on de la etiqueta LABEL en A.\\ \hline
+LEA b,A     & Carga la posici\'on de la variable b en A.\\ \hline
+LEA @100,A  & Carga la posici\'on de la constante 100 a A.\\ \hline
+\end{tabular}
+
+\subsection{Instrucci\'on MOV}
+El Destino de la funci\'on MOV no puede ser una constante.\\
+Si el par\'ametro pasado por referencia esta fuera de los l\'imites de memoria, la funci\'on no garantiza su ejecuci\'on y/o integridad de la memoria.\\
+\begin{tabular}{| c | p{11.5cm}|}
+\hline 
+OPCODE & Descripci\'on  \\ \hline
+MOV S,D & Mueve de S a D..\\ \hline
+MOV S,1  & Mueve lo que esta en la "variable" S a la posici\'on 1.\\ \hline
+MOV 1,D  & Mueve lo que esta en la posicion 1 a la variable D.\\ \hline
+MOV @10,S  & Mueve una constante a la variable S.\\ \hline
+MOV @10,1  & Mueve una constante a la posici\'on de memoria 1.\\ \hline
+MOV [S],1  & Mueve lo que esta en la posici\'on referenciada por S a la posici\'on 1.\\ \hline
+MOV [1],D  & Mueve lo que esta en la posici\'on referenciada por la posici\'on 1 a la variable D.\\ \hline
+MOV @10,[D] & Mueve una constante a la posici\'on referenciada por D.\\ \hline
+MOV @10,[1] &Mueve una constante a la posici\'on referenciada por la posici\'on 1.\\ \hline
+MOV @10,[@14] & Mueve una constante a la posici\'on referenciada por la constante (equivale a MOV @10,14).\\ \hline
+MOV S,[@14]  & Mueve lo que esta en la "variable" S a la posici\'on referenciada por la constante (equivale a MOV @10,14).\\ \hline
+\end{tabular}
+
+\subsection{Instrucci\'on RET }
+Retorna de la ejecucion de un call.
+
+\subsection{Instrucci\'on SHIFT }
+El Destino de la funci\'on SHIFT no puede ser una constante.\\
+\begin{tabular}{| c | p{11.5cm}|}
+\hline 
+OPCODE & Descripci\'on  \\ \hline
+SHIFTR X,10 & Desplaza X l\'ogicamente a derecha tantos bits como indica la posici\'on de memoria 10.\\ \hline
+SHIFTR X,S  & Desplaza X l\'ogicamente a derecha tantos bits como indica la variable S.\\ \hline
+SHIFTR X,@10 & Desplaza X l\'ogicamente a derecha tantos bits como indica la constante.\\ \hline
+\hline 
+SHIFTL X,10 & Desplaza X l\'ogicamente a izquierda tantos bits como indica la posici\'on de memoria 10.\\ \hline
+SHIFTL X,S  & Desplaza X l\'ogicamente a izquierda tantos bits como indica la variable S.\\ \hline
+SHIFTL X,@10 & Desplaza X l\'ogicamente a izquierda tantos bits como indica la constante.\\ \hline \hline
+SHIFTR 25,10 & Desplaza lo que hay en la posici\'on 25 l\'ogicamente a derecha tantos bits como indica la posici\'on de memoria 10.\\ \hline
+SHIFTR 25,S  & Desplaza lo que hay en la posici\'on 25 l\'ogicamente a derecha tantos bits como indica la variable S.\\ \hline
+SHIFTR 25,@10 & Desplaza lo que hay en la posici\'on 25 l\'ogicamente a derecha tantos bits como indica la constante.\\ \hline
+\hline 
+SHIFTL 25,10 & Desplaza lo que hay en la posici\'on 25 l\'ogicamente a izquierda tantos bits como indica la posici\'on de memoria 10.\\ \hline
+SHIFTL 25,S  & Desplaza lo que hay en la posici\'on 25 l\'ogicamente a izquierda tantos bits como indica la variable S.\\ \hline
+SHIFTL 25,@10 & Desplaza lo que hay en la posici\'on 25 l\'ogicamente a izquierda tantos bits como indica la constante.\\ \hline
+\end{tabular}
+\\Los valores insertados son siempre 0, el m\'aximo valor de desplazamiento es 15.
+Si se excede este l\'imite la funci\'on puede no devolver un valor o provocar alteraciones en la memoria.
+
+\subsection{Instrucci\'on SUB}
+El Destino de la funci\'on SUB no puede ser una constante.\\
+\begin{tabular}{| c | p{11.5cm}|}
+\hline 
+OPCODE & Descripci\'on  \\ \hline
+SUB X,Y & Resta la variable Y a la variable X y lo guarda en X.\\ \hline
+SUB X,1 & Resta el valor que hay en la posici\'on 1 a la variable X y lo guarda en X.\\ \hline
+SUB X,@1 & Resta la constante 1 a X y lo guarda en X.\\ \hline
+SUB 1,X & Resta la variable X al valor que hay en la posici\'on 1 y lo guarda en la posici\'on 1.\\ \hline
+SUB 1,@1 & Resta la constante 1 al valor que hay en la posici\'on 1 y lo guarda en la posici\'on 1.\\ \hline
+SUB 1,12 & Resta el valor que hay en la posici\'on 12 al valor que hay en la posici\'on 1 y lo guarda en la posici\'on 1.\\ \hline
+\end{tabular}
+
+
+\section{Pseudo-Instrucci\'on}
+\subsection{Introducci\'on}
+Dado que la m\'aquina tiene pocas instrucciones disponibles, para facilitar el trabajo al programador, se decide proveer de estas instrucciones. Esto no significa que sea necesariamente mejor que la que pueda implementar. Brinda este servicio de forma general, por lo que puede no ser \'optimo.
+\subsection{Desarrollo}
+\subsubsection{INC}
+La funcion INC se implementa mediante la creaci\'on de la constante 1 y utilizando la instrucci\'on ADD. De modo que INC x se transforma en ADD @1,X
+\begin{verbatim}
+INC X   =       ADD c,X
+            c:  DW 1
+\end{verbatim} 
+\subsubsection{DEC}
+La funcion INC se implementa mediante la creaci\'on de la constante 65535 y utilizando la instrucci\'on ADD. De modo que INC x se transforma en ADD @1,X
+\begin{verbatim}
+DEC X   =       ADD c,X
+            c:  DW 65535
+\end{verbatim} 
+\subsubsection{SUB}
+La funcion SUB se implementa mediante una resta sucesiva hasta que el segundo operando es cero, luego se mueve el resultado al  segundo operando.
+\begin{verbatim}
+    SUB A,B =           MOV B,Var 
+                loop:   CMP @0,Var 
+                        BEQ fin 
+                        ADD @65535,Var
+                        ADD @65535,A 
+                        CMP 0,0
+                        BEQ loop
+                fin:
+\end{verbatim}
+\subsubsection{LEA}
+La funcion LEA se implementa mediante la creaci\'on de la constante c, la cual es la posici\'on donde se encuentra X y utilizando la instrucci\'on MOV. De modo que LEA x,0 se transforma en MOV c,X
+\begin{verbatim}
+LEA c,X     =   MOV a,X
+                a:posicion de memoria de c asignada por el compilador
+\end{verbatim}  
+\subsubsection{MOV}
+La funcion MOV con indirecci\'on se implementa mediante un algoritmo que modifique la memoria para que la siguiente instrucci\'on que se ejecute sea un MOV con indireccion.\\
+ MOV [A],B
+\begin{verbatim}
+            MOV A,X 
+            MOV a,X
+            MOV @0,Contador
+    loop:   CMP CONTADOR_LOOP,7
+            BEQ FIN
+            ADD X,X
+            ADD @65535,Contador
+            CMP 0,0
+            BEQ loop
+    FIN:    ADD 10..0,X
+            LEA B,var
+            ADD var,X       
+    X:      MOV A,0
+\end{verbatim}    
+ MOV [A],[B]
+\begin{verbatim}
+            MOV A,X 
+            MOV a,X
+            MOV @0,Contador Loop
+    loop:   CMP CONTADOR_LOOP,7
+            BEQ FIN
+            ADD X,X
+            INC contador_loop
+            CMP 0,0
+            BEQ loop
+    FIN     ADD @32768,X
+            ADD B,X
+    X:      MOV A,0
+\end{verbatim} 
+ MOV A,[B]
+\begin{verbatim}
+            ADD B,X
+    X:      MOV A,0
+\end{verbatim}
+
+\subsubsection{SHIFT}
+La funcion SHIFT era parcialmente soportada hasta que fue a\~nadido el m\'odulo de 
+entrada/salida que permite dicha operaci\'on.
+
+SHIFT X,@const
+\begin{verbatim}
+            OUT PUERTO_0_SHIFTER,@const
+            OUT PUERTO_1_SHIFTER,X
+    LOOP:   IN PUERTO_3_SHIFTER,var
+            CMP @0,var
+            BEQ FIN
+            CMP 0,0
+            BEQ LOOP
+    FIN:    IN PUERTO_2_SHIFTER,X
+\end{verbatim}
+
+SHIFT X,Y
+\begin{verbatim}
+            MOV @32768,var
+            ADD Y,var
+            OUT PUERTO_0_SHIFTER,var
+            OUT PUERTO_1_SHIFTER,X
+    LOOP:   IN PUERTO_3_SHIFTER,var
+            CMP @0,var
+            BEQ FIN
+            CMP 0,0
+            BEQ LOOP
+    FIN:    IN PUERTO_2_SHIFTER,X
+\end{verbatim}
+
+\section{Compilaci\'on}
+El m\'etodo empleado para compilar el programa es el escaneo en 2 pasadas. En la
+primer lectura, se reconocen las etiquetas, variables y constantes y se les asigna
+un token. Luego, corremos un algoritmo que busca minimizar la cantidad de memoria
+utilizada por las variables y constantes. Finalmente, en la segunda lectura se
+procede a reemplazar las l\'ineas por c\'odigo m\'aquina y para resolver las
+posiciones desconocidas, utiliza el diccionario creado en el paso anterior.
+
+\section{Optimizaci\'on del uso de memoria}
+\subsection{Motivaci\'on}
+Dado que la m\'aquina tiene memoria finita y, en este caso, muy acotada,
+ se debe aprovechar al m\'aximo este recurso.
+
+\subsection{Desarrollo}
+El problema de memoria se intent\'a mejorar desde dos puntos de vista: instrucciones
+y variables. Por el lado de las instrucciones, se busca que las pseudo instrucciones
+ocupen poca memoria y tengan un rendimiento aceptable. Por el otro lado, se intenta
+aprovechar la memoria organizando las constantes y variables, de forma que esta sea
+un conjunto minimal y de menor tama\~no posible.
+
+\section{Testing}
+Para testear el c\'odigo generado por el compilador, se implement\'o un reensamblador,
+el cual genera instrucciones (si las existen) a partir del c\'odigo binario. Dado que
+las pseudo instrucciones no pueden ser reensambladas y las variables y constantes no
+son visibles en el c\'odigo original, el c\'odigo obtenido es, en general, de mayor
+tama\~no. Adem\'as, como algunas pseudo-instrucciones crean la instrucci\'on en el momento de ejecuci\'on, se implement\'o un simulador de la m\'aquina sencilla para poder realizar el seguimiento sobre dichas instrucciones.
+
+\section{Mejoras posibles en el futuro}
+
+Se puede mejorar la velocidad de compilaci\'on mejorando el modo de compilaci\'on. Por otro lado, se puede mejorar la distribuci\'on de las variables para consumir menos memoria.  Por motivos de r\'apida implementaci\'on el compilador, el reesamblador y el simulador fueron creados independientemente, creemos que integrar las tres herramientas en un solo entorno permitira crear c\'odigo para la m\'aquina sencilla de manera simple. Adem\'as, a causa de que el simulador no ofrece la posibilidad que se realicen comandos de entrada, se limita las pruebas de programas a procesamiento est\'atico. Ser\'ia id\'oneo que en el futuro admita esa funcionalidad.
+
+\section{NOTAS IMPORTANTES	}
+\begin{itemize}
+    \item Es responsabilidad del programador que las instrucciones de SHIFT,MOV
+si se ejecutan pasando un par\'ametro por referencia, esta este dentro 
+del rango v\'alido.
+    \item Las pseudo instrucciones no necesariamente ocupan 1 palabra en memoria.
+    \item Cuando las pseudo-instrucciones son utilizadas, tener cuidado con las referencias absolutas, es recomendable utilizar etiquetas.
+\end{itemize}
+
+\fbox{\parbox[b]{\linewidth}{\textbf{\underline{\emph{Importante:}}} UNA ETIQUETA
+ TIENE PRIORIDAD SOBRE UNA VARIABLE, SI EL NOMBRE DE UNA VARIABLE ES EL MISMO QUE UNA
+ ETIQUETA, CUANDO SE REFERENCIE APUNTAR\'A LA ETIQUETA.}}
+
+\section{BUGS}
+Lista de Known Issues:
+\begin{itemize}
+    \item No soporta dos instrucciones v\'alidas en la misma l\'inea.
+    \item Solo soporta n\'umeros decimales.
+    \item Hay una variable de ensamblador que est\'a reservada.
+    \item No se puede hacer call a una variable.
+    \item Si bien hace un chequeo general de los operandos, puede que acepte algo
+            no soportado.
+\end{itemize}
+
+\end{document}
