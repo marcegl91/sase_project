@@ -17,7 +17,7 @@ std::string caps_UP(std::string);
 std::string trim_espacios(std::string);
 bool hay_simbolos_reservados_check(std::string);
 bool direccion_check(std::string);
-bool limpiar_espacios(std::string&);
+bool chequear_espacios(std::string&);
 bool operando_check(std::string&);
 std::string address_solver(std::string var,
     std::map <std::string,int> etiquetas,

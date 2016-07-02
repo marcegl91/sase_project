@@ -19,6 +19,7 @@ map<string,string> etiquetas_ES;
 //SOPORTE EXPERIMENTAL PARA WINDOWS, para usarlo descomentar la siguiente linea
 //#define Windows_MODE
 //funciones auxiliares para conversion de datos(debe haber mejores pero estas andan :) )
+//funciones auxiliares para conversion de datos(debe haber mejores pero estas andan :) )
 bool es_variable(string a){
     return isalpha(a[0]);
 }
@@ -33,6 +34,15 @@ bool es_constante(string a){
 
 bool es_x_referencia(string a){
     return a[0]=='[';
+}
+
+bool chequear_que_hay_solo_numeros(string a){
+    bool res=true;
+    for(unsigned int i=0;i<a.length();i++){
+        if(!isdigit(a[i]))
+            res=false;
+    }
+    return res&&(a.length()>0);
 }
 
 string int_a_binario(int num,int tam_binario){
@@ -61,11 +71,10 @@ int string_a_int(string a){
 }
 
 string caps_UP(string a){
-    string b=a;
     for(unsigned int i=0;i<a.length();i++){
-        b[i]=toupper(a[i]);
+        a[i]=toupper(a[i]);
     }
-    return b;
+    return a;
 }
 
 //elimina espacios hasta el primer caracter valido
@@ -76,18 +85,10 @@ string trim_espacios(string a){
     return a;
 }
 bool hay_simbolos_reservados_check(string a){
-    return a.find_first_of("[],")!=string::npos;
+    return a.find_first_of("[],@")!=string::npos;
 }
 
-bool direccion_check(string a){
-    bool res=true;
-    for(unsigned int i=0;i<a.length();i++){
-        if(!isdigit(a[i]))
-            res=false;
-    }
-    return res&&(a.length()>0);
-}
-bool limpiar_espacios(string &a){
+bool chequear_espacios(string &a){
     string basura="";
     a=trim_espacios(a);
     if(a.find_first_of(" \t")!=string::npos){
@@ -101,62 +102,117 @@ bool limpiar_espacios(string &a){
     return true;
 }
 
-bool operando_check(string &a){
-    a=trim_espacios(a);
-    string auxiliar=a;
-    string basura="";
-    bool hay_llaves=false;
-    if((a.find_first_of("[")!=string::npos) &&
-        ((a.find_first_of("[")!=0)||(a.find_first_of("]")==string::npos)) ) {
-        //cout<<"error con las llaves"<<endl;
-        return false;
+bool direccion_check(string &a){
+    bool res=true;
+    for(unsigned int i=0;i<a.length();i++){
+        if(!isdigit(a[i]))
+            res=false;
     }
-    if(a.find_first_of("[")==0) {
-        hay_llaves=true;
-        if(a.find_first_of("]")!=string::npos){
-            auxiliar=a.substr(1,a.find_first_of("]")-1);
-            basura=a.substr(a.find_first_of("]")+1);
+    return res&&(a.length()>0);
+}
+
+/*decimal hexa o binario devuelve 1 si es un numero decimal, 
+2 si es binario, 3 si es un hexadecimal, 0 en caso de error*/
+void leer_decimal_hexa_o_binario(string &a){
+    long numero_leido;
+    if(!chequear_que_hay_solo_numeros(a)){
+        if(a.length()>2){
+            if(a[0]=='0'&&(a[1]=='b'||a[1]=='B')){
+                a=a.substr(2);
+                numero_leido = stol (a,nullptr,2);
+                if(chequear_que_hay_solo_numeros(a))
+                    a=int_a_string(numero_leido);
+                else
+                    a="@{}";
+            }
+            else{
+                if(a[0]=='0'&&(a[1]=='x'||a[1]=='X')){
+                    a=a.substr(2);
+                    numero_leido = stol (a,nullptr,16);
+                    if(chequear_que_hay_solo_numeros(a))
+                        a=int_a_string(numero_leido);
+                    else
+                        a="@{}";
+                }
+                else{
+                    numero_leido= stol (a,nullptr,0);  
+                    if(chequear_que_hay_solo_numeros(a))
+                        a=int_a_string(numero_leido);
+                    else
+                        a="@{}";
+                }
+            }
         }
         else{
-         //   cout<<"falta cerrar llave"<<endl;
-            return false;
-        }
-        basura=trim_espacios(basura);
-        if(basura.length()>0||(auxiliar.find_first_of("[")!=string::npos)){
-        //    cout<<"error en las llaves"<<endl;
-            return false;
+            a="@{}";
         }
     }
-    auxiliar=trim_espacios(auxiliar);
-    if(es_constante(auxiliar)){
-        auxiliar="@"+trim_espacios(auxiliar.substr(1));
-    }
-    if(!limpiar_espacios(auxiliar)){
-        return false;
-    }
-    if(hay_llaves){
-        a="["+auxiliar+"]";
+}
+
+bool operando_check(string &a){
+    a=trim_espacios(a);//elimino espacios en blanco
+    bool hay_corchetes=false;
+    int tipo_variable=0;
+    if(a.find_first_of("[")!=string::npos){        //encontre un corchete
+        hay_corchetes=true;
+        if(a.find_first_of("[")!=0){                    //error: no esta al principio
+            cout<<"error: encontrado en medio["<<endl;
+            return false;
+        }
+        string basura="";  
+        if(a.find_first_of("]")==string::npos){    //error: no esta cerrado
+            cout<<"Error: falta ]"<<endl;
+            return false;
+        }
+        else{
+            basura=a.substr(a.find_first_of("]")+1);
+            basura=trim_espacios(basura);
+        }
+        if(basura.length()>0){                          //me fijo que despues de ] no haya basura
+            cout<<"Error: unexpected "<<basura<<endl;
+            return false;
+        }
+        a=a.substr(1,a.find_first_of("]")-1);           //elimino el corchete inicial y el final
+        a=trim_espacios(a);                             //elimino espacios en blanco al principio
+    } 
+    if(es_constante(a)){        //es una constante
+        tipo_variable=1;
+        a=a.substr(1);
+        a=trim_espacios(a);   
+        if(!chequear_espacios(a)){   //me fijo que no sea una palabra fragmentada
+            return false;
+        } 
+        leer_decimal_hexa_o_binario(a);
     }
     else
-        a=auxiliar;
-    if(hay_simbolos_reservados_check(auxiliar)){
+        if(es_direccion(a)){    //es una direccion
+            tipo_variable=2;
+            if(!chequear_espacios(a)){   //me fijo que no sea una palabra fragmentada
+                return false;
+            } 
+            leer_decimal_hexa_o_binario(a);
+        }  
+        else{               //es una variable
+            tipo_variable=3;
+            if(!chequear_espacios(a)){   //me fijo que no sea una palabra fragmentada
+                return false;
+            } 
+        }
+    if(hay_simbolos_reservados_check(a)){
         return false;
     }
-    if(es_constante(auxiliar)){
-        auxiliar=auxiliar.substr(1);
-        auxiliar=trim_espacios(auxiliar);
-        return direccion_check(auxiliar);
+    if(tipo_variable==1){
+        a="@"+a;
     }
-    else{
-        if(!es_variable(auxiliar)){
-            return direccion_check(auxiliar);
-        }
+    if(hay_corchetes){
+        a="["+a+"]";
     }
     return true;
 }
 
 
-string address_solver(string var,map <string,int> etiquetas,map <string,int> variables,map <string,int> &lea_address){
+string address_solver(string var,map <string,int> etiquetas,
+    map <string,int> variables,map <string,int> &lea_address){
     int address;
     map<string,int>::iterator it_label=etiquetas.find(var);
     if(it_label!= etiquetas.end()){
@@ -386,7 +442,7 @@ void buscar_etiquetas(string &line,int linea_leida,map <string,int> &etiquetas,i
     if (label_pos != string::npos){
         string label=line.substr(0,label_pos);
         line=line.substr(label_pos+1); //linea sin comentario y sin etiqueta
-        if(!limpiar_espacios(label)||hay_simbolos_reservados_check(label)){
+        if(!chequear_espacios(label)||hay_simbolos_reservados_check(label)){
             cout<<"Error al compilar: label invalido:\""<<label<<"\" linea "<<linea_codigo+1<<endl;
             exit(-1);
         }
@@ -422,12 +478,12 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                 line=trim_espacios(line);
                 comando=caps_UP(comando);       //lo convierto a mayusculas para no tener problemas
                 if(instructions_codes.find(comando)!= instructions_codes.end()){
-                    if((comando==string("BEQ"))||(comando==string("CALL"))||(comando==string("DW"))||
-                        (comando==string("JMP"))||(comando==string("RET"))){
-                        if(comando==string("JMP")){
+                    if((comando=="BEQ")||(comando=="CALL")||(comando=="DW")||
+                        (comando=="JMP")||(comando=="RET")){
+                        if(comando=="JMP"){
                             program.push_back("CMP 0,0");
                             linea_leida++;
-                            comando=string("BEQ");
+                            comando="BEQ";
                         }
                         if(!operando_check(line)){
                             cout<<"parametro invalido, linea: "<<linea_codigo<<endl;
@@ -440,21 +496,21 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                     else{
                         primer_op=line.substr(0,line.find(',')); //busca primer operando
                         segundo_op=line.substr(line.find(',')+1); //busca segundo operando
-                        if(comando==string("INC")){
+                        if(comando=="INC"){
                             chequear_error_operando(primer_op,linea_codigo,comando,line);
                             agregar_var("@1",variables);
                             agregar_var(primer_op,variables);
                             program.push_back("ADD @1,"+primer_op);
                             linea_leida++;
                         }
-                        if(comando==string("DEC")){
+                        if(comando=="DEC"){
                             chequear_error_operando(primer_op,linea_codigo,comando,line);
                             agregar_var(primer_op,variables);
                             agregar_var("@65535",variables);
                             program.push_back("ADD @65535,"+primer_op);
                             linea_leida++;
                         }
-                        if(comando==string("SUB")){
+                        if(comando=="SUB"){
                             chequear_error_operando(primer_op,linea_codigo,comando,line);
                             chequear_error_operando(segundo_op,linea_codigo,comando,line);
                             chequear_destino_valido(primer_op,linea_codigo,comando,line);
@@ -475,7 +531,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             program.push_back("BEQ "+int_a_string(label_iteracion));    //      BEQ loop
                             linea_leida+=7;
                         }
-                        if(comando==string("LEA")){
+                        if(comando=="LEA"){
                             chequear_error_operando(primer_op,linea_codigo,comando,line);
                             chequear_error_operando(segundo_op,linea_codigo,comando,line);
                             chequear_destino_valido(segundo_op,linea_codigo,comando,line);
@@ -489,7 +545,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             linea_leida++;
                         }
 
-                        if(comando==string("ADD")){
+                        if(comando=="ADD"){
                             chequear_error_operando(primer_op,linea_codigo,comando,line);
                             chequear_error_operando(segundo_op,linea_codigo,comando,line);
                             chequear_destino_valido(segundo_op,linea_codigo,comando,line);
@@ -498,7 +554,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             program.push_back(comando+" "+primer_op+","+segundo_op);
                             linea_leida++;
                         }
-                        if(comando==string("MOV")){
+                        if(comando=="MOV"){
                             chequear_error_operando(primer_op,linea_codigo,comando,line);
                             chequear_error_operando(segundo_op,linea_codigo,comando,line);
                             chequear_destino_valido(segundo_op,linea_codigo,comando,line);
@@ -554,7 +610,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             agregar_var(segundo_op,variables);
                         }
                         //shiftl x,desplazamiento
-                        if(comando==string("SHIFTR")||comando==string("SHIFTL")){
+                        if(comando=="SHIFTR"||comando=="SHIFTL"){
                             chequear_error_operando(primer_op,linea_codigo,comando,line);
                             chequear_error_operando(segundo_op,linea_codigo,comando,line);
                             chequear_destino_valido(primer_op,linea_codigo,comando,line);
@@ -564,7 +620,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             agregar_var("@0",variables);
                             if(es_constante(segundo_op)){
                                 int primer_parametro=0;
-                                if(comando==string("SHIFTR"))
+                                if(comando=="SHIFTR")
                                     primer_parametro=32768;
                                 primer_parametro+=string_a_int(segundo_op.substr(1));
                                 string aux="@"+int_a_string(primer_parametro);
@@ -574,7 +630,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             else{
                                 agregar_var(segundo_op,variables);
                                 agregar_var("@32768",variables);
-                                if(comando==string("SHIFTR"))
+                                if(comando=="SHIFTR")
                                     program.push_back("MOV @32768,"+contador_shift);
                                 else
                                     program.push_back("MOV @0,"+contador_shift);
@@ -589,7 +645,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             program.push_back("IN "+etiquetas_ES.find("PUERTO_2_SHIFTER")->second+","+primer_op);
                             linea_leida+=6;
                         }
-                        if(comando==string("CMP")) {
+                        if(comando=="CMP") {
                             chequear_error_operando(primer_op,linea_codigo,comando,line);
                             chequear_error_operando(segundo_op,linea_codigo,comando,line);
                             agregar_var(primer_op,variables);
@@ -597,14 +653,15 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             program.push_back(comando+" "+primer_op+","+segundo_op);
                             linea_leida++;
                         }
-                        if((comando==string("IN"))||(comando==string("OUT"))){
+                        if((comando=="IN")||(comando=="OUT")){
                             chequear_error_operando(primer_op,linea_codigo,comando,line);
                             chequear_error_operando(segundo_op,linea_codigo,comando,line);
-                            if(comando==string("IN")){
+                            if(comando=="IN"){
                                 chequear_destino_valido(segundo_op,linea_codigo,comando,line);
                             }
                             if(!es_direccion(primer_op)){
-                                map<string,string>::iterator it=etiquetas_ES.find(caps_UP(primer_op));
+                                primer_op=caps_UP(primer_op);
+                                map<string,string>::iterator it=etiquetas_ES.find(primer_op);
                                 if(it==etiquetas_ES.end()){
                                     cout<<"Error al compilar: "<<comando<<" designa un puerto invalido, linea "<<linea_codigo+1<<endl;
                                     cout<<comando<<" "<<line<<endl;
@@ -697,8 +754,8 @@ int main(int argc,char * argv[]){
     cout<<"MODO LINUX"<<endl;
     string archivo_in=string(argv[1]);
     if((argc < 2)) {
-        cout << "El programa debe recibir al menos 1 parametro (archivo a ensamblar)" << std::endl;
-        cout << "El formato correcto de ejecucion es: ./main archivo_assembler [archivo_salida --opcional]" << std::endl;
+        cout << "El programa debe recibir al menos 1 parametro (archivo a ensamblar)" << endl;
+        cout << "El formato correcto de ejecucion es: ./main archivo_assembler [archivo_salida --opcional]" << endl;
         return -1;
     }
 #endif
@@ -713,7 +770,7 @@ int main(int argc,char * argv[]){
     ifstream input_file_fstream(archivo_in.c_str());
 
     if(input_file_fstream.fail()){
-        cerr << "No se pudo abrir archivo de entrada" << std::endl;
+        cerr << "No se pudo abrir archivo de entrada" << endl;
         return -2;
     }
     //esto no se tiene que mover de aca
@@ -729,7 +786,7 @@ int main(int argc,char * argv[]){
     cout<<"creando archivo de salida: "<<endl;
     ofstream output_file_fstream(archivo_out.c_str());
     if(output_file_fstream.fail()){
-        cerr << "No se pudo crear archivo de salida" << std::endl;
+        cerr << "No se pudo crear archivo de salida" << endl;
         return -2;
     }
     for (unsigned int i=0;i<codigo_ensamblado.size();i++)
