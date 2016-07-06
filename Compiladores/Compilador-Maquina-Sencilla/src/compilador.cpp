@@ -555,30 +555,36 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             linea_leida++;
                         }
                         if(comando=="MOV"){
-                            chequear_error_operando(primer_op,linea_codigo,comando,line);
                             chequear_error_operando(segundo_op,linea_codigo,comando,line);
+                            chequear_error_operando(primer_op,linea_codigo,comando,line);
                             chequear_destino_valido(segundo_op,linea_codigo,comando,line);
-                            if(es_x_referencia(primer_op)){
+                            if(es_x_referencia(primer_op)||es_x_referencia(segundo_op)){
                                 agregar_var("@1",variables);
                                 agregar_var("@0",variables);
                                 agregar_var("@7",variables);
                                 agregar_var("@32768",variables);
                                 string contador_shift="VARIABLE_AUXILIAR_ASM_###_Asquerosa_Imposible_de_Repetir";
                                 agregar_var(contador_shift,variables);
-                                primer_op=primer_op.substr(1,primer_op.find(']')-1);
                                 int pos_loop=linea_leida+2;
                                 int pos_fin_loop=pos_loop+6;
                                 int pos_var_x=pos_fin_loop+2;
                                 if(!es_x_referencia(segundo_op)){
                                     pos_var_x++;
                                 }
-                                program.push_back("MOV "+primer_op+","+int_a_string(pos_var_x));               //      MOV a,X
+                                if(es_x_referencia(primer_op)){
+                                    primer_op=primer_op.substr(1,primer_op.find(']')-1);
+                                    program.push_back("MOV "+primer_op+","+int_a_string(pos_var_x));               //      MOV a,X
+                                }
+                                else{
+                                    agregar_lea(primer_op,lea_address);
+                                    program.push_back("LEA "+primer_op+","+int_a_string(pos_var_x));   
+                                }
                                 program.push_back("MOV @0,"+contador_shift);                                   //      MOV @0,Contador Loop
                                 program.push_back("CMP @7,"+contador_shift);                                   //loop: CMP CONTADOR_LOOP,7
                                 program.push_back("BEQ "+int_a_string(pos_fin_loop));                          //      BEQ FIN
                                 program.push_back("ADD "+int_a_string(pos_var_x)+","+int_a_string(pos_var_x)); //      ADD X,X
                                 program.push_back("ADD @1,"+contador_shift);                                   //      INC contador_loop
-                                program.push_back("CMP 0,0");                                                  //      CMP 0,0
+                                program.push_back("CMP 0,0");                                                  //      CMP 0,                  0
                                 program.push_back("BEQ "+int_a_string(pos_loop));                              //      BEQ loop
                                 program.push_back("ADD @32768,"+int_a_string(pos_var_x));                      //FIN   ADD 10..0,x
                                 if(es_x_referencia(segundo_op)){//Mov [A],[B]
@@ -595,16 +601,9 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                                 program.push_back("MOV "+primer_op+",0");                                      //x:    MOV A,0
                             }
                             else{
-                                if(es_x_referencia(segundo_op)){ //MOV A,[B]
-                                    segundo_op=segundo_op.substr(1,segundo_op.find(']')-1) ;
-                                    program.push_back("ADD "+segundo_op+","+int_a_string(linea_leida+1));
-                                    program.push_back("MOV "+primer_op+",0");
-                                    linea_leida+=2;
-                                }
-                                else{                            //MOV A,[B]
-                                    program.push_back(comando+" "+primer_op+","+segundo_op);
-                                    linea_leida++;
-                                }
+                                //MOV A,B   
+                                program.push_back(comando+" "+primer_op+","+segundo_op);
+                                linea_leida++;
                             }
                             agregar_var(primer_op,variables);
                             agregar_var(segundo_op,variables);
@@ -621,7 +620,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             if(es_constante(segundo_op)){
                                 int primer_parametro=0;
                                 if(comando=="SHIFTR")
-                                    primer_parametro=32768;
+                                    primer_parametro=16;
                                 primer_parametro+=string_a_int(segundo_op.substr(1));
                                 string aux="@"+int_a_string(primer_parametro);
                                 agregar_var(aux,variables);
@@ -629,9 +628,9 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             }
                             else{
                                 agregar_var(segundo_op,variables);
-                                agregar_var("@32768",variables);
+                                agregar_var("@16",variables);
                                 if(comando=="SHIFTR")
-                                    program.push_back("MOV @32768,"+contador_shift);
+                                    program.push_back("MOV @16,"+contador_shift);
                                 else
                                     program.push_back("MOV @0,"+contador_shift);
                                 program.push_back("ADD "+segundo_op+","+contador_shift);
@@ -639,11 +638,8 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                                 linea_leida+=2;
                             }
                             program.push_back("OUT "+etiquetas_ES.find("PUERTO_1_SHIFTER")->second+","+primer_op);
-                            program.push_back("IN "+etiquetas_ES.find("PUERTO_3_SHIFTER")->second+","+contador_shift);
-                            program.push_back("CMP @0,"+contador_shift);
-                            program.push_back("BEQ "+int_a_string(linea_leida+2));
                             program.push_back("IN "+etiquetas_ES.find("PUERTO_2_SHIFTER")->second+","+primer_op);
-                            linea_leida+=6;
+                            linea_leida+=3;
                         }
                         if(comando=="CMP") {
                             chequear_error_operando(primer_op,linea_codigo,comando,line);
