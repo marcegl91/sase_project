@@ -1,0 +1,15 @@
+** Planteo del problema:
+
+    A continuación se obtendrá el perfil de temperaturas en estado estacionario
+    de una barra de metal.
+    La ecuación diferencial que representa este problema simple es la siguiente:
+
+    d^2u/dx^2 = 0,
+        Condiciones de borde u(1)=100 y u(M)=0.
+        Condiciones iniciales u(1)=100, u(x)=0, donde 1 < x <= M
+
+    La solución a esta ecuación simple se realiza de forma numérica,
+    por el método de las diferencias finitas.
+    
+    La solución analítica a este problema es la recta que pasa por los puntos (1,100) y (M,0)
+
