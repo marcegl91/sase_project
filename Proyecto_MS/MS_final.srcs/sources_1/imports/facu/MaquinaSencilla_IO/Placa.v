@@ -1,4 +1,24 @@
 `timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 13.05.2016 09:56:23
+// Design Name: 
+// Module Name: Placa
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
 
 module Placa(
     input clk,
@@ -46,11 +66,9 @@ module Placa(
     ControladorSSEG CntrlSSEG(.clk(clk), .reset(reset), .we(device4in[18]), .reg_sel(device4in[17:16]), .cs(device4cs), .in(device4in[15:0]), .out(device4out));
     // DEVICE 3: UART
     ControladorUART CntrlUART(.clk(clk), .reset(reset), .we(device3in[18]), .reg_sel({device3in[17:16]}), .cs(device3cs), .in({8'b0, device3in[7:0]}), .out(device3out), .tx(tx), .rx(rx));
-    // DEVICE 2: SHIFTER
-    //ControladorShifter CntrlShifter(.clk(clk), .reset(reset), .we(device2in[18]), .reg_sel({device2in[17:16]}), .cs(device2cs), .in({device2in[15:0]}), .out(device2out));
-    // Timer (para testear)
+    // DEVICE 2: Timer
     Timer TimerModule(.clk(clk), .reset(reset), .we(device2in[18]), .reg_sel({device2in[17:16]}), .cs(device2cs), .in({device2in[15:0]}), .out(device2out));
-    
-    // DEVICE 1: -------
+    // DEVICE 1: SHIFTER
+    ControladorShifter CntrlShifter(.clk(clk), .reset(reset), .we(device1in[18]), .reg_sel({device1in[17:16]}), .cs(device1cs), .in({device1in[15:0]}), .out(device1out));
     // DEVICE 0: -------
 endmodule
