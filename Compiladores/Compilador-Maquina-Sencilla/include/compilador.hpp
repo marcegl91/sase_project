@@ -4,7 +4,42 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include <map>
+
+typedef std::string label;
+typedef std::unsigned char address;
+
+class instruction
+{
+    private:
+        std::vector<std::string> operands;
+        std::string instruction;
+
+    public:
+        instruction(const std::string&);
+        instruction(const instruction&);
+        std::unsigned short bytecode(const std::unordered_map<label,const address>&) const;
+        std::vector<std::string>::iterator begin();
+        std::vector<std::string>::const_iterator cbegin() const;
+        std::vector<std::string>::iterator end();
+        std::vector<std::string>::const_iterator cend() const;
+}
+
+class program
+{
+    private:
+        //Attributes
+        std::vector<const instruction> instructions;
+        std::unordered_map<label,const address> labels;
+        std::unordered_map<std::string,const std::unsigned char> isa;
+
+    public:
+        program(const std::ifstream&);
+        program(const program&);
+        void print_object_code(std::ofstream&) const;
+        void print_machine_code(std::ofstream&) const;
+}
 
 bool es_variable(std::string);
 bool es_direccion(std::string);
