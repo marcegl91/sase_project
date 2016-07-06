@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module ControladorSwitches(
     input clk, reset, we, cs,
     input [1:0] reg_sel,

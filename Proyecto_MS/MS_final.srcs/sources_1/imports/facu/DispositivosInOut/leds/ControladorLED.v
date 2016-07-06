@@ -1,25 +1,4 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 11.05.2016 12:50:39
-// Design Name: 
-// Module Name: ControladorLED
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
-  //  ControladorLED CntrlLed(.clk(clk), .reset(reset), .we(device0in[18]), .reg_sel(device0in[17:16]), .cs(device0cs), .in(device0in[15:0]), .out(device0out));
 
 module ControladorLED(
     input clk, reset, we, cs,

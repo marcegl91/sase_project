@@ -33,24 +33,24 @@ module UC(
     reg [4:0] estado_next;
     
     localparam [4:0]
-        fetch   = 5'd0,
-        decode  = 5'd1,
-        load_f  = 5'd2,
-        load_d  = 5'd6,
-        add     = 5'd7,
-        cmp     = 5'd9,
-        mov     = 5'd10,
-        jump    = 5'd11,
-        in      = 5'd14,
-        out     = 5'd15,
-        dec_sp  = 5'd16,
-        push_pc = 5'd17,
-        pop_pc  = 5'd18;
+        fetch   = 4'd0,
+        decode  = 4'd1,
+        load_f  = 4'd2,
+        load_d  = 4'd3,
+        add     = 4'd4,
+        cmp     = 4'd5,
+        mov     = 4'd6,
+        jump    = 4'd7,
+        in      = 4'd8,
+        out     = 4'd9,
+        dec_sp  = 4'd10,
+        push_pc = 4'd11,
+        pop_pc  = 4'd12;
     
     always@(posedge clk)
     begin
         if (reset)
-            estado <= 5'd0;
+            estado <= fetch;
         else
             estado <= estado_next;
     end
