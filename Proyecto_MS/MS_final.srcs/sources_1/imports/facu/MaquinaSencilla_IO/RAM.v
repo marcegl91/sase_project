@@ -2,13 +2,13 @@
 
 module RAM(
     input clk, le,
-    input [6:0] dir,
+    input [9:0] dir,
     input [15:0] ent, 
     output [15:0] sal 
     );
     
     parameter RAM_WIDTH = 16;
-    parameter RAM_ADDR_BITS = 7;
+    parameter RAM_ADDR_BITS = 10;
     
     reg [RAM_WIDTH-1:0] M[(2**RAM_ADDR_BITS)-1:0];
     

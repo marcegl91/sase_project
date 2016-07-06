@@ -15,15 +15,15 @@ module UP(
     reg [15:0] ir, ir_next;
     reg [15:0] a, a_next;
     reg [15:0] b, b_next;
-    reg [6:0] pc, pc_next;
-    reg [6:0] sp, sp_next;
+    reg [9:0] pc, pc_next;
+    reg [9:0] sp, sp_next;
     reg fz_next;
     
     assign cop = ir[15:10];
     assign dirport = ir[11:7];
     
     wire [15:0] alu_out;
-    reg [6:0] mux_dir_out;
+    reg [9:0] mux_dir_out;
     reg [15:0] mux_mem_out;
        
     Alu A(.A(a), .B(b), .op(alu_op), .z(alu_z), .out(alu_out));
@@ -34,8 +34,8 @@ module UP(
         case (mux_dir)
             2'd0: mux_dir_out = pc;
             2'd1: mux_dir_out = sp;
-            2'd2: mux_dir_out = ir[13:7];
-            2'd3: mux_dir_out = ir[6:0];
+            2'd2: mux_dir_out = {3'b0, ir[13:7]};
+            2'd3: mux_dir_out = {3{pc_w}, 7'b1} & ir[9:0];
         endcase
     end
     
@@ -43,7 +43,7 @@ module UP(
     begin
         case (mux_in)
             2'd0: mux_mem_out = alu_out;
-            2'd1: mux_mem_out = pc;
+            2'd1: mux_mem_out = {6'b0, pc};
             2'd2: mux_mem_out = inport;
             default: mux_mem_out = 16'bX;
         endcase
@@ -54,10 +54,10 @@ module UP(
     if (reset)
     begin
         ir <= 16'd0;
-        pc <= 7'd0;
+        pc <= 10'd0;
         a  <= 16'd0;
         b  <= 16'd0;
-        sp <= 16'd0;
+        sp <= 10'd0;
         fz <= 1'd0;
     end
     else
@@ -89,7 +89,7 @@ module UP(
         if (b_w)
             b_next = mem_out;
         if (sp_w)
-            sp_next = sp_d ? (sp + 7'b1) : (sp - 7'b1);
+            sp_next = sp_d ? (sp + 10'b1) : (sp - 10'b1);
         if (fz_w)
             fz_next = alu_z;
     end
