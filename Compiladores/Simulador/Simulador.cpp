@@ -19,8 +19,6 @@ int reg_0_shifter=0;
 int reg_1_shifter=0;
 int reg_2_shifter=0;
 int reg_3_shifter=0;
-bool registro_modificado=false;
-int wait_time=0;
 
 string int_a_string(int numero){
     string resultado;
@@ -63,27 +61,14 @@ string int_a_binario(int num,int tam_binario){
 
 int modulo_in_shifter(int registro){
     int valor=0;
-    if(registro_modificado){
-        wait_time=0;
-    }
+    if(reg_0_shifter>=16) 
+        reg_2_shifter=reg_1_shifter>>(reg_0_shifter%16);
+    else
+        reg_2_shifter=reg_1_shifter<<(reg_0_shifter%16);
     switch(registro){
         case 2: valor=reg_2_shifter;
         break;
-        case 3:
-                registro_modificado=false;
-                int cant_shift;
-                cant_shift=reg_0_shifter%32768;
-                if(reg_0_shifter>32000) 
-                    reg_2_shifter=reg_1_shifter>>cant_shift;
-                else
-                    reg_2_shifter=reg_1_shifter<<cant_shift;
-                if(wait_time>cant_shift){
-                    valor=1;
-                }
-                else{
-                    wait_time++;
-                    valor=0;
-                }
+        case 3: valor=reg_2_shifter;
         break;
         default:cout<<"error de lectura del registro shifter"<<endl;
         break;
@@ -92,8 +77,6 @@ int modulo_in_shifter(int registro){
 }
 
 void modulo_out_shifter(int registro,int valor){
-    registro_modificado=true;
-    reg_3_shifter=1;
     switch(registro){
         case 0:reg_0_shifter=valor;
         break;

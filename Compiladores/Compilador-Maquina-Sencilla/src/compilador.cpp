@@ -18,7 +18,8 @@ map<string,string> instructions_codes;
 map<string,string> etiquetas_ES;
 //SOPORTE EXPERIMENTAL PARA WINDOWS, para usarlo descomentar la siguiente linea
 //#define Windows_MODE
-//funciones auxiliares para conversion de datos(debe haber mejores pero estas andan :) )
+//implementa funciones con shifter
+#define use_shifter
 //funciones auxiliares para conversion de datos(debe haber mejores pero estas andan :) )
 bool es_variable(string a){
     return isalpha(a[0]);
@@ -111,6 +112,14 @@ bool direccion_check(string &a){
     return res&&(a.length()>0);
 }
 
+bool numero_binario_check(string &a){
+    bool res=true;
+    for(unsigned int i=0;i<a.length();i++){
+        if(a[i]!='0'&&a[i]!='1')
+            res=false;
+    }
+    return res&&(a.length()>0);
+}
 /*decimal hexa o binario devuelve 1 si es un numero decimal, 
 2 si es binario, 3 si es un hexadecimal, 0 en caso de error*/
 void leer_decimal_hexa_o_binario(string &a){
@@ -120,10 +129,10 @@ void leer_decimal_hexa_o_binario(string &a){
             if(a[0]=='0'&&(a[1]=='b'||a[1]=='B')){
                 a=a.substr(2);
                 numero_leido = stol (a,nullptr,2);
-                if(chequear_que_hay_solo_numeros(a))
+                if(numero_binario_check(a))
                     a=int_a_string(numero_leido);
                 else
-                    a="@{}";
+                    a=a+"{}";
             }
             else{
                 if(a[0]=='0'&&(a[1]=='x'||a[1]=='X')){
@@ -132,19 +141,19 @@ void leer_decimal_hexa_o_binario(string &a){
                     if(chequear_que_hay_solo_numeros(a))
                         a=int_a_string(numero_leido);
                     else
-                        a="@{}";
+                        a=a+"{}";
                 }
                 else{
                     numero_leido= stol (a,nullptr,0);  
                     if(chequear_que_hay_solo_numeros(a))
                         a=int_a_string(numero_leido);
                     else
-                        a="@{}";
+                        a=a+"{}";
                 }
             }
         }
         else{
-            a="@{}";
+            a=a+"{}";
         }
     }
 }
@@ -470,11 +479,11 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
         if(line.length()!=0){                             //si la linea que queda no es nula
             buscar_etiquetas(line,linea_leida,etiquetas,linea_codigo); //
             line= trim_espacios(line);
-            string comando=line.substr(0,line.find(' '));//busca instruccion
+            string comando=line.substr(0,line.find_first_of(" \t"));//busca instruccion
             string primer_op;
             string segundo_op;
             if(comando.length()!=0){
-                line=line.substr(line.find(' ')+1);//lineas con operandos
+                line=line.substr(line.find_first_of(" \t"));//lineas con operandos
                 line=trim_espacios(line);
                 comando=caps_UP(comando);       //lo convierto a mayusculas para no tener problemas
                 if(instructions_codes.find(comando)!= instructions_codes.end()){
@@ -565,6 +574,36 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                                 agregar_var("@32768",variables);
                                 string contador_shift="VARIABLE_AUXILIAR_ASM_###_Asquerosa_Imposible_de_Repetir";
                                 agregar_var(contador_shift,variables);
+                                #ifdef use_shifter
+                                int pos_var_x=linea_leida+6 ;
+                                if(!es_x_referencia(segundo_op)){
+                                    pos_var_x++;
+                                }
+                                if(es_x_referencia(primer_op)){
+                                    primer_op=primer_op.substr(1,primer_op.find(']')-1);
+                                    program.push_back("MOV "+primer_op+","+int_a_string(pos_var_x));               //      MOV a,X
+                                }
+                                else{
+                                    agregar_lea(primer_op,lea_address);
+                                    program.push_back("LEA "+primer_op+","+int_a_string(pos_var_x));   
+                                }
+                                program.push_back("OUT "+etiquetas_ES.find("PUERTO_0_SHIFTER")->second+",@7");    
+                                program.push_back("OUT "+etiquetas_ES.find("PUERTO_1_SHIFTER")->second+","+int_a_string(pos_var_x));
+                                program.push_back("IN "+etiquetas_ES.find("PUERTO_2_SHIFTER")->second+","+int_a_string(pos_var_x));
+                                program.push_back("ADD @32768,"+int_a_string(pos_var_x));
+                                if(es_x_referencia(segundo_op)){//Mov [A],[B]
+                                    segundo_op=segundo_op.substr(1,segundo_op.find(']')-1) ;
+                                    program.push_back("ADD "+segundo_op+","+int_a_string(pos_var_x));          //      ADD B,X
+                                    linea_leida+=7;
+                                }
+                                else{ //Mov [A],B
+                                    agregar_lea(segundo_op,lea_address);
+                                    program.push_back("LEA "+segundo_op+","+contador_shift);                   //      LEA B,var
+                                    program.push_back("ADD "+contador_shift+","+int_a_string(pos_var_x));      //      ADD var,X
+                                    linea_leida+=8;
+                                }
+                                program.push_back("MOV "+primer_op+",0");                                      //x:    MOV A,0                 
+                                #else
                                 int pos_loop=linea_leida+2;
                                 int pos_fin_loop=pos_loop+6;
                                 int pos_var_x=pos_fin_loop+2;
@@ -599,6 +638,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                                     linea_leida+=12;
                                 }
                                 program.push_back("MOV "+primer_op+",0");                                      //x:    MOV A,0
+                                #endif
                             }
                             else{
                                 //MOV A,B   
