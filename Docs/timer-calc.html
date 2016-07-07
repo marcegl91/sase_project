@@ -28,7 +28,6 @@
 			document.getElementById("msValue").innerHTML=(delay / 1E-3).toFixed(4);
 			document.getElementById("usValue").innerHTML=(delay / 1E-6).toFixed(4);
 			document.getElementById("nsValue").innerHTML=(delay / 1E-9).toFixed(4);
-
 		}
 	}
 	</script>
@@ -37,38 +36,39 @@
 		<h1>Timer</h1>
 		<p>Rango de tiempos: [20ns, 42.9490s]
 		<h2>Descripción</h2>
-			<h3>Registros</h3>
+			<h3>Registros (lectura/escritura)</h3>
 			<ol type="0">
-			<li>ROUNDS_reg</li>
-			<li>PRESCALER_reg</li>
-			<li>START_reg</li>
-			<li>DONE_reg</li>
+			<li>ROUNDS/ROUNDS_goal</li>
+			<li>PRESCALER/PRESCALER_goal</li>
+			<li>STATUS/START</li>
+			<li>DONE/RESET</li>
 			</ol>
+			Todos con 16 bits de ancho.
 
-			<h3>Descripción</h3>
-			<p>El módulo contiene dos contadores de 16 bits: <em>prescaler</em>, que actúa como un divisor de frecuencia, y <em>rounds</em>, que representa la cantidad de iteraciones que se van a realizar.
-			</p>
-			<p>
-			Regularmente, se van contando ciclos de clock hasta que transcurrieron tantos como el valor que se le cargó como referencia a <em>prescaler</em>. En ese caso se produce un desborde (<em>prescaler</em> vuelve a 0), <em>rounds</em> es incrementado en una unidad y se repite el procedimiento. Esto se realiza hasta que se realizaron <em>rounds</em> iteraciones.
-			</p>
-			<p>
-			La señal de que terminó el tiempo de espera es mantenida en el registro <em>DONE_reg</em> (2'b11) hasta que se carguen nuevos valores en algún registro. Además, si se escribe nuevamente en el registro <em>START_reg</em> (2'b10) el timer vuelve a comenzar con los tiempos configurados previamente.
-			</p>
-			<p>
-			Escribir en cualquier registro mientras el timer está operando hace que el mismo vuelva a 0. Además, excepto en el caso de <em>START_reg</em>, el mismo queda detenido.
-			</p>
+			<h3>Modo de uso</h3>
+			<p>El módulo contiene dos contadores de 16 bits: <em>prescaler</em>, que actúa como un divisor de frecuencia, y <em>rounds</em>, que representa la cantidad de iteraciones que se van a realizar.</p>
+			<p>Regularmente, se van contando ciclos de clock hasta que transcurrieron tantos como el valor que se le cargó como referencia a <em>PRESCALER_goal</em>. En ese caso se produce un desborde (<em>prescaler</em> vuelve a 0), <em>rounds</em> es incrementado en una unidad y se repite el procedimiento. Esto se realiza hasta que se realizaron el número de iteraciones correspondiente al valor en el registro <em>ROUNDS_goal</em>.</p>
+			<p>La señal que indica que terminó el tiempo de espera es mantenida en el registro <em>DONE</em> hasta que se carguen nuevos valores en algún registro. Además, el timer puede pausarse escribiendo 0 en el registro <em>START</em>. El estado de los contadores se mantendrá, y la ejecución puede continuarse desde ese punto escribiendo un 1 en <em>START</em>.</p>
+			<p>Para realizar una nueva espera manteniendo los valores cargados previamente (sin importar si el timer está actualmente corriendo o ya terminó), puede escribirse cualquier valor en el registro <em>RESET</em> para reestablecer los contadores a cero.</p>
+			<p>Escribir en los registros <em>PRESCALER_goal</em> o <em>ROUNDS_goal</em>  mientras el timer está corriendo hace que el mismo vuelva a 0. Además, excepto en el caso de <em>START</em>, el mismo queda detenido.</p>
+
+			<h4>Aplicación como contador de ciclos</h4>
+			<p>Como el módulo permite leer el estado de los contadores <em>PRESCALER</em> y <em>ROUNDS</em> en un instante determinado, es posible utilizar el timer como un contador de ciclos. Esa función puede resultar útil por ejemplo para medir el rendimiento de una porción de código.</p>
+			<p>Para eso se puede cargar el máximo valor posible (65535) en los registros <em>goal</em> y luego lanzar el timer justo antés y pararlo justo después del código a medir. El resultado puede calcularse como: <blockquote>Cantidad de ciclos = ROUNDS⋅(65535+1) + PRESCALER</blockquote></p>
+
+			La razón por la que se suma 1 al valor de PRESCALER_goal en la fórmula anterior es que el incremento a ROUNDS se realiza un ciclo después de que PRESCALER llega al objetivo; es decir, durante la transición desde el valor PRESCALER_goal a 0.
 
 		<h2>Calculadora de tiempos</h2>
 		<p>(Asumiendo f<sub>clk</sub> = 100MHz)
 		<form id="form" action="" method="get">
 		<table>
 				<tr>
-				<td><label for="rounds">Rounds</label></td>
+				<td><label for="rounds">Rounds goal</label></td>
 				<td><input type="number" name="rounds" maxlength="5" value="1"
 					  min="1" max="65535" onchange='calculateDelay()'></td>
 				</tr>
 				<tr>
-				<td><label for="prescaler">Prescaler</label></td>
+				<td><label for="prescaler">Prescaler goal</label></td>
 				<td><input type="number" name="prescaler" maxlength="5" value="1"
 					 min="1" max="65535" onchange='calculateDelay()'></td>
 				</tr>
