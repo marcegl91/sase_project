@@ -830,10 +830,18 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
 }
 
 void inicializar_etiquetas_ES(){
-    etiquetas_ES.insert ( pair<string,string>("PUERTO_0_SHIFTER","8") );
-    etiquetas_ES.insert ( pair<string,string>("PUERTO_1_SHIFTER","9") );
-    etiquetas_ES.insert ( pair<string,string>("PUERTO_2_SHIFTER","10") );
-    etiquetas_ES.insert ( pair<string,string>("PUERTO_3_SHIFTER","11") );
+    etiquetas_ES.insert ( pair<string,string>("PUERTO_0_SHIFTER","4") );
+    etiquetas_ES.insert ( pair<string,string>("PUERTO_1_SHIFTER","5") );
+    etiquetas_ES.insert ( pair<string,string>("PUERTO_2_SHIFTER","6") );
+    etiquetas_ES.insert ( pair<string,string>("PUERTO_3_SHIFTER","7") );
+    etiquetas_ES.insert ( pair<string,string>("TIMER_ROUNDS","8") );
+    etiquetas_ES.insert ( pair<string,string>("TIMER_PRESCALER","9") );
+    etiquetas_ES.insert ( pair<string,string>("TIMER_STATUS","10") );
+    etiquetas_ES.insert ( pair<string,string>("TIMER_DONE","11") );
+    etiquetas_ES.insert ( pair<string,string>("TIMER_ROUNDS_GOAL","8") );
+    etiquetas_ES.insert ( pair<string,string>("TIMER_PRESCALER_GOAL","9") );
+    etiquetas_ES.insert ( pair<string,string>("TIMER_START","10") );
+    etiquetas_ES.insert ( pair<string,string>("TIMER_RESET","11") );
     etiquetas_ES.insert ( pair<string,string>("UART_TX","12") );
     etiquetas_ES.insert ( pair<string,string>("UART_RX","13") );
     etiquetas_ES.insert ( pair<string,string>("UART_FULL","14") );
