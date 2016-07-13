@@ -109,7 +109,7 @@ string caps_UP(string a){
 
 //elimina espacios hasta el primer caracter valido
 string trim_espacios(string a){
-    while(a.find_first_of(" \t")==0){
+    while((!a.empty())&&(a.find_first_of(" \t")==0)){
         a=a.substr(1);
     }
     return a;
@@ -190,10 +190,13 @@ bool leer_decimal_hexa_o_binario(string &a, bool anadir_corchetes, bool anadir_s
     return true;
 }
 
-bool operando_check(string &a){
+bool operando_check(string &a,bool soportar_corchete=false){
     a=trim_espacios(a);//elimino espacios en blanco
     bool hay_corchetes=false;
     if(a.find_first_of("[")!=string::npos){        //encontre un corchete
+        if(!soportar_corchete){
+            return false;
+        }
         hay_corchetes=true;
         if(a.find_first_of("[")!=0){                    //error: no esta al principio
             cout<<"error: encontrado en medio["<<endl;
@@ -227,6 +230,8 @@ bool operando_check(string &a){
             if(string_fragmentado(a)){   //me fijo que no sea una palabra fragmentada
                 return false;
             }
+            if(a.empty()||hay_simbolos_reservados_check(a))
+                return false;
             if(hay_corchetes){
                 a="["+a+"]";
             }
@@ -437,9 +442,9 @@ void agregar_lea(string var,map <string,int> &lea_address){
     }
 }
 
-void chequear_error_operando(string &operando,int linea_codigo,string comando,string line){
-    if(!operando_check(operando)){
-        cout<<"parametro invalido, linea: "<<linea_codigo<<endl;
+void chequear_error_operando(string &operando,int linea_codigo,string comando,string line,bool soportar_corchete=false){
+    if(!operando_check(operando,soportar_corchete)){
+        cout<<"parametro invalido, linea: "<<linea_codigo+1<<endl;
         cout<<comando<<" "<<line<<endl;
         exit(-1);
     }
@@ -494,6 +499,11 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
             string primer_op;
             string segundo_op;
             if(!comando.empty()){
+                if(line.find_first_of(" \t")==string::npos){
+                    cout<<"Error al compilar, parametro faltante, linea: "<<linea_codigo+1<<endl;
+                    cout<<comando<<endl;
+                    exit(-1);
+                }
                 line=line.substr(line.find_first_of(" \t"));//lineas con operandos
                 line=trim_espacios(line);
                 comando=caps_UP(comando);       //lo convierto a mayusculas para no tener problemas
@@ -506,7 +516,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             comando="BEQ";
                         }
                         if(!operando_check(line)){
-                            cout<<"parametro invalido, linea: "<<linea_codigo<<endl;
+                            cout<<"parametro invalido, linea: "<<linea_codigo+1<<endl;
                             cout<<comando<<" "<<line<<endl;
                             exit(-1);
                         }
@@ -575,8 +585,8 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             linea_leida++;
                         }
                         if(comando=="MOV"){
-                            chequear_error_operando(segundo_op,linea_codigo,comando,line);
-                            chequear_error_operando(primer_op,linea_codigo,comando,line);
+                            chequear_error_operando(segundo_op,linea_codigo,comando,line,true);
+                            chequear_error_operando(primer_op,linea_codigo,comando,line,true);
                             chequear_destino_valido(segundo_op,linea_codigo,comando,line);
                             if(es_x_referencia(primer_op)||es_x_referencia(segundo_op)){
                                 agregar_var("@1",variables);
