@@ -1,4 +1,3 @@
-#include <compilador.hpp>
 #include <cassert>
 #include <cctype>
 #include <iostream>
@@ -17,7 +16,7 @@ using namespace std;
 map<string,string> instructions_codes;
 map<string,string> etiquetas_ES;
 //SOPORTE EXPERIMENTAL PARA WINDOWS, para usarlo descomentar la siguiente linea
-//#define Windows_MODE
+#define Windows_MODE
 //implementa funciones con shifter
 #define use_shifter
 //funciones auxiliares para conversion de datos(debe haber mejores pero estas andan :) )
@@ -65,6 +64,62 @@ string int_a_string(int numero){
     convert << numero;
     resultado = convert.str();
     return resultado;
+}
+
+int bin_to_int(string a){
+    int numero=0;
+    for(unsigned int i=0;i<a.length();i++){
+        if(a[i]=='1'){
+            numero+=pow(2,a.length()-1-i);
+        }
+    }
+    return numero;
+
+}
+
+int hex_to_int(string a){
+    int numero=0;
+    for(unsigned int i=0;i<a.length();i++){
+        switch(a[i]){
+            case '1':numero+=pow(16,a.length()-1-i);
+            break;
+            case '2':numero+=2*pow(16,a.length()-1-i);
+            break;
+            case '3':numero+=3*pow(16,a.length()-1-i);
+            break;
+            case '4':numero+=4*pow(16,a.length()-1-i);
+            break;
+            case '5':numero+=5*pow(16,a.length()-1-i);
+            break;
+            case '6':numero+=6*pow(16,a.length()-1-i);
+            break;
+            case '7':numero+=7*pow(16,a.length()-1-i);
+            break;
+            case '8':numero+=8*pow(16,a.length()-1-i);
+            break;
+            case '9':numero+=9*pow(16,a.length()-1-i);
+            break;
+            case 'a':
+            case 'A':numero+=10*pow(16,a.length()-1-i);
+            break;
+            case 'b':
+            case 'B':numero+=11*pow(16,a.length()-1-i);
+            break;
+            case 'c':
+            case 'C':numero+=12*pow(16,a.length()-1-i);
+            break;
+            case 'd':
+            case 'D':numero+=13*pow(16,a.length()-1-i);
+            break;
+            case 'e':
+            case 'E':numero+=14*pow(16,a.length()-1-i);
+            break;
+            case 'f':
+            case 'F':numero+=15*pow(16,a.length()-1-i);
+            break;
+        }
+    }
+    return numero;
 }
 
 int string_a_int(string a){
@@ -120,41 +175,78 @@ bool numero_binario_check(string &a){
     }
     return res&&(a.length()>0);
 }
-/*decimal hexa o binario devuelve 1 si es un numero decimal, 
+
+bool numero_hexa_check(string &a){
+    bool res=true;
+    for(unsigned int i=0;i<a.length();i++){
+        switch(a[i]){
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case 'a':
+            case 'A':
+            case 'b':
+            case 'B':
+            case 'c':
+            case 'C':
+            case 'd':
+            case 'D':
+            case 'e':
+            case 'E':
+            case 'f':
+            case 'F':
+            break;
+            default:
+                res=false;
+            break;
+        }
+    }
+    return res&&(a.length()>0);
+}
+/*decimal hexa o binario devuelve 1 si es un numero decimal,
 2 si es binario, 3 si es un hexadecimal, 0 en caso de error*/
 void leer_decimal_hexa_o_binario(string &a){
-    long numero_leido;
-    if(!chequear_que_hay_solo_numeros(a)){
-        if(a.length()>2){
-            if(a[0]=='0'&&(a[1]=='b'||a[1]=='B')){
-                a=a.substr(2);
-                numero_leido = stol (a,nullptr,2);
-                if(numero_binario_check(a))
-                    a=int_a_string(numero_leido);
-                else
-                    a=a+"{}";
+    if(a.length()>2){
+        if(a[0]=='0'&&(a[1]=='b'||a[1]=='B')){
+            a=a.substr(2);
+            if(numero_binario_check(a)){
+                a=int_a_string(bin_to_int(a));
             }
             else{
-                if(a[0]=='0'&&(a[1]=='x'||a[1]=='X')){
-                    a=a.substr(2);
-                    numero_leido = stol (a,nullptr,16);
-                    if(chequear_que_hay_solo_numeros(a))
-                        a=int_a_string(numero_leido);
-                    else
-                        a=a+"{}";
-                }
-                else{
-                    numero_leido= stol (a,nullptr,0);  
-                    if(chequear_que_hay_solo_numeros(a))
-                        a=int_a_string(numero_leido);
-                    else
-                        a=a+"{}";
-                }
+                cout<<"Binario invalido:  "<<endl;
+                a=a+"{}";
             }
         }
         else{
-            a=a+"{}";
+            if(a[0]=='0'&&(a[1]=='x'||a[1]=='X')){
+                a=a.substr(2);
+                if(numero_hexa_check(a)){
+                    a=int_a_string(hex_to_int(a));
+                }
+                else{
+                    cout<<"Hexa invalido:  "<<endl;
+                    a=a+"{}";
+                }
+            }
+            else{
+                if(chequear_que_hay_solo_numeros(a))
+                    a=a;
+                else{
+                    cout<<"Decimal invalido"<<endl;
+                    a=a+"{}";
+                }
+            }
         }
+    }
+    else{
+        if(!chequear_que_hay_solo_numeros(a))
+            a=a+"{}";
     }
 }
 
@@ -168,7 +260,7 @@ bool operando_check(string &a){
             cout<<"error: encontrado en medio["<<endl;
             return false;
         }
-        string basura="";  
+        string basura="";
         if(a.find_first_of("]")==string::npos){    //error: no esta cerrado
             cout<<"Error: falta ]"<<endl;
             return false;
@@ -183,29 +275,37 @@ bool operando_check(string &a){
         }
         a=a.substr(1,a.find_first_of("]")-1);           //elimino el corchete inicial y el final
         a=trim_espacios(a);                             //elimino espacios en blanco al principio
-    } 
+    }
     if(es_constante(a)){        //es una constante
         tipo_variable=1;
         a=a.substr(1);
-        a=trim_espacios(a);   
+        a=trim_espacios(a);
         if(!chequear_espacios(a)){   //me fijo que no sea una palabra fragmentada
             return false;
-        } 
+        }
         leer_decimal_hexa_o_binario(a);
+        if(a.find_first_of("{}")!=string::npos){
+            a=a.substr(0,a.find_first_of("{}"));
+            return false;
+        }
     }
     else
         if(es_direccion(a)){    //es una direccion
             tipo_variable=2;
             if(!chequear_espacios(a)){   //me fijo que no sea una palabra fragmentada
                 return false;
-            } 
+            }
             leer_decimal_hexa_o_binario(a);
-        }  
+            if(a.find_first_of("{}")!=string::npos){
+                a=a.substr(0,a.find_first_of("{}"));
+                return false;
+            }
+        }
         else{               //es una variable
             tipo_variable=3;
             if(!chequear_espacios(a)){   //me fijo que no sea una palabra fragmentada
                 return false;
-            } 
+            }
         }
     if(hay_simbolos_reservados_check(a)){
         return false;
@@ -585,9 +685,9 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                                 }
                                 else{
                                     agregar_lea(primer_op,lea_address);
-                                    program.push_back("LEA "+primer_op+","+int_a_string(pos_var_x));   
+                                    program.push_back("LEA "+primer_op+","+int_a_string(pos_var_x));
                                 }
-                                program.push_back("OUT "+etiquetas_ES.find("PUERTO_0_SHIFTER")->second+",@7");    
+                                program.push_back("OUT "+etiquetas_ES.find("PUERTO_0_SHIFTER")->second+",@7");
                                 program.push_back("OUT "+etiquetas_ES.find("PUERTO_1_SHIFTER")->second+","+int_a_string(pos_var_x));
                                 program.push_back("IN "+etiquetas_ES.find("PUERTO_2_SHIFTER")->second+","+int_a_string(pos_var_x));
                                 program.push_back("ADD @32768,"+int_a_string(pos_var_x));
@@ -602,7 +702,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                                     program.push_back("ADD "+contador_shift+","+int_a_string(pos_var_x));      //      ADD var,X
                                     linea_leida+=8;
                                 }
-                                program.push_back("MOV "+primer_op+",0");                                      //x:    MOV A,0                 
+                                program.push_back("MOV "+primer_op+",0");                                      //x:    MOV A,0
                                 #else
                                 int pos_loop=linea_leida+2;
                                 int pos_fin_loop=pos_loop+6;
@@ -616,7 +716,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                                 }
                                 else{
                                     agregar_lea(primer_op,lea_address);
-                                    program.push_back("LEA "+primer_op+","+int_a_string(pos_var_x));   
+                                    program.push_back("LEA "+primer_op+","+int_a_string(pos_var_x));
                                 }
                                 program.push_back("MOV @0,"+contador_shift);                                   //      MOV @0,Contador Loop
                                 program.push_back("CMP @7,"+contador_shift);                                   //loop: CMP CONTADOR_LOOP,7
@@ -641,7 +741,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                                 #endif
                             }
                             else{
-                                //MOV A,B   
+                                //MOV A,B
                                 program.push_back(comando+" "+primer_op+","+segundo_op);
                                 linea_leida++;
                             }
