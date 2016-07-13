@@ -80,43 +80,17 @@ int bin_to_int(string a){
 int hex_to_int(string a){
     int numero=0;
     for(unsigned int i=0;i<a.length();i++){
-        switch(a[i]){
-            case '1':numero+=pow(16,a.length()-1-i);
-            break;
-            case '2':numero+=2*pow(16,a.length()-1-i);
-            break;
-            case '3':numero+=3*pow(16,a.length()-1-i);
-            break;
-            case '4':numero+=4*pow(16,a.length()-1-i);
-            break;
-            case '5':numero+=5*pow(16,a.length()-1-i);
-            break;
-            case '6':numero+=6*pow(16,a.length()-1-i);
-            break;
-            case '7':numero+=7*pow(16,a.length()-1-i);
-            break;
-            case '8':numero+=8*pow(16,a.length()-1-i);
-            break;
-            case '9':numero+=9*pow(16,a.length()-1-i);
-            break;
-            case 'a':
-            case 'A':numero+=10*pow(16,a.length()-1-i);
-            break;
-            case 'b':
-            case 'B':numero+=11*pow(16,a.length()-1-i);
-            break;
-            case 'c':
-            case 'C':numero+=12*pow(16,a.length()-1-i);
-            break;
-            case 'd':
-            case 'D':numero+=13*pow(16,a.length()-1-i);
-            break;
-            case 'e':
-            case 'E':numero+=14*pow(16,a.length()-1-i);
-            break;
-            case 'f':
-            case 'F':numero+=15*pow(16,a.length()-1-i);
-            break;
+        if(('0'<=a[i])&&(a[i]<='9')){
+            numero+=(a[i]-'0')*pow(16,a.length()-1-i);
+        }
+        else{
+            if(('A'<=a[i])&&(a[i]<='F')){
+                numero+=(10+a[i]-'A')*pow(16,a.length()-1-i);
+            }
+            else{
+                if(('a'<=a[i])&&(a[i]<='f'))
+                    numero+=(10+a[i]-'a')*pow(16,a.length()-1-i);
+            }
         }
     }
     return numero;
