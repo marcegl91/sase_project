@@ -150,41 +150,12 @@ bool numero_binario_check(string &a){
         if(a[i]!='0'&&a[i]!='1')
             res=false;
     }
-    return res&&(a.length()>0);
-}
+    return res&&(!a.empty());
+}   
 
 bool numero_hexa_check(string &a){
-    bool res=true;
-    for(unsigned int i=0;i<a.length();i++){
-        switch(a[i]){
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case 'a':
-            case 'A':
-            case 'b':
-            case 'B':
-            case 'c':
-            case 'C':
-            case 'd':
-            case 'D':
-            case 'e':
-            case 'E':
-            case 'f':
-            case 'F':
-            break;
-            default:
-                res=false;
-            break;
-        }
-    }
-    return res&&(a.length()>0);
+    bool res=a.find_first_not_of("1234567890ABCDEFabcdef")==string::npos;
+    return res&&(!a.empty());
 }
 
 bool string_fragmentado(string &a){
@@ -193,7 +164,7 @@ bool string_fragmentado(string &a){
         string basura=a.substr(a.find_first_of(" \t"));
         basura=trim_espacios(basura);
         a=a.substr(0,a.find_first_of(" \t"));
-        if(basura.length()>0)
+        if(!basura.empty())
             return true;
     }
     return false;
@@ -235,7 +206,7 @@ bool leer_decimal_hexa_o_binario(string &a, bool anadir_corchetes, bool anadir_s
         if(!chequear_que_hay_solo_numeros(auxiliar))
             return false;
     }
-    if(auxiliar.length()==0)
+    if(auxiliar.empty())
         return false;
     if(anadir_simbolo_constante)
         auxiliar="@"+auxiliar;
@@ -263,7 +234,7 @@ bool operando_check(string &a){
             basura=a.substr(a.find_first_of("]")+1);
             basura=trim_espacios(basura);
         }
-        if(basura.length()>0){                          //me fijo que despues de ] no haya basura
+        if(!basura.empty()){                          //me fijo que despues de ] no haya basura
             cout<<"Error: unexpected "<<basura<<endl;
             return false;
         }
@@ -542,13 +513,13 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
 
     while(getline(input_file, line)){
         eliminar_comentarios(line);                       //elimino los espacios hasta el primer caracter valido
-        if(line.length()!=0){                             //si la linea que queda no es nula
+        if(!line.empty()){                             //si la linea que queda no es nula
             buscar_etiquetas(line,linea_leida,etiquetas,linea_codigo); //
             line= trim_espacios(line);
             string comando=line.substr(0,line.find_first_of(" \t"));//busca instruccion
             string primer_op;
             string segundo_op;
-            if(comando.length()!=0){
+            if(!comando.empty()){
                 line=line.substr(line.find_first_of(" \t"));//lineas con operandos
                 line=trim_espacios(line);
                 comando=caps_UP(comando);       //lo convierto a mayusculas para no tener problemas
