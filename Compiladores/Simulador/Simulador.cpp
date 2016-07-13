@@ -154,7 +154,7 @@ bool ejecucion(vector<string> &programa,int ciclos){
                     int device=(operando1-registro)/4;
                     //cout<<"IN device: "<<device<<" registro: "<<registro<<endl;
                     switch(device){
-                        case 2:res=modulo_in_shifter(registro);
+                        case 1:res=modulo_in_shifter(registro);
                         break;
                         default:cout<<"modulo desconectado"<<endl;
                         break;
@@ -170,7 +170,7 @@ bool ejecucion(vector<string> &programa,int ciclos){
                         int device=(operando1-registro)/4;
                         //cout<<"OUT device: "<<device<<" registro: "<<registro<<endl;
                         switch(device){
-                            case 2:modulo_out_shifter(registro,valor);
+                            case 1:modulo_out_shifter(registro,valor);
                             break;
                             case 4:modulo_out_sseg(registro,valor);
                             break;
