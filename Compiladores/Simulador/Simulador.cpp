@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #define MAX_SIZE_CODE 128
 #define MAX_CALL 128
-#define DEFAULT_CYCLE 500
+#define DEFAULT_CYCLE 500000
 using namespace std;
 //SOPORTE EXPERIMENTAL PARA WINDOWS, para usarlo descomentar la siguiente linea
 //#define Windows_MODE
@@ -87,11 +87,22 @@ void modulo_out_shifter(int registro,int valor){
     }
 }
 
+void modulo_out_uart(int registro,int valor){
+    switch(registro){
+        case 0:cout<<"Salida UART_TX: "<<int_a_binario(valor,16)<<endl;
+        break;
+        case 2:cout<<"Salida UART_reset: "<<int_a_binario(valor,16)<<endl;
+        break;
+        default:cout<<"error de escritura del registro UART"<<endl;
+        break;
+    }
+}
+
 void modulo_out_led(int registro,int valor){
     switch(registro){
         case 0:cout<<"Salida LED: "<<int_a_binario(valor,16)<<endl;
         break;
-        default:cout<<"error de escritura del registro shifter"<<endl;
+        default:cout<<"error de escritura del registro LED"<<endl;
         break;
     }
 }
@@ -100,7 +111,7 @@ void modulo_out_sseg(int registro,int valor){
     switch(registro){
         case 0:cout<<"Salida Siete Segmentos: "<<int_a_binario(valor,16)<<endl;
         break;
-        default:cout<<"error de escritura del registro shifter"<<endl;
+        default:cout<<"error de escritura del registro SSEG"<<endl;
         break;
     }
 }
@@ -171,6 +182,8 @@ bool ejecucion(vector<string> &programa,int ciclos){
                         //cout<<"OUT device: "<<device<<" registro: "<<registro<<endl;
                         switch(device){
                             case 1:modulo_out_shifter(registro,valor);
+                            break;
+                            case 3:modulo_out_uart(registro,valor);
                             break;
                             case 4:modulo_out_sseg(registro,valor);
                             break;

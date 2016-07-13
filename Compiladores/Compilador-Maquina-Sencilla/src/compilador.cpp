@@ -16,7 +16,7 @@ using namespace std;
 map<string,string> instructions_codes;
 map<string,string> etiquetas_ES;
 //SOPORTE EXPERIMENTAL PARA WINDOWS, para usarlo descomentar la siguiente linea
-#define Windows_MODE
+//#define Windows_MODE
 //implementa funciones con shifter
 #define use_shifter
 //funciones auxiliares para conversion de datos(debe haber mejores pero estas andan :) )
@@ -144,29 +144,6 @@ bool hay_simbolos_reservados_check(string a){
     return a.find_first_of("[],@")!=string::npos;
 }
 
-bool chequear_espacios(string &a){
-    string basura="";
-    a=trim_espacios(a);
-    if(a.find_first_of(" \t")!=string::npos){
-        basura=a.substr(a.find_first_of(" \t"));
-        a=a.substr(0,a.find_first_of(" \t"));
-        basura=trim_espacios(basura);
-    }
-    if(basura.length()>0){
-        return false;
-    }
-    return true;
-}
-
-bool direccion_check(string &a){
-    bool res=true;
-    for(unsigned int i=0;i<a.length();i++){
-        if(!isdigit(a[i]))
-            res=false;
-    }
-    return res&&(a.length()>0);
-}
-
 bool numero_binario_check(string &a){
     bool res=true;
     for(unsigned int i=0;i<a.length();i++){
@@ -209,51 +186,68 @@ bool numero_hexa_check(string &a){
     }
     return res&&(a.length()>0);
 }
-/*decimal hexa o binario devuelve 1 si es un numero decimal,
-2 si es binario, 3 si es un hexadecimal, 0 en caso de error*/
-void leer_decimal_hexa_o_binario(string &a){
-    if(a.length()>2){
-        if(a[0]=='0'&&(a[1]=='b'||a[1]=='B')){
-            a=a.substr(2);
-            if(numero_binario_check(a)){
-                a=int_a_string(bin_to_int(a));
-            }
+
+bool string_fragmentado(string &a){
+    a=trim_espacios(a);
+    if(a.find_first_of(" \t")!=string::npos){
+        string basura=a.substr(a.find_first_of(" \t"));
+        basura=trim_espacios(basura);
+        a=a.substr(0,a.find_first_of(" \t"));
+        if(basura.length()>0)
+            return true;
+    }
+    return false;
+}
+
+bool leer_decimal_hexa_o_binario(string &a, bool anadir_corchetes, bool anadir_simbolo_constante){
+    string auxiliar=trim_espacios(a);
+    if(string_fragmentado(auxiliar))
+        return false;
+    if(auxiliar.length()>2){
+        if(auxiliar[0]=='0'&&(auxiliar[1]=='b'||auxiliar[1]=='B')){
+            auxiliar=auxiliar.substr(2);
+            if(numero_binario_check(auxiliar))
+                auxiliar=int_a_string(bin_to_int(auxiliar));
             else{
-                cout<<"Binario invalido:  "<<endl;
-                a=a+"{}";
+                cout<<"Numero binario invalido ";
+                return false;
             }
         }
         else{
-            if(a[0]=='0'&&(a[1]=='x'||a[1]=='X')){
-                a=a.substr(2);
-                if(numero_hexa_check(a)){
-                    a=int_a_string(hex_to_int(a));
-                }
+            if(auxiliar[0]=='0'&&(auxiliar[1]=='x'||auxiliar[1]=='X')){
+                auxiliar=auxiliar.substr(2);
+                if(numero_hexa_check(auxiliar))
+                    auxiliar=int_a_string(hex_to_int(auxiliar));
                 else{
-                    cout<<"Hexa invalido:  "<<endl;
-                    a=a+"{}";
+                    cout<<"Numero hexa invalido ";
+                    return false;
                 }
             }
             else{
-                if(chequear_que_hay_solo_numeros(a))
-                    a=a;
-                else{
-                    cout<<"Decimal invalido"<<endl;
-                    a=a+"{}";
+                if(!chequear_que_hay_solo_numeros(auxiliar)){
+                    cout<<"Numero decimal invalido ";
+                    return false;
                 }
             }
         }
     }
     else{
-        if(!chequear_que_hay_solo_numeros(a))
-            a=a+"{}";
+        if(!chequear_que_hay_solo_numeros(auxiliar))
+            return false;
     }
+    if(auxiliar.length()==0)
+        return false;
+    if(anadir_simbolo_constante)
+        auxiliar="@"+auxiliar;
+    if(anadir_corchetes)
+        auxiliar="["+auxiliar+"]";
+    a=auxiliar;
+    return true;
 }
 
 bool operando_check(string &a){
     a=trim_espacios(a);//elimino espacios en blanco
     bool hay_corchetes=false;
-    int tipo_variable=0;
     if(a.find_first_of("[")!=string::npos){        //encontre un corchete
         hay_corchetes=true;
         if(a.find_first_of("[")!=0){                    //error: no esta al principio
@@ -277,48 +271,23 @@ bool operando_check(string &a){
         a=trim_espacios(a);                             //elimino espacios en blanco al principio
     }
     if(es_constante(a)){        //es una constante
-        tipo_variable=1;
         a=a.substr(1);
-        a=trim_espacios(a);
-        if(!chequear_espacios(a)){   //me fijo que no sea una palabra fragmentada
-            return false;
-        }
-        leer_decimal_hexa_o_binario(a);
-        if(a.find_first_of("{}")!=string::npos){
-            a=a.substr(0,a.find_first_of("{}"));
-            return false;
-        }
+        return leer_decimal_hexa_o_binario(a,hay_corchetes,true);
     }
     else
         if(es_direccion(a)){    //es una direccion
-            tipo_variable=2;
-            if(!chequear_espacios(a)){   //me fijo que no sea una palabra fragmentada
-                return false;
-            }
-            leer_decimal_hexa_o_binario(a);
-            if(a.find_first_of("{}")!=string::npos){
-                a=a.substr(0,a.find_first_of("{}"));
-                return false;
-            }
+            return leer_decimal_hexa_o_binario(a,hay_corchetes,false);
         }
         else{               //es una variable
-            tipo_variable=3;
-            if(!chequear_espacios(a)){   //me fijo que no sea una palabra fragmentada
+            if(string_fragmentado(a)){   //me fijo que no sea una palabra fragmentada
                 return false;
             }
+            if(hay_corchetes){
+                a="["+a+"]";
+            }
         }
-    if(hay_simbolos_reservados_check(a)){
-        return false;
-    }
-    if(tipo_variable==1){
-        a="@"+a;
-    }
-    if(hay_corchetes){
-        a="["+a+"]";
-    }
     return true;
 }
-
 
 string address_solver(string var,map <string,int> etiquetas,
     map <string,int> variables,map <string,int> &lea_address){
@@ -413,8 +382,6 @@ vector<string> generador_codigo(vector<string> codigo_limpio,map <string,int> et
         line=trim_espacios(line);
         string primer_op;
         string segundo_op;
-        //bool usa_segundo_comando=true;
-        segundo_op=trim_espacios(segundo_op);
         if((comando=="IN")||(comando=="OUT")){
             //instruccion con primer operando de 5 bits
             primer_op=line.substr(0,line.find(',')); //busca primer operando
@@ -472,8 +439,7 @@ vector<string> generador_codigo(vector<string> codigo_limpio,map <string,int> et
         }
         else{
             string a=it_const->first;
-            a=a.substr(1);
-            program[it_const->second]=int_a_binario(string_a_int(a),16);
+            program[it_const->second]=int_a_binario(string_a_int(a.substr(1)),16);
         }
     }
     //relleno las "direcciones de lea con su valor"
@@ -551,7 +517,7 @@ void buscar_etiquetas(string &line,int linea_leida,map <string,int> &etiquetas,i
     if (label_pos != string::npos){
         string label=line.substr(0,label_pos);
         line=line.substr(label_pos+1); //linea sin comentario y sin etiqueta
-        if(!chequear_espacios(label)||hay_simbolos_reservados_check(label)){
+        if(string_fragmentado(label)||hay_simbolos_reservados_check(label)){
             cout<<"Error al compilar: label invalido:\""<<label<<"\" linea "<<linea_codigo+1<<endl;
             exit(-1);
         }
@@ -748,6 +714,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             agregar_var(primer_op,variables);
                             agregar_var(segundo_op,variables);
                         }
+                        #ifdef use_shifter
                         //shiftl x,desplazamiento
                         if(comando=="SHIFTR"||comando=="SHIFTL"){
                             chequear_error_operando(primer_op,linea_codigo,comando,line);
@@ -781,6 +748,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             program.push_back("IN "+etiquetas_ES.find("PUERTO_2_SHIFTER")->second+","+primer_op);
                             linea_leida+=3;
                         }
+                        #endif
                         if(comando=="CMP") {
                             chequear_error_operando(primer_op,linea_codigo,comando,line);
                             chequear_error_operando(segundo_op,linea_codigo,comando,line);
@@ -830,10 +798,12 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
 }
 
 void inicializar_etiquetas_ES(){
+    #ifdef use_shifter
     etiquetas_ES.insert ( pair<string,string>("PUERTO_0_SHIFTER","4") );
     etiquetas_ES.insert ( pair<string,string>("PUERTO_1_SHIFTER","5") );
     etiquetas_ES.insert ( pair<string,string>("PUERTO_2_SHIFTER","6") );
     etiquetas_ES.insert ( pair<string,string>("PUERTO_3_SHIFTER","7") );
+    #endif
     etiquetas_ES.insert ( pair<string,string>("TIMER_ROUNDS","8") );
     etiquetas_ES.insert ( pair<string,string>("TIMER_PRESCALER","9") );
     etiquetas_ES.insert ( pair<string,string>("TIMER_STATUS","10") );
@@ -859,7 +829,7 @@ void inicializar_instrucciones(){
     instructions_codes.insert ( pair<string,string>("CMP","01") );
     instructions_codes.insert ( pair<string,string>("MOV","10") );
     instructions_codes.insert ( pair<string,string>("LEA","10") );
-    instructions_codes.insert ( pair<string,string>("SUB","10") );
+    instructions_codes.insert ( pair<string,string>("SUB","") );
     //instruccion con 1 parametro de 5 bits y uno de 7
     instructions_codes.insert ( pair<string,string>("IN",  "1110") );
     instructions_codes.insert ( pair<string,string>("OUT", "1111") );
@@ -867,12 +837,14 @@ void inicializar_instrucciones(){
     instructions_codes.insert ( pair<string,string>("BEQ", "110000000") );
     instructions_codes.insert ( pair<string,string>("CALL","110010000") );
     instructions_codes.insert ( pair<string,string>("RET", "110011000") );
-    instructions_codes.insert ( pair<string,string>("JMP", "110000000") );
+    instructions_codes.insert ( pair<string,string>("JMP", "") );
     instructions_codes.insert ( pair<string,string>("INC", "") );
     instructions_codes.insert ( pair<string,string>("DEC", "") );
     //instruccion con 1 parametro de 4 bits y uno de 7
+    #ifdef use_shifter
     instructions_codes.insert ( pair<string,string>("SHIFTL", "") );
     instructions_codes.insert ( pair<string,string>("SHIFTR", "") );
+    #endif
     //instruccion de ensamble de 16 bits
     instructions_codes.insert ( pair<string,string>("DW","") );
     //
