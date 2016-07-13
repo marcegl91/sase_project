@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<BillOfMaterials Version="1" Minor="2">
+  <IPInstance name="Divider">
+    <FileSets>
+      <FileSet generator="apply_current_project_options_generator">
+        <File name="./apply_current_project_options_generator.xlog" type="ignore" timestamp="Wed Jul 13 16:19:24 GMT 2016" checksum="0xFFFFFFFF"></File>
+      </FileSet>
+      <FileSet generator="model_parameter_resolution_generator">
+        <File name="./model_parameter_resolution_generator.xlog" type="ignore" timestamp="Wed Jul 13 16:19:24 GMT 2016" checksum="0xFFFFFFFF"></File>
+      </FileSet>
+      <FileSet generator="ip_xco_generator">
+        <File name="./Divider.xco" type="xco" timestamp="Wed Jul 13 16:17:42 GMT 2016" checksum="0x6CBE9477"></File>
+      </FileSet>
+      <FileSet generator="ngc_netlist_generator">
+        <File name="./Divider.ngc" type="ngc" timestamp="Wed Jul 13 16:19:19 GMT 2016" checksum="0x4CF7B85C"></File>
+        <File name="./Divider.v" type="verilog" timestamp="Wed Jul 13 16:19:20 GMT 2016" checksum="0xF1367779"></File>
+        <File name="./Divider.veo" type="veo" timestamp="Wed Jul 13 16:19:07 GMT 2016" checksum="0x54479EC9"></File>
+      </FileSet>
+      <FileSet generator="instantiation_template_generator">
+        <File name="./Divider.veo" type="veo" timestamp="Wed Jul 13 16:19:20 GMT 2016" checksum="0x54479EC9"></File>
+      </FileSet>
+      <FileSet generator="asy_generator">
+        <File name="./Divider.asy" type="asy" timestamp="Wed Jul 13 16:19:20 GMT 2016" checksum="0x5A3ABBFA"></File>
+      </FileSet>
+      <FileSet generator="xmdf_generator">
+        <File name="./Divider_xmdf.tcl" type="tclXmdf" timestamp="Wed Jul 13 16:19:20 GMT 2016" checksum="0x8C34EF39"></File>
+      </FileSet>
+      <FileSet generator="ise_generator">
+        <File name="./Divider.gise" type="ignore" timestamp="Wed Jul 13 16:19:24 GMT 2016" checksum="0x3DD873C3"></File>
+        <File name="./Divider.xise" type="ignore" timestamp="Wed Jul 13 16:19:23 GMT 2016" checksum="0xF14FD067"></File>
+      </FileSet>
+      <FileSet generator="deliver_readme_generator">
+        <File name="./Divider_readme.txt" type="ignore" timestamp="Wed Jul 13 16:19:24 GMT 2016" checksum="0xEB893116"></File>
+      </FileSet>
+      <FileSet generator="flist_generator">
+        <File name="./Divider_flist.txt" type="ignore" timestamp="Wed Jul 13 16:19:24 GMT 2016" checksum="0x7B7023DF"></File>
+      </FileSet>
+    </FileSets>
+  </IPInstance>
+</BillOfMaterials>

@@ -32,10 +32,6 @@ module Timer(
 
 		else
 		begin
-			prescaler <= prescaler_next;
-			rounds <= rounds_next;
-			running <= running_next;
-
 			// Writes:
 			case({cs, we, reg_sel})
 				{1'b1, 1'b1, ROUNDS_reg}:
@@ -55,6 +51,8 @@ module Timer(
 				{1'b1, 1'b1, STATUS_reg}: // Toggle run/stop
 					begin
 					running <= in[0];
+					prescaler <= prescaler_next;
+					rounds <= rounds_next;
 					end
 				{1'b1, 1'b1, DONE_reg}: // Reset & pause
 					begin
@@ -62,7 +60,12 @@ module Timer(
 					prescaler <= 16'b0;
 					rounds <= 16'b0;
 					end
-				default: ;
+				default:
+				    begin 
+					prescaler <= prescaler_next;
+					rounds <= rounds_next;
+					running <= running_next;
+					end
 			endcase
 		end
 	end
@@ -70,9 +73,17 @@ module Timer(
 		 always@*
 		 begin
 			// Next-state logic:
-			rounds_next = ((rounds != rounds_goal) && (prescaler == prescaler_goal))? rounds + 16'b1 : rounds;
-			prescaler_next = (!running || (prescaler == prescaler_goal))? 16'b0 : prescaler + 16'b1;
-			running_next = (rounds_next != rounds_goal);
+		    rounds_next = (running && (rounds != rounds_goal) && ((prescaler + 1'b1) == prescaler_goal))? rounds + 16'b1 : rounds;
+
+			if (!running)
+			     prescaler_next = prescaler;
+			else if (prescaler == prescaler_goal)
+			     prescaler_next = 16'b0;
+			else
+		         prescaler_next = prescaler + 1'b1;
+		         
+			//prescaler_next = (!running || (prescaler == prescaler_goal))? 16'b0 : prescaler + 16'b1;
+			running_next = (running && (rounds_next != rounds_goal));
 			
 			// Output:
 			case({cs, we, reg_sel})

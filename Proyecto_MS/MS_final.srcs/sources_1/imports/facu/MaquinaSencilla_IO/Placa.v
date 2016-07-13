@@ -71,4 +71,5 @@ module Placa(
     // DEVICE 1: SHIFTER
     ControladorShifter CntrlShifter(.clk(clk), .reset(reset), .we(device1in[18]), .reg_sel({device1in[17:16]}), .cs(device1cs), .in({device1in[15:0]}), .out(device1out));
     // DEVICE 0: -------
+    ALM alm(.clk(clk), .reset(reset), .we(device0in[18]), .reg_sel({device0in[17:16]}), .cs(device0cs), .in({device0in[15:0]}), .out(device0out));
 endmodule

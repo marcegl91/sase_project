@@ -1,0 +1,60 @@
+INFO:sim:172 - Generating IP...
+Applying current project options...
+Finished applying current project options.
+Resolving generic values...
+Finished resolving generic values.
+Generating IP...
+WARNING:sim:472 - The chosen IP does not support a Verilog behavioral model,
+   generating a Verilog structural model instead.
+WARNING:sim:89 - A core named <Divider> already exists in the output directory.
+   Output products for this core may be overwritten.
+XST: HDL Parsing
+XST: HDL Elaboration
+XST: HDL Synthesis
+XST: Advanced HDL Synthesis
+XST: Low Level Synthesis
+Generating Implementation files.
+Generating NGC file.
+Generating Verilog structural model.
+Finished Generation.
+Generating IP instantiation template...
+Generating ASY schematic symbol...
+INFO:sim:949 - Finished generation of ASY schematic symbol.
+Generating metadata file...
+Generating ISE project...
+XCO file found: Divider.xco
+XMDF file found: Divider_xmdf.tcl
+Adding
+C:/Users/azure/Desktop/repoMS/sase_project-master/Proyecto_MS/MS_final.srcs/sour
+ces_1/ip/div_gen_v3_0_0/tmp/_cg/Divider.asy -view all -origin_type imported
+Adding
+C:/Users/azure/Desktop/repoMS/sase_project-master/Proyecto_MS/MS_final.srcs/sour
+ces_1/ip/div_gen_v3_0_0/tmp/_cg/Divider.ngc -view all -origin_type created
+Checking file
+"C:/Users/azure/Desktop/repoMS/sase_project-master/Proyecto_MS/MS_final.srcs/sou
+rces_1/ip/div_gen_v3_0_0/tmp/_cg/Divider.ngc" for project device match ...
+File
+"C:/Users/azure/Desktop/repoMS/sase_project-master/Proyecto_MS/MS_final.srcs/sou
+rces_1/ip/div_gen_v3_0_0/tmp/_cg/Divider.ngc" device information matches project
+device.
+Adding
+C:/Users/azure/Desktop/repoMS/sase_project-master/Proyecto_MS/MS_final.srcs/sour
+ces_1/ip/div_gen_v3_0_0/tmp/_cg/Divider.v -view all -origin_type created
+INFO:HDLCompiler:1845 - Analyzing Verilog file
+   "C:/Users/azure/Desktop/repoMS/sase_project-master/Proyecto_MS/MS_final.srcs/
+   sources_1/ip/div_gen_v3_0_0/tmp/_cg/Divider.v" into library work
+INFO:ProjectMgmt - Parsing design hierarchy completed successfully.
+Adding
+C:/Users/azure/Desktop/repoMS/sase_project-master/Proyecto_MS/MS_final.srcs/sour
+ces_1/ip/div_gen_v3_0_0/tmp/_cg/Divider.veo -view all -origin_type imported
+INFO:TclTasksC:2116 - The automatic calculation of top has been turned-off.
+   Please set the new top explicitly by running the "project set top" command.
+   To re-calculate the new top automatically, set the "Auto Implementation Top"
+   property to true.
+Top level has been set to "/Divider"
+Generating README file...
+Generating FLIST file...
+INFO:sim:948 - Finished FLIST file generation.
+Moving files to output directory...
+Finished moving files to output directory
+Saved CGP file for project 'coregen'.

@@ -5,58 +5,6 @@
 			Type="DesignSrcs"
 			RelSrcDir="$PSRCDIR/sources_1">
 		<Filter Type="Srcs"/>
-		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/bitwise-module/BWM.v">
-			<FileInfo>
-				<Attr Name="ImportPath"
-						Val="F:/aca_otras_cosas/facu/DispositivosInOut/bitwise-module/BWM.v"/>
-				<Attr Name="ImportTime"
-						Val="1466772988"/>
-				<Attr Name="UsedInSynthesis"
-						Val="1"/>
-				<Attr Name="UsedInImplementation"
-						Val="1"/>
-				<Attr Name="UsedInSimulation"
-						Val="1"/>
-			</FileInfo>
-		</File>
-		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/shifter/shifter.v">
-			<FileInfo>
-				<Attr Name="ImportPath"
-						Val="F:/aca_otras_cosas/facu/DispositivosInOut/shifter/shifter.v"/>
-				<Attr Name="ImportTime"
-						Val="1466612586"/>
-				<Attr Name="UsedInSynthesis"
-						Val="1"/>
-				<Attr Name="UsedInImplementation"
-						Val="1"/>
-				<Attr Name="UsedInSimulation"
-						Val="1"/>
-			</FileInfo>
-		</File>
-		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/shifter/Register.v">
-			<FileInfo>
-				<Attr Name="ImportPath"
-						Val="F:/aca_otras_cosas/facu/DispositivosInOut/shifter/Register.v"/>
-				<Attr Name="ImportTime"
-						Val="1466606430"/>
-				<Attr Name="UsedInSynthesis"
-						Val="1"/>
-				<Attr Name="UsedInImplementation"
-						Val="1"/>
-				<Attr Name="UsedInSimulation"
-						Val="1"/>
-			</FileInfo>
-		</File>
-		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/shifter/ControladorShifter.v">
-			<FileInfo>
-				<Attr Name="UsedInSynthesis"
-						Val="1"/>
-				<Attr Name="UsedInImplementation"
-						Val="1"/>
-				<Attr Name="UsedInSimulation"
-						Val="1"/>
-			</FileInfo>
-		</File>
 		<File Path="$PSRCDIR/sources_1/imports/facu/MaquinaSencilla_IO/RAM.v">
 			<FileInfo>
 				<Attr Name="ImportPath"
@@ -165,6 +113,26 @@
 						Val="1"/>
 			</FileInfo>
 		</File>
+		<File Path="$PSRCDIR/sources_1/ip/mult_gen_v11_2_0/Multiplier.xci">
+			<FileInfo SFType="IP">
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/ip/div_gen_v3_0_0/Divider.xco">
+			<FileInfo SFType="IP">
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
 		<File Path="$PSRCDIR/sources_1/imports/facu/MaquinaSencilla_IO/UP.v">
 			<FileInfo>
 				<Attr Name="ImportPath"
@@ -227,7 +195,31 @@
 						Val="1"/>
 			</FileInfo>
 		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/shifter/Register.v">
+			<FileInfo>
+				<Attr Name="ImportPath"
+						Val="F:/aca_otras_cosas/facu/DispositivosInOut/shifter/Register.v"/>
+				<Attr Name="ImportTime"
+						Val="1466606430"/>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
 		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/ControladorBoton.v">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/new/ALM.v">
 			<FileInfo>
 				<Attr Name="UsedInSynthesis"
 						Val="1"/>
@@ -290,6 +282,16 @@
 			</FileInfo>
 		</File>
 		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/sseg/ControladorSSEG.v">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PSRCDIR/sources_1/imports/facu/DispositivosInOut/shifter/ControladorShifter.v">
 			<FileInfo>
 				<Attr Name="UsedInSynthesis"
 						Val="1"/>
