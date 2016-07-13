@@ -19,7 +19,7 @@
 			document.getElementById("errorMsg").innerHTML="Error: Valores numéricos entre 1 y 65535 (16 bits)";
 		}
 		else {
-			var delay = (p+1)*r / 100E6;
+			var delay = p*r / 100E6;
 
 			document.getElementById("results").style.visibility = "visible";
 			document.getElementById("errorMsg").style.visibility = "hidden";
@@ -34,7 +34,7 @@
 
 	<div>
 		<h1>Timer</h1>
-		<p>Rango de tiempos: [20ns, 42.9490s]
+		<p>Rango de tiempos: [10ns, 42.9484s]
 		<h2>Descripción</h2>
 			<h3>Registros (lectura/escritura)</h3>
 			<ol type="0">
@@ -54,9 +54,8 @@
 
 			<h4>Aplicación como contador de ciclos</h4>
 			<p>Como el módulo permite leer el estado de los contadores <em>PRESCALER</em> y <em>ROUNDS</em> en un instante determinado, es posible utilizar el timer como un contador de ciclos. Esa función puede resultar útil por ejemplo para medir el rendimiento de una porción de código.</p>
-			<p>Para eso se puede cargar el máximo valor posible (65535) en los registros <em>goal</em> y luego lanzar el timer justo antés y pararlo justo después del código a medir. El resultado puede calcularse como: <blockquote>Cantidad de ciclos = ROUNDS⋅(65535+1) + PRESCALER</blockquote></p>
+			<p>Para eso se puede cargar el máximo valor posible (65535) en los registros <em>goal</em> y luego lanzar el timer justo antés y pararlo justo después del código a medir. El resultado puede calcularse como: <blockquote>Cantidad de ciclos = 65535⋅ROUNDS + PRESCALER</blockquote></p>
 
-			La razón por la que se suma 1 al valor de PRESCALER_goal en la fórmula anterior es que el incremento a ROUNDS se realiza un ciclo después de que PRESCALER llega al objetivo; es decir, durante la transición desde el valor PRESCALER_goal a 0.
 
 		<h2>Calculadora de tiempos</h2>
 		<p>(Asumiendo f<sub>clk</sub> = 100MHz)
