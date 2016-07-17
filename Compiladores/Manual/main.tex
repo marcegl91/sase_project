@@ -409,7 +409,6 @@ La funcion MOV con indirecci\'on se implementa mediante un algoritmo que modifiq
  MOV [A],B
 \begin{verbatim}
             MOV A,X 
-            MOV a,X
             MOV @0,Contador
     loop:   CMP CONTADOR_LOOP,7
             BEQ FIN
@@ -417,7 +416,7 @@ La funcion MOV con indirecci\'on se implementa mediante un algoritmo que modifiq
             ADD @65535,Contador
             CMP 0,0
             BEQ loop
-    FIN:    ADD 10..0,X
+    FIN:    ADD @32768,X
             LEA B,var
             ADD var,X       
     X:      MOV A,0
@@ -425,7 +424,6 @@ La funcion MOV con indirecci\'on se implementa mediante un algoritmo que modifiq
  MOV [A],[B]
 \begin{verbatim}
             MOV A,X 
-            MOV a,X
             MOV @0,Contador Loop
     loop:   CMP CONTADOR_LOOP,7
             BEQ FIN
@@ -439,38 +437,82 @@ La funcion MOV con indirecci\'on se implementa mediante un algoritmo que modifiq
 \end{verbatim} 
  MOV A,[B]
 \begin{verbatim}
-            ADD B,X
+            LEA A,X 
+            MOV @0,Contador
+    loop:   CMP CONTADOR_LOOP,7
+            BEQ FIN
+            ADD X,X
+            ADD @65535,Contador
+            CMP 0,0
+            BEQ loop
+    FIN:    ADD @32768,X
+            LEA B,var
+            ADD var,X       
     X:      MOV A,0
 \end{verbatim}
+
+Aprovechado los modulos de E/S, se puede simplificar la instrucci\'on
+
+MOV [A],B
+\begin{verbatim}
+            OUT PUERTO_0_SHIFTER,@7
+            OUT PUERTO_1_SHIFTER,A
+            IN  PUERTO_2_SHIFTER,X
+            ADD @32768,X
+            LEA B,var
+            ADD var,X       
+    X:      MOV A,0
+\end{verbatim}    
+
+ MOV [A],[B]
+\begin{verbatim}
+            OUT PUERTO_0_SHIFTER,@7
+            OUT PUERTO_1_SHIFTER,A
+            IN  PUERTO_2_SHIFTER,X
+            ADD @32768,X
+            ADD B,X
+    X:      MOV A,0
+\end{verbatim} 
+ MOV A,[B]
+\begin{verbatim}
+            LEA A,X 
+            OUT PUERTO_0_SHIFTER,@7
+            OUT PUERTO_1_SHIFTER,X
+            IN  PUERTO_2_SHIFTER,X
+            ADD @32768,X
+            ADD B,X
+    X:      MOV A,0
 
 \subsubsection{SHIFT}
 La funcion SHIFT era parcialmente soportada hasta que fue a\~nadido el m\'odulo de 
 entrada/salida que permite dicha operaci\'on.
 
-SHIFT X,@const
+SHIFTR X,@const
 \begin{verbatim}
-            OUT PUERTO_0_SHIFTER,@const
-            OUT PUERTO_1_SHIFTER,X
-    LOOP:   IN PUERTO_3_SHIFTER,var
-            CMP @0,var
-            BEQ FIN
-            CMP 0,0
-            BEQ LOOP
-    FIN:    IN PUERTO_2_SHIFTER,X
+    OUT PUERTO_0_SHIFTER,@const
+    OUT PUERTO_1_SHIFTER,X
+    IN  PUERTO_3_SHIFTER,X
 \end{verbatim}
 
-SHIFT X,Y
+SHIFTR X,Y
 \begin{verbatim}
-            MOV @32768,var
-            ADD Y,var
-            OUT PUERTO_0_SHIFTER,var
-            OUT PUERTO_1_SHIFTER,X
-    LOOP:   IN PUERTO_3_SHIFTER,var
-            CMP @0,var
-            BEQ FIN
-            CMP 0,0
-            BEQ LOOP
-    FIN:    IN PUERTO_2_SHIFTER,X
+    OUT PUERTO_0_SHIFTER,Y
+    OUT PUERTO_1_SHIFTER,X
+    IN  PUERTO_3_SHIFTER,X
+\end{verbatim}
+
+SHIFTL X,@const
+\begin{verbatim}
+    OUT PUERTO_0_SHIFTER,@const
+    OUT PUERTO_1_SHIFTER,X
+    IN  PUERTO_2_SHIFTER,X
+\end{verbatim}
+
+SHIFTL X,Y
+\begin{verbatim}
+    OUT PUERTO_0_SHIFTER,Y
+    OUT PUERTO_1_SHIFTER,X
+    IN  PUERTO_2_SHIFTER,X
 \end{verbatim}
 
 \section{Compilaci\'on}
@@ -521,9 +563,7 @@ del rango v\'alido.
 Lista de Known Issues:
 \begin{itemize}
     \item No soporta dos instrucciones v\'alidas en la misma l\'inea.
-    \item Solo soporta n\'umeros decimales.
     \item Hay una variable de ensamblador que est\'a reservada.
-    \item No se puede hacer call a una variable.
     \item Si bien hace un chequeo general de los operandos, puede que acepte algo
             no soportado.
 \end{itemize}
