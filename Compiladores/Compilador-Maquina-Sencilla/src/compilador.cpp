@@ -676,31 +676,15 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             chequear_error_operando(segundo_op,linea_codigo,comando,line);
                             chequear_destino_valido(primer_op,linea_codigo,comando,line);
                             agregar_var(primer_op,variables);
-                            string contador_shift="VARIABLE_AUXILIAR_ASM_###_Asquerosa_Imposible_de_Repetir";
-                            agregar_var(contador_shift,variables);
-                            agregar_var("@0",variables);
-                            if(es_constante(segundo_op)){
-                                int primer_parametro=0;
-                                if(comando=="SHIFTR")
-                                    primer_parametro=16;
-                                primer_parametro+=string_a_int(segundo_op.substr(1));
-                                string aux="@"+int_a_string(primer_parametro);
-                                agregar_var(aux,variables);
-                                program.push_back("OUT "+etiquetas_ES.find("PUERTO_0_SHIFTER")->second+","+aux);
+                            agregar_var(segundo_op,variables);
+                            program.push_back("OUT "+etiquetas_ES.find("PUERTO_0_SHIFTER")->second+","+aux);
+                            program.push_back("OUT "+etiquetas_ES.find("PUERTO_1_SHIFTER")->second+","+primer_op);
+                            if(comando=="SHIFTL"){
+                                program.push_back("IN "+etiquetas_ES.find("PUERTO_2_SHIFTER")->second+","+primer_op);
                             }
                             else{
-                                agregar_var(segundo_op,variables);
-                                agregar_var("@16",variables);
-                                if(comando=="SHIFTR")
-                                    program.push_back("MOV @16,"+contador_shift);
-                                else
-                                    program.push_back("MOV @0,"+contador_shift);
-                                program.push_back("ADD "+segundo_op+","+contador_shift);
-                                program.push_back("OUT "+etiquetas_ES.find("PUERTO_0_SHIFTER")->second+","+contador_shift);
-                                linea_leida+=2;
+                                program.push_back("IN "+etiquetas_ES.find("PUERTO_3_SHIFTER")->second+","+primer_op);
                             }
-                            program.push_back("OUT "+etiquetas_ES.find("PUERTO_1_SHIFTER")->second+","+primer_op);
-                            program.push_back("IN "+etiquetas_ES.find("PUERTO_2_SHIFTER")->second+","+primer_op);
                             linea_leida+=3;
                         }
                         #endif
