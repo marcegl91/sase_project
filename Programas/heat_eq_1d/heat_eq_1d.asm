@@ -1,5 +1,12 @@
 ; Reinicio la UART
-OUT 5,@0 ; Esta funcion debe seguir estando aquí???
+OUT UART_RX,@0 ; Esta funcion debe seguir estando aquí???
+
+;MOV @3,aux
+;OUT LED,aux
+;SHIFTR aux,@1
+;OUT SSEG,aux
+
+;JMP EndProgram
 
 ; Inicialización...
 MOV @150,N ; Número de iteraciones para converger
@@ -42,9 +49,9 @@ MainIt: CMP k,N
 					BEQ SendToUart
 					JMP EndSendUart
 					SendToUart:
-						OUT 12,res
-						SHIFTR res,8
-						OUT 12,res
+						OUT UART_TX,res
+						SHIFTR res,@8
+						OUT UART_TX,res
 				EndSendUart:
 
 			; Incremento subiteración
