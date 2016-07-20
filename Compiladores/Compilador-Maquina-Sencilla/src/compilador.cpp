@@ -677,7 +677,7 @@ vector<string> parser(ifstream &input_file,map <string,int> &etiquetas,map <stri
                             chequear_destino_valido(primer_op,linea_codigo,comando,line);
                             agregar_var(primer_op,variables);
                             agregar_var(segundo_op,variables);
-                            program.push_back("OUT "+etiquetas_ES.find("PUERTO_0_SHIFTER")->second+","+aux);
+                            program.push_back("OUT "+etiquetas_ES.find("PUERTO_0_SHIFTER")->second+","+segundo_op);
                             program.push_back("OUT "+etiquetas_ES.find("PUERTO_1_SHIFTER")->second+","+primer_op);
                             if(comando=="SHIFTL"){
                                 program.push_back("IN "+etiquetas_ES.find("PUERTO_2_SHIFTER")->second+","+primer_op);
