@@ -708,8 +708,8 @@ bool ensamblador::parser(ifstream &input_file){
                         }
 
                         if(comando=="ADD"){
-                            chequear_error_operando(primer_op,linea_codigo,comando,line);
-                            chequear_error_operando(segundo_op,linea_codigo,comando,line);
+                            chequear_error_operando(primer_op,linea_codigo,comando,line,true);
+                            chequear_error_operando(segundo_op,linea_codigo,comando,line,true);
                             chequear_destino_valido(segundo_op,linea_codigo,comando,line);
                             if(es_x_referencia(primer_op)||es_x_referencia(segundo_op)){
                                 agregar_var("@0");
@@ -769,11 +769,24 @@ bool ensamblador::parser(ifstream &input_file){
                         }
                         #endif
                         if(comando=="CMP") {
-                            chequear_error_operando(primer_op,linea_codigo,comando,line);
-                            chequear_error_operando(segundo_op,linea_codigo,comando,line);
+                            chequear_error_operando(primer_op,linea_codigo,comando,line,true);
+                            chequear_error_operando(segundo_op,linea_codigo,comando,line,true);
                             agregar_var(primer_op);
                             agregar_var(segundo_op);
-                            program.push_back(comando+" "+primer_op+","+segundo_op);
+                            if(es_x_referencia(primer_op)||es_x_referencia(segundo_op)){
+                                agregar_var("@16384");
+                                #ifdef use_shifter
+                                    int pos_instruccion_nueva=construir_instruccion_por_referencia(program,primer_op,segundo_op,linea_leida);                                  //x:    MOV A,0
+                                #else
+                                    int pos_instruccion_nueva=construir_instruccion_por_referencia_sin_shifter(program,primer_op,segundo_op,linea_leida);
+                                #endif
+                                program.push_back("ADD @16384,"+int_a_string(pos_instruccion_nueva));
+                                program.push_back("CMP "+primer_op+",0");   
+                            }
+                            else{
+                                program.push_back(comando+" "+primer_op+","+segundo_op);
+                                linea_leida++;
+                            }
                             linea_leida++;
                         }
                         if((comando=="IN")||(comando=="OUT")){
