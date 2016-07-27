@@ -608,19 +608,19 @@ bool ensamblador::parser(ifstream &input_file){
     string line;
     string comando_limpio;
     int linea_leida=0;
-    int linea_codigo=0;
+    int linea_file=0;
 
     while(getline(input_file, line)){
         eliminar_comentarios(line);                       //elimino los espacios hasta el primer caracter valido
         if(!line.empty()){                             //si la linea que queda no es nula
-            buscar_etiquetas(line,linea_leida,linea_codigo); //
+            buscar_etiquetas(line,linea_leida,linea_file); //
             line= trim_espacios(line);
             string comando=line.substr(0,line.find_first_of(" \t"));//busca instruccion
             string primer_op;
             string segundo_op;
             if(!comando.empty()){
                 if(line.find_first_of(" \t")==string::npos){
-                    cout<<"Error al compilar, parametro faltante, linea: "<<linea_codigo+1<<endl;
+                    cout<<"Error al compilar, parametro faltante, linea: "<<linea_file+1<<endl;
                     cout<<comando<<endl;
                     exit(-1);
                 }
@@ -636,7 +636,7 @@ bool ensamblador::parser(ifstream &input_file){
                             comando="BEQ";
                         }
                         if(!operando_check(line)){
-                            cout<<"parametro invalido, linea: "<<linea_codigo+1<<endl;
+                            cout<<"parametro invalido, linea: "<<linea_file+1<<endl;
                             cout<<comando<<" "<<line<<endl;
                             exit(-1);
                         }
@@ -647,23 +647,23 @@ bool ensamblador::parser(ifstream &input_file){
                         primer_op=line.substr(0,line.find(',')); //busca primer operando
                         segundo_op=line.substr(line.find(',')+1); //busca segundo operando
                         if(comando=="INC"){
-                            chequear_error_operando(primer_op,linea_codigo,comando,line);
+                            chequear_error_operando(primer_op,linea_file,comando,line);
                             agregar_var("@1");
                             agregar_var(primer_op);
                             program.push_back("ADD @1,"+primer_op);
                             linea_leida++;
                         }
                         if(comando=="DEC"){
-                            chequear_error_operando(primer_op,linea_codigo,comando,line);
+                            chequear_error_operando(primer_op,linea_file,comando,line);
                             agregar_var(primer_op);
                             agregar_var("@65535");
                             program.push_back("ADD @65535,"+primer_op);
                             linea_leida++;
                         }
                         if(comando=="SUB"){
-                            chequear_error_operando(primer_op,linea_codigo,comando,line);
-                            chequear_error_operando(segundo_op,linea_codigo,comando,line);
-                            chequear_destino_valido(primer_op,linea_codigo,comando,line);
+                            chequear_error_operando(primer_op,linea_file,comando,line);
+                            chequear_error_operando(segundo_op,linea_file,comando,line);
+                            chequear_destino_valido(primer_op,linea_file,comando,line);
                             agregar_var(primer_op);
                             agregar_var(segundo_op);
                             string variable_auxiliar="VARIABLE_AUXILIAR_ASM_###_Asquerosa_Imposible_de_Repetir";
@@ -694,13 +694,13 @@ bool ensamblador::parser(ifstream &input_file){
                             #endif
                         }
                         if(comando=="LEA"){
-                            chequear_error_operando(primer_op,linea_codigo,comando,line);
-                            chequear_error_operando(segundo_op,linea_codigo,comando,line);
-                            chequear_destino_valido(segundo_op,linea_codigo,comando,line);
+                            chequear_error_operando(primer_op,linea_file,comando,line);
+                            chequear_error_operando(segundo_op,linea_file,comando,line);
+                            chequear_destino_valido(segundo_op,linea_file,comando,line);
                             agregar_lea(primer_op);
                             if(es_direccion(primer_op)){
                                 cout<<"ADVERTENCIA, LEA CARGA LITERAL EN POSICION DE MEMORIA"<<endl;
-                                cout<<"LEA "<<primer_op<<","<<segundo_op<<" linea:"<<linea_codigo<<endl;
+                                cout<<"LEA "<<primer_op<<","<<segundo_op<<" linea:"<<linea_file<<endl;
                             }
                             agregar_var(segundo_op);
                             program.push_back(comando+" "+primer_op+","+segundo_op);
@@ -708,9 +708,9 @@ bool ensamblador::parser(ifstream &input_file){
                         }
 
                         if(comando=="ADD"){
-                            chequear_error_operando(primer_op,linea_codigo,comando,line,true);
-                            chequear_error_operando(segundo_op,linea_codigo,comando,line,true);
-                            chequear_destino_valido(segundo_op,linea_codigo,comando,line);
+                            chequear_error_operando(primer_op,linea_file,comando,line,true);
+                            chequear_error_operando(segundo_op,linea_file,comando,line,true);
+                            chequear_destino_valido(segundo_op,linea_file,comando,line);
                             if(es_x_referencia(primer_op)||es_x_referencia(segundo_op)){
                                 agregar_var("@0");
                                 #ifdef use_shifter
@@ -725,12 +725,11 @@ bool ensamblador::parser(ifstream &input_file){
                                 program.push_back(comando+" "+primer_op+","+segundo_op);
                                 linea_leida++;
                             }
-                            linea_leida++;
                         }
                         if(comando=="MOV"){
-                            chequear_error_operando(segundo_op,linea_codigo,comando,line,true);
-                            chequear_error_operando(primer_op,linea_codigo,comando,line,true);
-                            chequear_destino_valido(segundo_op,linea_codigo,comando,line);
+                            chequear_error_operando(segundo_op,linea_file,comando,line,true);
+                            chequear_error_operando(primer_op,linea_file,comando,line,true);
+                            chequear_destino_valido(segundo_op,linea_file,comando,line);
                             if(es_x_referencia(primer_op)||es_x_referencia(segundo_op)){
                                 agregar_var("@32768");
                                 #ifdef use_shifter
@@ -752,9 +751,9 @@ bool ensamblador::parser(ifstream &input_file){
                         #ifdef use_shifter
                         //shiftl x,desplazamiento
                         if(comando=="SHIFTR"||comando=="SHIFTL"){
-                            chequear_error_operando(primer_op,linea_codigo,comando,line);
-                            chequear_error_operando(segundo_op,linea_codigo,comando,line);
-                            chequear_destino_valido(primer_op,linea_codigo,comando,line);
+                            chequear_error_operando(primer_op,linea_file,comando,line);
+                            chequear_error_operando(segundo_op,linea_file,comando,line);
+                            chequear_destino_valido(primer_op,linea_file,comando,line);
                             agregar_var(primer_op);
                             agregar_var(segundo_op);
                             program.push_back("OUT "+etiquetas_ES.find("SHIFTER_REG0")->second+","+primer_op);
@@ -769,8 +768,8 @@ bool ensamblador::parser(ifstream &input_file){
                         }
                         #endif
                         if(comando=="CMP") {
-                            chequear_error_operando(primer_op,linea_codigo,comando,line,true);
-                            chequear_error_operando(segundo_op,linea_codigo,comando,line,true);
+                            chequear_error_operando(primer_op,linea_file,comando,line,true);
+                            chequear_error_operando(segundo_op,linea_file,comando,line,true);
                             agregar_var(primer_op);
                             agregar_var(segundo_op);
                             if(es_x_referencia(primer_op)||es_x_referencia(segundo_op)){
@@ -787,26 +786,25 @@ bool ensamblador::parser(ifstream &input_file){
                                 program.push_back(comando+" "+primer_op+","+segundo_op);
                                 linea_leida++;
                             }
-                            linea_leida++;
                         }
                         if((comando=="IN")||(comando=="OUT")){
-                            chequear_error_operando(primer_op,linea_codigo,comando,line);
-                            chequear_error_operando(segundo_op,linea_codigo,comando,line);
+                            chequear_error_operando(primer_op,linea_file,comando,line);
+                            chequear_error_operando(segundo_op,linea_file,comando,line);
                             if(comando=="IN"){
-                                chequear_destino_valido(segundo_op,linea_codigo,comando,line);
+                                chequear_destino_valido(segundo_op,linea_file,comando,line);
                             }
                             if(!es_direccion(primer_op)){
                                 primer_op=caps_UP(primer_op);
                                 map<string,string>::iterator it=etiquetas_ES.find(primer_op);
                                 if(it==etiquetas_ES.end()){
-                                    cout<<"Error al compilar: "<<comando<<" designa un puerto invalido, linea "<<linea_codigo+1<<endl;
+                                    cout<<"Error al compilar: "<<comando<<" designa un puerto invalido, linea "<<linea_file+1<<endl;
                                     cout<<comando<<" "<<line<<endl;
                                     exit(-1);
                                 }
                                 primer_op=it->second;
                             }
                             if(atoi (primer_op.c_str())>=32){
-                                cout<<"Error al compilar: "<<comando<<" designa un puerto invalido, linea "<<linea_codigo+1<<endl;
+                                cout<<"Error al compilar: "<<comando<<" designa un puerto invalido, linea "<<linea_file+1<<endl;
                                 cout<<comando<<" "<<line<<endl;
                                 exit(-1);
                             }
@@ -817,14 +815,14 @@ bool ensamblador::parser(ifstream &input_file){
                     }
                 }
                 else{
-                        cout<<"Error al compilar: instruccion invalida en linea "<<linea_codigo+1<<endl;
+                        cout<<"Error al compilar: instruccion invalida en linea "<<linea_file+1<<endl;
                         cout<<comando+" "+line<<endl;
                         exit(-3);
                 }
             }
 
         }
-        linea_codigo++;
+        linea_file++;
     }
     codigo_limpio=program;
     return true;
