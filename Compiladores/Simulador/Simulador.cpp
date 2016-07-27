@@ -89,7 +89,7 @@ void modulo_out_uart(int registro,int valor){
         break;
         case 2:cout<<"Salida UART_reset: "<<int_a_binario(valor,16)<<endl;
         break;
-        default:cout<<"error de escritura del registro UART"<<endl;
+        default:cout<<"error de escritura del registro UART, registro "<<registro<<endl;
         break;
     }
 }
