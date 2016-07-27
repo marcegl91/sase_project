@@ -584,13 +584,14 @@ int ensamblador::construir_instruccion_por_referencia(vector<string> &program,st
         pos_intruccion_creada++;
         program.push_back("LEA "+primer_op+","+int_a_string(pos_intruccion_creada));
         program.push_back("OUT "+etiquetas_ES.find("SHIFTER_REG0")->second+","+int_a_string(pos_intruccion_creada));
+        linea_leida++;
     }
     program.push_back("OUT "+etiquetas_ES.find("SHIFTER_REG1")->second+",@7");
     program.push_back("IN "+etiquetas_ES.find("SHIFTER_REG2")->second+","+int_a_string(pos_intruccion_creada));
     if(es_x_referencia(segundo_op)){//Mov [A],[B]
         segundo_op=segundo_op.substr(1,segundo_op.find(']')-1) ;
         program.push_back("ADD "+segundo_op+","+int_a_string(pos_intruccion_creada));          //      ADD B,X
-        linea_leida+=7;
+        linea_leida+=6;
     }
     else{ //Mov [A],B
         agregar_lea(segundo_op);
@@ -598,7 +599,7 @@ int ensamblador::construir_instruccion_por_referencia(vector<string> &program,st
         program.push_back("LEA "+segundo_op+","+variable_auxiliar);                   //      LEA B,var
         agregar_var(variable_auxiliar);
         program.push_back("ADD "+variable_auxiliar+","+int_a_string(pos_intruccion_creada));      //      ADD var,X
-        linea_leida+=8;
+        linea_leida+=7;
     }
     return pos_intruccion_creada;
 }
