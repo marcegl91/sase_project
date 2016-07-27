@@ -620,17 +620,23 @@ bool ensamblador::parser(ifstream &input_file){
             string primer_op;
             string segundo_op;
             if(!comando.empty()){
-                if(line.find_first_of(" \t")==string::npos){
-                    cout<<"Error al compilar, parametro faltante, linea: "<<linea_file+1<<endl;
-                    cout<<comando<<endl;
-                    exit(-1);
-                }
-                line=line.substr(line.find_first_of(" \t"));//lineas con operandos
-                line=trim_espacios(line);
                 comando=caps_UP(comando);       //lo convierto a mayusculas para no tener problemas
+                if((comando=="RET")){
+                    program.push_back(comando+" "+line);
+                    linea_leida++;
+                }
+                else{
+                    if(line.find_first_of(" \t")==string::npos){
+                        cout<<"Error al compilar, parametro faltante, linea: "<<linea_file+1<<endl;
+                        cout<<comando<<endl;
+                        exit(-1);
+                    }
+                    line=line.substr(line.find_first_of(" \t"));//lineas con operandos
+                    line=trim_espacios(line);
+                }
                 if(instructions_codes.find(comando)!= instructions_codes.end()){
                     if((comando=="BEQ")||(comando=="CALL")||(comando=="DW")||
-                        (comando=="JMP")||(comando=="RET")){
+                        (comando=="JMP")){
                         if(comando=="JMP"){
                             program.push_back("CMP 0,0");
                             linea_leida++;
@@ -761,8 +767,10 @@ bool ensamblador::parser(ifstream &input_file){
                             program.push_back("OUT "+etiquetas_ES.find("SHIFTER_REG1")->second+","+segundo_op);
                             if(comando=="SHIFTL"){
                                 program.push_back("IN "+etiquetas_ES.find("SHIFTER_REG2")->second+","+primer_op);
+                                cout<<"shift izq"<<endl;
                             }
                             else{
+                                cout<<"shift der"<<endl;
                                 program.push_back("IN "+etiquetas_ES.find("SHIFTER_REG3")->second+","+primer_op);
                             }
                             linea_leida+=3;
