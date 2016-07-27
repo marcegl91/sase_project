@@ -62,9 +62,11 @@ string int_a_binario(int num,int tam_binario){
 int modulo_in_shifter(int registro){
     int valor=0;
     switch(registro){
-        case 3: valor=reg_0_shifter<<(reg_1_shifter);
+        case 3:
+            valor=reg_0_shifter>>(reg_1_shifter);
         break;
-        case 2: valor=reg_0_shifter<<(reg_1_shifter);
+        case 2: 
+            valor=reg_0_shifter<<(reg_1_shifter);
         break;
         default:cout<<"error de lectura del registro shifter"<<endl;
         break;
