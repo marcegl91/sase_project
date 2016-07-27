@@ -52,8 +52,8 @@ class ensamblador {
     void eliminar_comentarios(string &linea);
     void chequear_destino_valido(string operando,int linea_codigo,string comando,string line);
     void buscar_etiquetas(string &line,int linea_leida,int linea_codigo);
-    int construir_instruccion_por_referencia(vector<string> &program,string primer_op,string segundo_op,int &linea_leida);
-    int construir_instruccion_por_referencia_sin_shifter(vector<string> &program,string primer_op,string segundo_op,int &linea_leida);
+    int construir_instruccion_por_referencia(vector<string> &program,string &primer_op,string &segundo_op,int &linea_leida);
+    int construir_instruccion_por_referencia_sin_shifter(vector<string> &program,string &primer_op,string &segundo_op,int &linea_leida);
     map<string,string> instructions_codes;
     map<string,string> etiquetas_ES;
     vector<string> codigo_limpio;
@@ -530,7 +530,7 @@ void ensamblador::buscar_etiquetas(string &line,int linea_leida,int linea_codigo
     }
 }
 
-int  ensamblador::construir_instruccion_por_referencia_sin_shifter(vector<string> &program,string primer_op,string segundo_op,int &linea_leida){
+int  ensamblador::construir_instruccion_por_referencia_sin_shifter(vector<string> &program,string &primer_op,string &segundo_op,int &linea_leida){
     agregar_var("@7");
     agregar_var("@1");
     agregar_var("@0");
@@ -569,7 +569,7 @@ int  ensamblador::construir_instruccion_por_referencia_sin_shifter(vector<string
     return pos_intruccion_creada;
 }
 
-int ensamblador::construir_instruccion_por_referencia(vector<string> &program,string primer_op,string segundo_op,int &linea_leida){
+int ensamblador::construir_instruccion_por_referencia(vector<string> &program,string &primer_op,string &segundo_op,int &linea_leida){
     agregar_var("@7");
     int pos_intruccion_creada=linea_leida+5 ;
     if(!es_x_referencia(segundo_op)){
